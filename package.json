@@ -1,0 +1,29 @@
+{
+    "name": "productivity",
+    "version": "0.0.7",
+    "private": true,
+    "scripts": {
+        "build": "nx run-many --target=build --all",
+        "test": "nx run-many --target=test --all",
+        "lint": "nx run-many --target=lint --all",
+        "typecheck": "nx run-many --target=typecheck --all",
+        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+        "prepare": "husky",
+        "release": "qingniao",
+        "release:dry-run": "qingniao --dry-run"
+    },
+    "devDependencies": {
+        "@changesets/cli": "^2.29.8",
+        "@systembug/qingniao": "workspace:*",
+        "eslint": "^8.57.0",
+        "husky": "^9.1.7",
+        "nx": "^22.3.3",
+        "prettier": "^3.2.5",
+        "typescript": "^5.3.3"
+    },
+    "packageManager": "pnpm@9.0.0",
+    "volta": {
+        "node": "22.10.0",
+        "pnpm": "9.0.0"
+    }
+}
