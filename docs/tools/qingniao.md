@@ -79,10 +79,10 @@ qn
 
 ```json
 {
-  "scripts": {
-    "release": "qingniao",
-    "release:dry-run": "qingniao --dry-run"
-  }
+    "scripts": {
+        "release": "qingniao",
+        "release:dry-run": "qingniao --dry-run"
+    }
 }
 ```
 
@@ -177,30 +177,30 @@ flowchart TD
 ### 详细步骤
 
 1. **环境检查**
-   - NPM 认证检查
-   - Git 状态检查（工作区干净）
-   - 远程同步检查
+    - NPM 认证检查
+    - Git 状态检查（工作区干净）
+    - 远程同步检查
 
 2. **版本管理**（可选）
-   - 选择版本类型（major/minor/patch）
-   - 更新所有包的版本号（包括根目录）
-   - 同步 workspace 依赖版本
-   - 提交到 Git 并创建标签
+    - 选择版本类型（major/minor/patch）
+    - 更新所有包的版本号（包括根目录）
+    - 同步 workspace 依赖版本
+    - 提交到 Git 并创建标签
 
 3. **构建验证**
-   - 清理构建产物
-   - 安装依赖
-   - 代码检查（ESLint）
-   - 类型检查（TypeScript）
-   - 运行测试
-   - 构建所有包（Turbo/Nx）
-   - 验证构建产物
+    - 清理构建产物
+    - 安装依赖
+    - 代码检查（ESLint）
+    - 类型检查（TypeScript）
+    - 运行测试
+    - 构建所有包（Turbo/Nx）
+    - 验证构建产物
 
 4. **发布到 NPM**
-   - 显示将要发布的包列表
-   - 检查已存在的版本
-   - Dry-run 测试（可选）
-   - 正式发布
+    - 显示将要发布的包列表
+    - 检查已存在的版本
+    - Dry-run 测试（可选）
+    - 正式发布
 
 ## 🎯 使用示例
 
@@ -343,4 +343,3 @@ export default {
 
 > **蓬山此去无多路，青鸟殷勤为探看**
 > 让代码发布如青鸟传递消息般优雅流畅！
-
