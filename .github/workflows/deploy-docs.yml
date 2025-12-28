@@ -42,10 +42,12 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Build VitePress
-              run: VITEPRESS_BASE=/productivity/ pnpm docs:build
+            - name: Build VitePress for GitHub Pages
+              run: pnpm docs:build
               env:
                   NODE_ENV: production
+                  # GitHub Pages 部署路径：https://<username>.github.io/productivity/
+                  VITEPRESS_BASE: /productivity/
 
             - name: Setup Pages
               uses: actions/configure-pages@v5

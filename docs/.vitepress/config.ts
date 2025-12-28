@@ -10,9 +10,10 @@ export default withMermaid(
             // 可以在这里添加 favicon 等 head 标签
             // ['link', { rel: 'icon', href: '/favicon.ico' }],
         ],
+        // GitHub Pages 配置
         // 本地开发时使用 /，GitHub Pages 部署时使用 /productivity/
-        // 可以通过环境变量 VITEPRESS_BASE 来覆盖
-        // 默认本地开发使用 /，生产构建使用 /productivity/
+        // GitHub Actions 会自动设置 VITEPRESS_BASE=/productivity/
+        // 访问地址：https://luban-ws.github.io/productivity/
         base: process.env.VITEPRESS_BASE || "/",
         lang: "zh-CN",
 
