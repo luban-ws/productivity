@@ -6,7 +6,11 @@ import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import { exec, execSilent } from "../utils/exec";
 import type { Context, PublishConfig } from "../types";
-import { discoverAllPackagesWithPnpm, discoverAllPackagesWithPattern, readPackageJson } from "../utils/package";
+import {
+    discoverAllPackagesWithPnpm,
+    discoverAllPackagesWithPattern,
+    readPackageJson,
+} from "../utils/package";
 
 /**
  * 检测是否使用 changeset
@@ -173,7 +177,7 @@ export async function bumpVersionWithChangeset(
     // changeset 更新后，获取所有已更新包的版本号
     // 通常所有包应该使用相同的版本号，我们取第一个已更新包的版本
     const allPackages = await discoverAllWorkspacePackages(rootDir, config);
-    
+
     // 找到第一个有版本号的包（changeset 会更新有 changeset 文件的包）
     let newVersion: string | undefined;
     for (const pkg of allPackages) {
@@ -190,7 +194,11 @@ export async function bumpVersionWithChangeset(
         if (existsSync(rootPackageJsonPath)) {
             const rootPackageJson = JSON.parse(readFileSync(rootPackageJsonPath, "utf-8"));
             rootPackageJson.version = newVersion;
-            writeFileSync(rootPackageJsonPath, JSON.stringify(rootPackageJson, null, 2) + "\n", "utf-8");
+            writeFileSync(
+                rootPackageJsonPath,
+                JSON.stringify(rootPackageJson, null, 2) + "\n",
+                "utf-8",
+            );
         }
 
         // 同步所有包的版本号（确保所有包版本一致）
@@ -200,7 +208,11 @@ export async function bumpVersionWithChangeset(
                 try {
                     const pkgJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
                     pkgJson.version = newVersion;
-                    writeFileSync(packageJsonPath, JSON.stringify(pkgJson, null, 2) + "\n", "utf-8");
+                    writeFileSync(
+                        packageJsonPath,
+                        JSON.stringify(pkgJson, null, 2) + "\n",
+                        "utf-8",
+                    );
                 } catch {
                     // 忽略无效的 package.json
                 }

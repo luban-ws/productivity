@@ -10,16 +10,23 @@
         "format": "prettier --write \"**/*.{ts,tsx,md}\"",
         "prepare": "husky",
         "release": "qingniao",
-        "release:dry-run": "qingniao --dry-run"
+        "release:dry-run": "qingniao --dry-run",
+        "docs": "vitepress dev docs --open",
+        "docs:dev": "vitepress dev docs --open",
+        "docs:build": "VITEPRESS_BASE=/productivity/ vitepress build docs",
+        "docs:preview": "vitepress preview docs"
     },
     "devDependencies": {
         "@changesets/cli": "^2.29.8",
         "@systembug/qingniao": "workspace:*",
         "eslint": "^8.57.0",
         "husky": "^9.1.7",
+        "mermaid": "^11.12.2",
         "nx": "^22.3.3",
         "prettier": "^3.2.5",
-        "typescript": "^5.3.3"
+        "typescript": "^5.3.3",
+        "vitepress": "^1.6.4",
+        "vitepress-plugin-mermaid": "^2.0.17"
     },
     "packageManager": "pnpm@9.0.0",
     "volta": {

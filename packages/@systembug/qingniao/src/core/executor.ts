@@ -200,7 +200,11 @@ export async function executePublish(
 
         // 验证每个包的发布配置
         const validPackages: typeof packages = [];
-        const invalidPackages: Array<{ pkg: typeof packages[0]; errors: string[]; warnings: string[] }> = [];
+        const invalidPackages: Array<{
+            pkg: (typeof packages)[0];
+            errors: string[];
+            warnings: string[];
+        }> = [];
 
         for (const pkg of packages) {
             const validation = validatePackageForPublish(pkg.path);
@@ -208,9 +212,7 @@ export async function executePublish(
                 validPackages.push(pkg);
                 // 显示警告（如果有）
                 if (validation.warnings.length > 0) {
-                    logger.warn(
-                        chalk.yellow(`⚠️  ${pkg.name}: ${validation.warnings.join("; ")}`),
-                    );
+                    logger.warn(chalk.yellow(`⚠️  ${pkg.name}: ${validation.warnings.join("; ")}`));
                 }
             } else {
                 invalidPackages.push({
