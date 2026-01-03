@@ -51,11 +51,17 @@ importers:
       '@types/node':
         specifier: ^18.0.0
         version: 18.19.130
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.21.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^6.21.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.9.3)
       '@vitest/coverage-v8':
         specifier: ^1.0.0
         version: 1.6.1(vitest@1.6.1(@types/node@18.19.130)(happy-dom@17.6.3)(jsdom@23.2.0)(less@4.5.1)(sass@1.97.1)(terser@5.44.1))
       eslint:
-        specifier: ^8.0.0
+        specifier: ^8.57.0
         version: 8.57.1
       prettier:
         specifier: ^3.0.0
@@ -143,6 +149,12 @@ importers:
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.7
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^6.21.0
+        version: 6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.9.3))(eslint@8.57.1)(typescript@5.9.3)
+      '@typescript-eslint/parser':
+        specifier: ^6.21.0
+        version: 6.21.0(eslint@8.57.1)(typescript@5.9.3)
       '@vitejs/plugin-react':
         specifier: ^5.1.2
         version: 5.1.2(vite@5.4.21(@types/node@18.19.130)(less@4.5.1)(sass@1.97.1)(terser@5.44.1))
@@ -150,7 +162,7 @@ importers:
         specifier: ^1.0.0
         version: 1.6.1(vitest@1.6.1(@types/node@18.19.130)(happy-dom@17.6.3)(jsdom@23.2.0)(less@4.5.1)(sass@1.97.1)(terser@5.44.1))
       eslint:
-        specifier: ^8.0.0
+        specifier: ^8.57.0
         version: 8.57.1
       prettier:
         specifier: ^3.0.0

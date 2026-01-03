@@ -67,54 +67,51 @@ npx wenxin --typedoc-only
 
 ```json
 {
-  "$schema": "./node_modules/@systembug/wenxin/schemas/config.schema.json",
-  "mode": "hybrid",
-  "mergeTypes": true,
-  "jsdoc": {
-    "enabled": true,
-    "source": {
-      "include": ["src/**/*.ts", "src/**/*.js"],
-      "exclude": ["node_modules", "dist", "**/*.test.ts"]
+    "$schema": "./node_modules/@systembug/wenxin/schemas/config.schema.json",
+    "mode": "hybrid",
+    "mergeTypes": true,
+    "jsdoc": {
+        "enabled": true,
+        "source": {
+            "include": ["src/**/*.ts", "src/**/*.js"],
+            "exclude": ["node_modules", "dist", "**/*.test.ts"]
+        },
+        "opts": {
+            "destination": "doc",
+            "template": "./jsdoc-template",
+            "recurse": true,
+            "verbose": true
+        },
+        "plugins": ["plugins/markdown", "./dist/jsdoc-aliases.js"]
     },
-    "opts": {
-      "destination": "doc",
-      "template": "./jsdoc-template",
-      "recurse": true,
-      "verbose": true
-    },
-    "plugins": [
-      "plugins/markdown",
-      "./dist/jsdoc-aliases.js"
-    ]
-  },
-  "typedoc": {
-    "enabled": true,
-    "entryPoints": ["src/index.ts"],
-    "out": "doc",
-    "excludePrivate": true,
-    "excludeProtected": false,
-    "excludeInternal": true
-  }
+    "typedoc": {
+        "enabled": true,
+        "entryPoints": ["src/index.ts"],
+        "out": "doc",
+        "excludePrivate": true,
+        "excludeProtected": false,
+        "excludeInternal": true
+    }
 }
 ```
 
 ### 编程式使用
 
 ```typescript
-import { generateDocs } from '@systembug/wenxin';
+import { generateDocs } from "@systembug/wenxin";
 
 // 使用默认配置
 await generateDocs();
 
 // 使用自定义配置
-await generateDocs('api-doc.config.json', {
-  mode: 'hybrid',
-  jsdoc: {
-    enabled: true,
-    opts: {
-      destination: './docs'
-    }
-  }
+await generateDocs("api-doc.config.json", {
+    mode: "hybrid",
+    jsdoc: {
+        enabled: true,
+        opts: {
+            destination: "./docs",
+        },
+    },
 });
 ```
 
@@ -176,7 +173,7 @@ npx wenxin --mode hybrid
  * @aliases main, entry
  */
 export function primaryFunction() {
-  // ...
+    // ...
 }
 ```
 
@@ -188,7 +185,7 @@ export function primaryFunction() {
  * @category Utilities
  */
 export function utilityFunction() {
-  // ...
+    // ...
 }
 ```
 
@@ -229,4 +226,3 @@ pnpm format
 ## 许可证
 
 MIT
-

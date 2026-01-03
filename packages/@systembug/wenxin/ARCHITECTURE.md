@@ -23,6 +23,7 @@ wenxin/
 ### 1. **JSDoc 是独立工具**
 
 JSDoc 是一个独立的命令行工具，它：
+
 - 不通过我们的 TypeScript 代码运行
 - 直接通过文件系统路径访问模板目录
 - 在运行时动态加载 `publish.js` 和模板文件
@@ -30,6 +31,7 @@ JSDoc 是一个独立的命令行工具，它：
 ### 2. **模板文件格式要求**
 
 模板文件必须是：
+
 - **`publish.js`**: CommonJS 格式的 JavaScript 文件
 - **`.tmpl` 文件**: HTML 模板文件（使用 Underscore Template 语法）
 - **静态资源**: CSS、JavaScript 文件
@@ -41,6 +43,7 @@ JSDoc 是一个独立的命令行工具，它：
 JSDoc 通过**绝对路径**访问模板：
 
 **文心工具的处理流程**：
+
 ```typescript
 // 1. 在 src/config.ts 中，默认配置解析为绝对路径
 template: resolve(__dirname, "../jsdoc-template")
@@ -59,6 +62,7 @@ view = new template.Template(templatePath + '/tmpl');  // 直接访问文件系�
 ```
 
 **为什么需要绝对路径？**
+
 - JSDoc 在独立进程中运行，工作目录可能不同
 - 使用绝对路径确保无论从哪里运行都能找到模板
 - 文心工具负责将相对路径转换为绝对路径
@@ -70,15 +74,16 @@ view = new template.Template(templatePath + '/tmpl');  // 直接访问文件系�
 ```json
 // package.json
 {
-  "files": [
-    "dist/",
-    "jsdoc-template/",  // 必须包含在包中
-    "schemas/"
-  ]
+    "files": [
+        "dist/",
+        "jsdoc-template/", // 必须包含在包中
+        "schemas/"
+    ]
 }
 ```
 
 用户安装包后（使用 pnpm/npm/yarn），模板目录会在：
+
 ```
 node_modules/@systembug/wenxin/jsdoc-template/
 ```
@@ -187,23 +192,23 @@ HTML 文档
 ### 如果放在 `src/` 里会有什么问题？
 
 1. **编译问题**
-   - TypeScript 编译器会尝试编译 `publish.js`
-   - 但 `publish.js` 使用 CommonJS，需要 JSDoc 的运行时环境
-   - 编译后的文件可能无法被 JSDoc 正确加载
+    - TypeScript 编译器会尝试编译 `publish.js`
+    - 但 `publish.js` 使用 CommonJS，需要 JSDoc 的运行时环境
+    - 编译后的文件可能无法被 JSDoc 正确加载
 
 2. **路径问题**
-   - 编译后文件在 `dist/` 目录
-   - JSDoc 需要访问原始模板文件，不是编译后的
-   - 路径会变得复杂：`dist/jsdoc-template/` vs `jsdoc-template/`
+    - 编译后文件在 `dist/` 目录
+    - JSDoc 需要访问原始模板文件，不是编译后的
+    - 路径会变得复杂：`dist/jsdoc-template/` vs `jsdoc-template/`
 
 3. **依赖问题**
-   - `publish.js` 依赖 JSDoc 的内部模块（`jsdoc/template`, `jsdoc/fs` 等）
-   - 这些模块在 JSDoc 运行时环境中可用
-   - 如果编译，这些依赖关系会丢失
+    - `publish.js` 依赖 JSDoc 的内部模块（`jsdoc/template`, `jsdoc/fs` 等）
+    - 这些模块在 JSDoc 运行时环境中可用
+    - 如果编译，这些依赖关系会丢失
 
 4. **静态资源问题**
-   - CSS 和 JavaScript 文件需要原样复制
-   - 如果放在 `src/`，需要额外的构建步骤来复制这些文件
+    - CSS 和 JavaScript 文件需要原样复制
+    - 如果放在 `src/`，需要额外的构建步骤来复制这些文件
 
 ## 正确的架构
 
@@ -240,8 +245,8 @@ HTML 文档
 - **分离的原因**: JSDoc 是独立工具，通过文件系统路径访问模板，不是通过我们的代码
 
 这种架构确保了：
+
 1. ✅ 我们的代码可以正常编译和打包
 2. ✅ JSDoc 可以正确加载和使用模板
 3. ✅ 模板文件作为资源文件正确打包到包中
 4. ✅ 用户安装包后可以正常使用模板
-

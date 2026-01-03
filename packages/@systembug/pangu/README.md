@@ -28,40 +28,42 @@ yarn add -D @systembug/pangu
 在项目根目录创建 `dev.config.json` 或 `dev.config.yaml`：
 
 **dev.config.json:**
+
 ```json
 {
-  "projectName": "quizerjs",
-  "packageManager": "pnpm",
-  "demos": [
-    {
-      "name": "Vue",
-      "value": "vue",
-      "description": "Vue 3 演示项目",
-      "package": "@quizerjs/demo-vue"
-    },
-    {
-      "name": "React",
-      "value": "react",
-      "description": "React 18 演示项目",
-      "package": "@quizerjs/demo-react"
-    }
-  ]
+    "projectName": "quizerjs",
+    "packageManager": "pnpm",
+    "demos": [
+        {
+            "name": "Vue",
+            "value": "vue",
+            "description": "Vue 3 演示项目",
+            "package": "@quizerjs/demo-vue"
+        },
+        {
+            "name": "React",
+            "value": "react",
+            "description": "React 18 演示项目",
+            "package": "@quizerjs/demo-react"
+        }
+    ]
 }
 ```
 
 **dev.config.yaml:**
+
 ```yaml
 projectName: quizerjs
 packageManager: pnpm
 demos:
-  - name: Vue
-    value: vue
-    description: Vue 3 演示项目
-    package: "@quizerjs/demo-vue"
-  - name: React
-    value: react
-    description: React 18 演示项目
-    package: "@quizerjs/demo-react"
+    - name: Vue
+      value: vue
+      description: Vue 3 演示项目
+      package: "@quizerjs/demo-vue"
+    - name: React
+      value: react
+      description: React 18 演示项目
+      package: "@quizerjs/demo-react"
 ```
 
 ### 2. 使用 CLI
@@ -81,13 +83,14 @@ npx pangu --help
 
 ```json
 {
-  "scripts": {
-    "dev": "pangu"
-  }
+    "scripts": {
+        "dev": "pangu"
+    }
 }
 ```
 
 然后运行：
+
 ```bash
 pnpm dev
 ```
@@ -98,23 +101,23 @@ pnpm dev
 
 ```typescript
 interface DevConfig {
-  /**
-   * 项目名称（用于欢迎信息）
-   * 默认: "项目"
-   */
-  projectName?: string;
+    /**
+     * 项目名称（用于欢迎信息）
+     * 默认: "项目"
+     */
+    projectName?: string;
 
-  /**
-   * 包管理器命令
-   * 默认: "pnpm"
-   * 可选: "pnpm" | "npm" | "yarn"
-   */
-  packageManager?: string;
+    /**
+     * 包管理器命令
+     * 默认: "pnpm"
+     * 可选: "pnpm" | "npm" | "yarn"
+     */
+    packageManager?: string;
 
-  /**
-   * Demo 选项列表（必需）
-   */
-  demos: DemoOption[];
+    /**
+     * Demo 选项列表（必需）
+     */
+    demos: DemoOption[];
 }
 ```
 
@@ -122,25 +125,25 @@ interface DevConfig {
 
 ```typescript
 interface DemoOption {
-  /**
-   * Demo 显示名称
-   */
-  name: string;
+    /**
+     * Demo 显示名称
+     */
+    name: string;
 
-  /**
-   * Demo 值（用于命令行参数）
-   */
-  value: string;
+    /**
+     * Demo 值（用于命令行参数）
+     */
+    value: string;
 
-  /**
-   * Demo 描述
-   */
-  description: string;
+    /**
+     * Demo 描述
+     */
+    description: string;
 
-  /**
-   * 包名（用于 pnpm --filter）
-   */
-  package: string;
+    /**
+     * 包名（用于 pnpm --filter）
+     */
+    package: string;
 }
 ```
 
