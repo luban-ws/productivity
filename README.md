@@ -8,6 +8,7 @@ This monorepo contains various productivity tools and utilities that streamline 
 
 - **[@systembug/qingniao](./packages/@systembug/qingniao/)**: Universal publish tool for managing releases and versioning.
 - **[@systembug/diting](./packages/@systembug/diting/)**: Documentation and tooling utilities.
+- **[@systembug/wenxin](./packages/@systembug/wenxin/)**: Universal API documentation generator supporting JSDoc and TypeScript.
 
 ## Documentation
 

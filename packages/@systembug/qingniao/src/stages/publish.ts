@@ -31,6 +31,14 @@ export async function publishPackagesDryRun(
               ? "yarn"
               : "npx";
 
+    // 根据包管理器选择发布命令
+    const publishCommand =
+        config.project?.packageManager === "pnpm"
+            ? "pnpm publish"
+            : config.project?.packageManager === "yarn"
+              ? "yarn publish"
+              : "npm publish";
+
     if (config.changeset?.enabled) {
         // 使用 changeset publish --dry-run
         const command =
@@ -38,13 +46,13 @@ export async function publishPackagesDryRun(
             `${pmCommand} changeset publish --dry-run`;
         exec(command, { cwd: context.rootDir });
     } else {
-        // 对每个包执行 npm publish --dry-run
+        // 对每个包执行发布命令的 dry-run
         for (const pkg of context.packages) {
             try {
                 // Scoped packages 需要 --access public 才能发布为公共包
                 const isScoped = pkg.name.startsWith("@");
                 const accessFlag = isScoped ? " --access public" : "";
-                exec(`npm publish --dry-run${accessFlag}`, { cwd: pkg.path });
+                exec(`${publishCommand} --dry-run${accessFlag}`, { cwd: pkg.path });
             } catch (error: any) {
                 throw new Error(`包 ${pkg.name} dry-run 失败: ${error.message}`);
             }
@@ -62,6 +70,14 @@ export async function publishPackages(config: PublishConfig, context: Context): 
             : config.project?.packageManager === "yarn"
               ? "yarn"
               : "npx";
+
+    // 根据包管理器选择发布命令
+    const publishCommand =
+        config.project?.packageManager === "pnpm"
+            ? "pnpm publish"
+            : config.project?.packageManager === "yarn"
+              ? "yarn publish"
+              : "npm publish";
 
     // 检查已存在的包
     const existingPackages: Array<{ name: string; version: string }> = [];
@@ -106,7 +122,7 @@ export async function publishPackages(config: PublishConfig, context: Context): 
                 // Scoped packages 需要 --access public 才能发布为公共包
                 const isScoped = pkg.name.startsWith("@");
                 const accessFlag = isScoped ? " --access public" : "";
-                exec(`npm publish${accessFlag}`, {
+                exec(`${publishCommand}${accessFlag}`, {
                     cwd: pkg.path,
                     silent: false, // 允许交互式输入 OTP
                 });

@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "文心 API 文档生成工具配置",
+  "description": "文心 - 通用 API 文档生成工具配置文件 Schema",
+  "type": "object",
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": ["jsdoc", "typedoc", "hybrid"],
+      "default": "hybrid",
+      "description": "文档生成模式：jsdoc（仅 JSDoc）、typedoc（仅 TypeDoc）、hybrid（混合模式，推荐）"
+    },
+    "mergeTypes": {
+      "type": "boolean",
+      "default": true,
+      "description": "是否合并 TypeScript 类型信息到 JSDoc 文档中（仅在 hybrid 模式下有效）"
+    },
+    "cwd": {
+      "type": "string",
+      "description": "工作目录（相对于配置文件），默认使用当前目录"
+    },
+    "jsdoc": {
+      "type": "object",
+      "description": "JSDoc 配置选项",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否启用 JSDoc 处理"
+        },
+        "source": {
+          "type": "object",
+          "properties": {
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "源文件路径（支持 glob 模式）",
+              "default": ["src/**/*.ts", "src/**/*.js"]
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "排除的文件路径"
+            },
+            "excludePattern": {
+              "type": "string",
+              "description": "排除模式（正则表达式）"
+            }
+          },
+          "required": ["include"]
+        },
+        "opts": {
+          "type": "object",
+          "properties": {
+            "destination": {
+              "type": "string",
+              "default": "doc",
+              "description": "输出目录"
+            },
+            "template": {
+              "type": "string",
+              "description": "模板路径（相对于配置文件或绝对路径）"
+            },
+            "recurse": {
+              "type": "boolean",
+              "default": true,
+              "description": "是否递归处理子目录"
+            },
+            "verbose": {
+              "type": "boolean",
+              "default": false,
+              "description": "是否显示详细信息"
+            }
+          },
+          "required": ["destination"]
+        },
+        "plugins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "JSDoc 插件列表"
+        },
+        "markdown": {
+          "type": "object",
+          "properties": {
+            "parser": {
+              "type": "string",
+              "default": "evilstreak"
+            },
+            "dialect": {
+              "type": "string",
+              "default": "Markuru"
+            }
+          }
+        }
+      }
+    },
+    "typedoc": {
+      "type": "object",
+      "description": "TypeDoc 配置选项",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否启用 TypeDoc 处理"
+        },
+        "entryPoints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "入口文件列表",
+          "default": ["src/index.ts"]
+        },
+        "out": {
+          "type": "string",
+          "default": "doc",
+          "description": "输出目录"
+        },
+        "excludePrivate": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否排除私有成员"
+        },
+        "excludeProtected": {
+          "type": "boolean",
+          "default": false,
+          "description": "是否排除受保护成员"
+        },
+        "excludeInternal": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否排除内部成员"
+        }
+      },
+      "required": ["entryPoints", "out"]
+    }
+  },
+  "additionalProperties": false
+}
+
