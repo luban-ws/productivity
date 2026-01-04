@@ -21,18 +21,35 @@ export function checkBuildArtifact(
     if (!distPath) {
         // 尝试从 package.json 推断
         const pkgJson = readPackageJson(pkgPath);
-        if (pkgJson.main) {
-            distPath = pkgJson.main;
-        } else if (pkgJson.module) {
-            distPath = pkgJson.module;
-        } else if (pkgJson.exports) {
-            // 尝试从 exports 推断
-            const exports =
-                typeof pkgJson.exports === "string"
-                    ? pkgJson.exports
-                    : pkgJson.exports["."] || pkgJson.exports["./"] || pkgJson.exports.default;
-            if (typeof exports === "string") {
-                distPath = exports;
+        if (pkgJson) {
+            const main = typeof pkgJson.main === "string" ? pkgJson.main : undefined;
+            const module = typeof pkgJson.module === "string" ? pkgJson.module : undefined;
+            if (main) {
+                distPath = main;
+            } else if (module) {
+                distPath = module;
+            } else if (pkgJson.exports) {
+                // 尝试从 exports 推断
+                let exports: unknown;
+                if (typeof pkgJson.exports === "string") {
+                    exports = pkgJson.exports;
+                } else if (typeof pkgJson.exports === "object" && pkgJson.exports !== null) {
+                    const exportsObj = pkgJson.exports as Record<string, unknown>;
+                    exports = exportsObj["."] || exportsObj["./"] || exportsObj.default;
+                }
+                if (typeof exports === "string") {
+                    distPath = exports;
+                } else if (
+                    exports &&
+                    typeof exports === "object" &&
+                    exports !== null &&
+                    "default" in exports
+                ) {
+                    const exportsWithDefault = exports as { default: unknown };
+                    if (typeof exportsWithDefault.default === "string") {
+                        distPath = exportsWithDefault.default;
+                    }
+                }
             }
         }
     }

@@ -133,22 +133,28 @@ function deepMerge(
     const output = { ...target };
     if (isObject(target) && isObject(source)) {
         Object.keys(source).forEach((key) => {
-            if (isObject(source[key])) {
+            const sourceValue = source[key];
+            if (isObject(sourceValue)) {
                 if (!(key in target)) {
-                    Object.assign(output, { [key]: source[key] });
+                    Object.assign(output, { [key]: sourceValue });
                 } else {
-                    output[key] = deepMerge(target[key], source[key]);
+                    const targetValue = target[key];
+                    if (isObject(targetValue) && isObject(sourceValue)) {
+                        output[key] = deepMerge(targetValue, sourceValue);
+                    } else {
+                        output[key] = sourceValue;
+                    }
                 }
             } else {
-                Object.assign(output, { [key]: source[key] });
+                Object.assign(output, { [key]: sourceValue });
             }
         });
     }
     return output;
 }
 
-function isObject(item: unknown): boolean {
-    return item && typeof item === "object" && !Array.isArray(item);
+function isObject(item: unknown): item is Record<string, unknown> {
+    return item !== null && typeof item === "object" && !Array.isArray(item);
 }
 
 /**

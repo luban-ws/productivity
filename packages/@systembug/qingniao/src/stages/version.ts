@@ -188,8 +188,10 @@ export async function bumpVersionWithChangeset(
     let newVersion: string | undefined;
     for (const pkg of allPackages) {
         const pkgJson = readPackageJson(pkg.path);
-        if (pkgJson?.version) {
-            newVersion = pkgJson.version;
+        const version =
+            pkgJson && typeof pkgJson.version === "string" ? pkgJson.version : undefined;
+        if (version) {
+            newVersion = version;
             break;
         }
     }

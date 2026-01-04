@@ -36,14 +36,19 @@ export async function discoverAllPackagesWithPnpm(_rootDir: string): Promise<Pac
 
         // pnpm list 返回的是数组或对象，需要处理
         const processItem = (item: Record<string, unknown>) => {
-            if (item.name && item.path) {
-                const pkgJson = readPackageJson(item.path);
+            const itemName = typeof item.name === "string" ? item.name : undefined;
+            const itemPath = typeof item.path === "string" ? item.path : undefined;
+            if (itemName && itemPath) {
+                const pkgJson = readPackageJson(itemPath);
                 if (pkgJson) {
+                    const version = typeof pkgJson.version === "string" ? pkgJson.version : "0.0.0";
+                    const isPrivate =
+                        typeof pkgJson.private === "boolean" ? pkgJson.private : false;
                     packages.push({
-                        name: item.name,
-                        version: pkgJson.version || "0.0.0",
-                        path: item.path,
-                        private: pkgJson.private || false,
+                        name: itemName,
+                        version,
+                        path: itemPath,
+                        private: isPrivate,
                     });
                 }
             }
@@ -100,21 +105,30 @@ export async function discoverAllPackagesWithPattern(
             const packagePath = join(packagesDir, dir.name);
             const pkgJson = readPackageJson(packagePath);
 
-            if (pkgJson && pkgJson.name) {
-                // 检查是否匹配模式
-                const matches = patterns.some((pattern) => {
-                    // 简单的 glob 匹配
-                    const regex = new RegExp(pattern.replace(/\*/g, ".*").replace(/\//g, "\\/"));
-                    return regex.test(pkgJson.name) || regex.test(packagePath);
-                });
-
-                if (matches || patterns.length === 0) {
-                    packages.push({
-                        name: pkgJson.name,
-                        version: pkgJson.version || "0.0.0",
-                        path: packagePath,
-                        private: pkgJson.private || false,
+            if (pkgJson) {
+                const pkgName = typeof pkgJson.name === "string" ? pkgJson.name : undefined;
+                if (pkgName) {
+                    // 检查是否匹配模式
+                    const matches = patterns.some((pattern) => {
+                        // 简单的 glob 匹配
+                        const regex = new RegExp(
+                            pattern.replace(/\*/g, ".*").replace(/\//g, "\\/"),
+                        );
+                        return regex.test(pkgName) || regex.test(packagePath);
                     });
+
+                    if (matches || patterns.length === 0) {
+                        const version =
+                            typeof pkgJson.version === "string" ? pkgJson.version : "0.0.0";
+                        const isPrivate =
+                            typeof pkgJson.private === "boolean" ? pkgJson.private : false;
+                        packages.push({
+                            name: pkgName,
+                            version,
+                            path: packagePath,
+                            private: isPrivate,
+                        });
+                    }
                 }
             }
         }
@@ -173,8 +187,14 @@ export function validatePackageForPublish(pkgPath: string): {
     }
 
     // 检查 scoped packages 的 publishConfig.access
-    if (pkgJson.name && pkgJson.name.startsWith("@")) {
-        const publishConfig = pkgJson.publishConfig || {};
+    const pkgName = typeof pkgJson.name === "string" ? pkgJson.name : undefined;
+    if (pkgName && pkgName.startsWith("@")) {
+        const publishConfig =
+            pkgJson.publishConfig &&
+            typeof pkgJson.publishConfig === "object" &&
+            pkgJson.publishConfig !== null
+                ? (pkgJson.publishConfig as Record<string, unknown>)
+                : {};
         const access = publishConfig.access;
 
         if (access === undefined || access === null) {

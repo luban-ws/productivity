@@ -121,9 +121,9 @@ export async function extractTypeInfo(
             };
             const name = reflectionObj.name;
             const kind = reflectionObj.kind;
-            const longname = prefix ? `${prefix}#${name}` : name;
+            const longname = name ? (prefix ? `${prefix}#${name}` : name) : undefined;
 
-            if (name && kind) {
+            if (name && kind && longname) {
                 typeInfo[longname] = {
                     name,
                     kind,

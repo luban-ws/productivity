@@ -27,14 +27,17 @@ export function mergeTypeInfo(
         const longname = typeof doclet.longname === "string" ? doclet.longname : undefined;
         const typeData = longname ? typeIndex[longname] : undefined;
 
-        if (typeData) {
+        if (typeData && typeof typeData === "object" && typeData !== null) {
+            const typeDataObj = typeData as Record<string, unknown>;
             // 如果 JSDoc 中没有类型信息，使用 TypeScript 类型
-            if (!merged.type && typeData.type) {
-                merged.type = typeData.type;
+            if (!merged.type && typeDataObj.type) {
+                merged.type = typeDataObj.type;
             }
 
             // 如果 JSDoc 中没有参数类型，使用 TypeScript 参数类型
-            const typeDataParams = Array.isArray(typeData.params) ? typeData.params : undefined;
+            const typeDataParams = Array.isArray(typeDataObj.params)
+                ? typeDataObj.params
+                : undefined;
             if (!merged.params && typeDataParams) {
                 merged.params = typeDataParams;
             } else if (Array.isArray(merged.params) && typeDataParams) {
@@ -43,12 +46,14 @@ export function mergeTypeInfo(
             }
 
             // 如果 JSDoc 中没有返回类型，使用 TypeScript 返回类型
-            if (!merged.returns && typeData.returns) {
-                merged.returns = typeData.returns;
+            if (!merged.returns && typeDataObj.returns) {
+                merged.returns = typeDataObj.returns;
             }
 
             // 合并其他类型信息
-            const typeDataProperties = Array.isArray(typeData.properties) ? typeData.properties : undefined;
+            const typeDataProperties = Array.isArray(typeDataObj.properties)
+                ? typeDataObj.properties
+                : undefined;
             if (typeDataProperties) {
                 const mergedProperties = Array.isArray(merged.properties) ? merged.properties : [];
                 merged.properties = mergeProperties(mergedProperties, typeDataProperties);
@@ -125,7 +130,10 @@ function mergeParams(jsdocParams: unknown[], tsParams: unknown[]): unknown[] {
         const mergedItem = merged[index];
         if (mergedItem && typeof mergedItem === "object" && mergedItem !== null) {
             const mergedObj = mergedItem as Record<string, unknown>;
-            const tsParamObj = tsParam && typeof tsParam === "object" && tsParam !== null ? (tsParam as Record<string, unknown>) : null;
+            const tsParamObj =
+                tsParam && typeof tsParam === "object" && tsParam !== null
+                    ? (tsParam as Record<string, unknown>)
+                    : null;
             // 如果 JSDoc 参数没有类型，使用 TypeScript 类型
             if (!mergedObj.type && tsParamObj?.type) {
                 mergedObj.type = tsParamObj.type;

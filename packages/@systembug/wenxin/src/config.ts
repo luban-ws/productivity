@@ -175,7 +175,10 @@ function mergeConfig(
 
     // 合并 JSDoc 配置
     if (userConfig.jsdoc !== undefined) {
-        config.jsdoc = deepMerge(DEFAULT_JSDOC_CONFIG, userConfig.jsdoc as Record<string, unknown>);
+        config.jsdoc = deepMerge(
+            DEFAULT_JSDOC_CONFIG as unknown as Record<string, unknown>,
+            userConfig.jsdoc as unknown as Record<string, unknown>,
+        ) as unknown as JSDocOptions;
         // 解析相对路径
         if (config.jsdoc?.opts?.template) {
             config.jsdoc.opts.template = resolve(baseDir, config.jsdoc.opts.template);

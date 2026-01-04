@@ -58,7 +58,11 @@ function showPackageList(
  */
 function checkPublishConfigNamespace(rootDir: string): void {
     const rootPkg = readPackageJson(rootDir);
-    if (rootPkg?.publishConfig?.namespace) {
+    const publishConfig =
+        rootPkg && typeof rootPkg.publishConfig === "object" && rootPkg.publishConfig !== null
+            ? (rootPkg.publishConfig as Record<string, unknown>)
+            : null;
+    if (publishConfig?.namespace) {
         logger.warn(
             chalk.yellow(`⚠️  警告: 检测到 package.json 中存在 publishConfig.namespace 配置`),
         );
