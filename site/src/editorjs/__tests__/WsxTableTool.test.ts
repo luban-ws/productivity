@@ -79,7 +79,7 @@ describe("WsxTableTool", () => {
             const element = toolWithData.render();
             document.body.appendChild(element);
             const component = element.querySelector("wsx-table-component") as WsxTableComponent;
-            
+
             // 等待组件连接和渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
             await customElements.whenDefined("wsx-table-component");
@@ -87,7 +87,7 @@ describe("WsxTableTool", () => {
             expect(component.getAttribute("headers")).toBe('["Product","Price"]');
             expect(component.getAttribute("rows")).toBe('[["Laptop","$999"]]');
             expect(component.getAttribute("withheadings")).toBe("false");
-            
+
             element.remove();
         });
 
@@ -96,13 +96,13 @@ describe("WsxTableTool", () => {
             const element = readOnlyTool.render();
             document.body.appendChild(element);
             const component = element.querySelector("wsx-table-component") as WsxTableComponent;
-            
+
             // 等待组件连接和渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
             await customElements.whenDefined("wsx-table-component");
 
             expect(component.getAttribute("readonly")).toBe("true");
-            
+
             element.remove();
         });
     });
@@ -268,13 +268,13 @@ describe("WsxTableTool", () => {
             const element = toolWithData.render();
             document.body.appendChild(element);
             const component = element.querySelector("wsx-table-component") as WsxTableComponent;
-            
+
             // 等待组件连接和渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
             await customElements.whenDefined("wsx-table-component");
 
             expect(component.getAttribute("withheadings")).toBe("false");
-            
+
             element.remove();
         });
 
@@ -370,7 +370,7 @@ describe("WsxTableTool", () => {
             const element = toolWithData.render();
             document.body.appendChild(element);
             const component = element.querySelector("wsx-table-component") as WsxTableComponent;
-            
+
             // 等待组件连接和渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
             await customElements.whenDefined("wsx-table-component");
@@ -394,7 +394,7 @@ describe("WsxTableTool", () => {
             // Save should return updated data
             const savedData = toolWithData.save();
             expect(savedData).toEqual(newData);
-            
+
             element.remove();
         });
 

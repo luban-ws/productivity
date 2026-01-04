@@ -97,7 +97,7 @@ describe("LanguageSwitcher - 语言切换立即更新修复", () => {
         const componentInstance = component as any;
         const targetLanguage = initialText === "中文" ? "en" : "zh";
         const targetText = targetLanguage === "en" ? "English" : "中文";
-        
+
         componentInstance.currentLanguage = targetLanguage;
         componentInstance.rerender();
 

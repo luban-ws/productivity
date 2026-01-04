@@ -45,19 +45,25 @@ export default class WsxTableComponent extends WebComponent {
             case "headers":
                 try {
                     const headers = JSON.parse(newValue || '["Column 1", "Column 2"]');
-                    this.tableData = { ...this.tableData, headers };
-                    this.rerender();
+                    if (Array.isArray(headers)) {
+                        this.tableData = { ...this.tableData, headers };
+                        this.rerender();
+                    }
                 } catch (e) {
                     logger.error("Failed to parse headers:", e);
+                    // Keep existing headers on parse error
                 }
                 break;
             case "rows":
                 try {
                     const rows = JSON.parse(newValue || '[["", ""]]');
-                    this.tableData = { ...this.tableData, rows };
-                    this.rerender();
+                    if (Array.isArray(rows)) {
+                        this.tableData = { ...this.tableData, rows };
+                        this.rerender();
+                    }
                 } catch (e) {
                     logger.error("Failed to parse rows:", e);
+                    // Keep existing rows on parse error
                 }
                 break;
             case "withheadings":
@@ -77,7 +83,19 @@ export default class WsxTableComponent extends WebComponent {
     }
 
     render() {
-        const data = this.tableData;
+        // Ensure tableData is always valid
+        const data = this.tableData || {
+            headers: ["Column 1", "Column 2"],
+            rows: [["", ""]],
+            withHeadings: true,
+        };
+        
+        // Ensure rows and headers are arrays
+        const headers = Array.isArray(data.headers) ? data.headers : ["Column 1", "Column 2"];
+        const rows = Array.isArray(data.rows) ? data.rows : [["", ""]];
+        const withHeadings = data.withHeadings ?? true;
+        
+        const safeData = { headers, rows, withHeadings };
 
         return (
             <div class="wsx-table-tool">
@@ -88,7 +106,7 @@ export default class WsxTableComponent extends WebComponent {
                             <label class="checkbox-label">
                                 <input
                                     type="checkbox"
-                                    checked={data.withHeadings}
+                                    checked={safeData.withHeadings}
                                     onChange={this.handleHeadingsToggle}
                                 />
                                 Headers
@@ -112,7 +130,7 @@ export default class WsxTableComponent extends WebComponent {
                         </div>
 
                         <div class="table-info">
-                            {data.rows.length} rows × {data.headers.length} columns
+                            {safeData.rows.length} rows × {safeData.headers.length} columns
                         </div>
                     </div>
                 )}
@@ -120,10 +138,10 @@ export default class WsxTableComponent extends WebComponent {
                 {/* Table */}
                 <div class="table-container">
                     <table class="data-table">
-                        {data.withHeadings && (
+                        {safeData.withHeadings && (
                             <thead>
                                 <tr>
-                                    {data.headers.map((header, colIndex) => (
+                                    {safeData.headers.map((header, colIndex) => (
                                         <th key={colIndex}>
                                             <input
                                                 type="text"
@@ -153,7 +171,7 @@ export default class WsxTableComponent extends WebComponent {
                         )}
 
                         <tbody>
-                            {data.rows.map((row, rowIndex) => (
+                            {safeData.rows.map((row, rowIndex) => (
                                 <tr key={rowIndex}>
                                     {row.map((cell, colIndex) => (
                                         <td
@@ -340,7 +358,7 @@ export default class WsxTableComponent extends WebComponent {
     };
 
     private removeColumn = () => {
-        const data = this.tableData();
+        const data = this.tableData;
         if (data.headers.length <= 1) return;
 
         const newHeaders = data.headers.slice(0, -1);
@@ -355,7 +373,7 @@ export default class WsxTableComponent extends WebComponent {
     };
 
     private removeRow = () => {
-        const data = this.tableData();
+        const data = this.tableData;
         if (data.rows.length <= 1) return;
 
         this.updateTableData({
@@ -366,7 +384,7 @@ export default class WsxTableComponent extends WebComponent {
     };
 
     private exportCSV = () => {
-        const data = this.tableData();
+        const data = this.tableData;
         let csvContent = "";
 
         if (data.withHeadings) {
@@ -389,7 +407,7 @@ export default class WsxTableComponent extends WebComponent {
     };
 
     private clearTable = () => {
-        const data = this.tableData();
+        const data = this.tableData;
         const emptyRows = data.rows.map((row) => row.map(() => ""));
 
         this.updateTableData({ rows: emptyRows });

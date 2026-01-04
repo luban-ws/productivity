@@ -11,7 +11,7 @@ describe("WsxTableComponent", () => {
     beforeEach(async () => {
         // 等待自定义元素定义
         await customElements.whenDefined("wsx-table-component");
-        
+
         // Create component instance
         component = document.createElement("wsx-table-component") as WsxTableComponent;
         document.body.appendChild(component);
@@ -57,7 +57,7 @@ describe("WsxTableComponent", () => {
         test("should handle headers attribute", async () => {
             const testHeaders = ["Name", "Age", "City"];
             component.setAttribute("headers", JSON.stringify(testHeaders));
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -78,7 +78,7 @@ describe("WsxTableComponent", () => {
                 ["Jane", "30", "LA"],
             ];
             component.setAttribute("rows", JSON.stringify(testRows));
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -96,7 +96,7 @@ describe("WsxTableComponent", () => {
 
         test("should handle withheadings attribute", async () => {
             component.setAttribute("withheadings", "false");
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -108,7 +108,7 @@ describe("WsxTableComponent", () => {
 
         test("should handle readonly attribute", async () => {
             component.setAttribute("readonly", "true");
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -123,7 +123,7 @@ describe("WsxTableComponent", () => {
     describe("Table Structure", () => {
         test("should show headers when withHeadings is true", async () => {
             component.setAttribute("withheadings", "true");
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -136,7 +136,7 @@ describe("WsxTableComponent", () => {
 
         test("should hide headers when withHeadings is false", async () => {
             component.setAttribute("withheadings", "false");
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -151,7 +151,7 @@ describe("WsxTableComponent", () => {
                 ["E", "F"],
             ];
             component.setAttribute("rows", JSON.stringify(testRows));
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -168,7 +168,7 @@ describe("WsxTableComponent", () => {
 
             component.setAttribute("headers", JSON.stringify(testHeaders));
             component.setAttribute("rows", JSON.stringify(testRows));
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -254,7 +254,7 @@ describe("WsxTableComponent", () => {
             // Start with 3 columns
             component.setAttribute("headers", JSON.stringify(["A", "B", "C"]));
             component.setAttribute("rows", JSON.stringify([["1", "2", "3"]]));
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -262,7 +262,7 @@ describe("WsxTableComponent", () => {
                 ".btn-danger:nth-child(4)",
             ) as HTMLButtonElement;
             removeColumnBtn?.click();
-            
+
             // 等待点击事件处理
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -275,7 +275,7 @@ describe("WsxTableComponent", () => {
             // Start with 1 column
             component.setAttribute("headers", JSON.stringify(["A"]));
             component.setAttribute("rows", JSON.stringify([["1"]]));
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -310,7 +310,7 @@ describe("WsxTableComponent", () => {
                     ["C", "D"],
                 ]),
             );
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -318,7 +318,7 @@ describe("WsxTableComponent", () => {
                 ".btn-danger:nth-child(5)",
             ) as HTMLButtonElement;
             removeRowBtn?.click();
-            
+
             // 等待点击事件处理
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -329,7 +329,7 @@ describe("WsxTableComponent", () => {
         test("should not remove row if only one remains", async () => {
             // Start with 1 row
             component.setAttribute("rows", JSON.stringify([["A", "B"]]));
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -337,7 +337,7 @@ describe("WsxTableComponent", () => {
                 ".btn-danger:nth-child(5)",
             ) as HTMLButtonElement;
             removeRowBtn?.click();
-            
+
             // 等待点击事件处理
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -385,7 +385,7 @@ describe("WsxTableComponent", () => {
                     ["C", "D"],
                 ]),
             );
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -393,7 +393,7 @@ describe("WsxTableComponent", () => {
                 ".btn-outline:nth-child(2)",
             ) as HTMLButtonElement;
             clearBtn?.click();
-            
+
             // 等待点击事件处理
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -409,7 +409,7 @@ describe("WsxTableComponent", () => {
                 ".btn-outline:nth-child(3)",
             ) as HTMLButtonElement;
             sampleBtn?.click();
-            
+
             // 等待点击事件处理和数据加载
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -455,7 +455,7 @@ describe("WsxTableComponent", () => {
     describe("Readonly Mode", () => {
         test("should hide toolbar in readonly mode", async () => {
             component.setAttribute("readonly", "true");
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -465,7 +465,7 @@ describe("WsxTableComponent", () => {
 
         test("should hide actions in readonly mode", async () => {
             component.setAttribute("readonly", "true");
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -475,7 +475,7 @@ describe("WsxTableComponent", () => {
 
         test("should disable cell inputs in readonly mode", async () => {
             component.setAttribute("readonly", "true");
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -491,7 +491,7 @@ describe("WsxTableComponent", () => {
 
         test("should not allow cell selection in readonly mode", async () => {
             component.setAttribute("readonly", "true");
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -513,7 +513,7 @@ describe("WsxTableComponent", () => {
                     ["4", "5", "6"],
                 ]),
             );
-            
+
             // 等待属性更新和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -528,7 +528,7 @@ describe("WsxTableComponent", () => {
                 ".btn:nth-child(2)",
             ) as HTMLButtonElement;
             addColumnBtn?.click();
-            
+
             // 等待点击事件处理和重新渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -542,7 +542,7 @@ describe("WsxTableComponent", () => {
     describe("Error Handling", () => {
         test("should handle invalid JSON in headers attribute", async () => {
             component.setAttribute("headers", "invalid json");
-            
+
             // 等待属性更新和错误处理
             await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -553,7 +553,7 @@ describe("WsxTableComponent", () => {
 
         test("should handle invalid JSON in rows attribute", async () => {
             component.setAttribute("rows", "invalid json");
-            
+
             // 等待属性更新和错误处理
             await new Promise((resolve) => setTimeout(resolve, 50));
 

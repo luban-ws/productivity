@@ -26,6 +26,7 @@ export default class WsxCodeComponent extends WebComponent {
     private setCode = (value: string) => {
         this.codeValue = value;
         this.updateCodeElement();
+        this.rerender();
     };
 
     private languages = [
@@ -53,15 +54,19 @@ export default class WsxCodeComponent extends WebComponent {
         switch (name) {
             case "code":
                 this.setCode(newValue || "");
+                this.rerender();
                 break;
             case "language":
                 this.language = newValue || "javascript";
+                this.rerender();
                 break;
             case "showlinenumbers":
                 this.showLineNumbers = newValue === "true";
+                this.rerender();
                 break;
             case "readonly":
                 this.readonly = newValue === "true";
+                this.rerender();
                 break;
         }
     }
@@ -177,6 +182,8 @@ export default class WsxCodeComponent extends WebComponent {
         const target = event.target as HTMLTextAreaElement;
         this.codeValue = target.value;
         this.dispatchEvent(new CustomEvent("codechange", { detail: target.value }));
+        // Trigger rerender to update line numbers and preview
+        this.rerender();
     };
 
     private handleLineNumbersToggle = (event: Event) => {

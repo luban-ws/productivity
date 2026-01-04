@@ -226,7 +226,7 @@ describe("EditorJSDemo Component", () => {
         test("should maintain structure after reconnection", async () => {
             component.remove();
             document.body.appendChild(component);
-            
+
             // 等待重新连接和渲染
             await new Promise((resolve) => setTimeout(resolve, 200));
 
