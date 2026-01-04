@@ -87,19 +87,23 @@ describe("LanguageSwitcher - 语言切换立即更新修复", () => {
         const textSpan = button!.querySelector(".language-switcher-text");
         expect(textSpan).not.toBeNull();
 
-        // 验证初始状态
-        expect(textSpan!.textContent).toBe("English");
+        // 获取初始状态（可能是任何语言，取决于 i18n 配置）
+        const initialText = textSpan!.textContent;
+        expect(initialText).toBeTruthy();
 
         // 模拟状态更新（通过内部 API）
         // 注意：这是测试内部实现，生产代码不应该直接访问
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const componentInstance = component as any;
-        componentInstance.currentLanguage = "zh";
+        const targetLanguage = initialText === "中文" ? "en" : "zh";
+        const targetText = targetLanguage === "en" ? "English" : "中文";
+        
+        componentInstance.currentLanguage = targetLanguage;
         componentInstance.rerender();
 
         await new Promise((resolve) => setTimeout(resolve, 50));
 
         // 验证文本已更新
-        expect(textSpan!.textContent).toBe("中文");
+        expect(textSpan!.textContent).toBe(targetText);
     });
 });

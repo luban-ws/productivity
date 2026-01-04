@@ -11,7 +11,8 @@ describe("WsxTableTool", () => {
     let tool: WsxTableTool;
 
     beforeEach(async () => {
-        tool = document.createElement("wsx-table-tool") as WsxTableTool;
+        // WsxTableTool 是一个类，不是 Web Component，应该使用 new 创建实例
+        tool = new WsxTableTool();
     });
 
     describe("Tool Configuration", () => {
@@ -67,7 +68,7 @@ describe("WsxTableTool", () => {
             expect(component).toBeInstanceOf(HTMLElement);
         });
 
-        test("should set initial attributes on component", () => {
+        test("should set initial attributes on component", async () => {
             const initialData: TableData = {
                 headers: ["Product", "Price"],
                 rows: [["Laptop", "$999"]],
@@ -76,19 +77,33 @@ describe("WsxTableTool", () => {
 
             const toolWithData = new WsxTableTool({ data: initialData });
             const element = toolWithData.render();
+            document.body.appendChild(element);
             const component = element.querySelector("wsx-table-component") as WsxTableComponent;
+            
+            // 等待组件连接和渲染
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            await customElements.whenDefined("wsx-table-component");
 
             expect(component.getAttribute("headers")).toBe('["Product","Price"]');
             expect(component.getAttribute("rows")).toBe('[["Laptop","$999"]]');
             expect(component.getAttribute("withheadings")).toBe("false");
+            
+            element.remove();
         });
 
-        test("should set readonly attribute when in readonly mode", () => {
+        test("should set readonly attribute when in readonly mode", async () => {
             const readOnlyTool = new WsxTableTool({ readOnly: true });
             const element = readOnlyTool.render();
+            document.body.appendChild(element);
             const component = element.querySelector("wsx-table-component") as WsxTableComponent;
+            
+            // 等待组件连接和渲染
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            await customElements.whenDefined("wsx-table-component");
 
             expect(component.getAttribute("readonly")).toBe("true");
+            
+            element.remove();
         });
     });
 
@@ -239,7 +254,7 @@ describe("WsxTableTool", () => {
             expect(savedData.rows[0]).toHaveLength(5);
         });
 
-        test("should handle table without headers", () => {
+        test("should handle table without headers", async () => {
             const noHeaderData: TableData = {
                 headers: ["Col1", "Col2"],
                 rows: [
@@ -251,9 +266,16 @@ describe("WsxTableTool", () => {
 
             const toolWithData = new WsxTableTool({ data: noHeaderData });
             const element = toolWithData.render();
+            document.body.appendChild(element);
             const component = element.querySelector("wsx-table-component") as WsxTableComponent;
+            
+            // 等待组件连接和渲染
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            await customElements.whenDefined("wsx-table-component");
 
             expect(component.getAttribute("withheadings")).toBe("false");
+            
+            element.remove();
         });
 
         test("should handle single cell table", () => {
@@ -332,7 +354,7 @@ describe("WsxTableTool", () => {
             expect(element.firstElementChild?.tagName.toLowerCase()).toBe("wsx-table-component");
         });
 
-        test("should maintain data consistency between operations", () => {
+        test("should maintain data consistency between operations", async () => {
             const initialData: TableData = {
                 headers: ["Col1", "Col2"],
                 rows: [
@@ -346,7 +368,12 @@ describe("WsxTableTool", () => {
 
             // Render
             const element = toolWithData.render();
+            document.body.appendChild(element);
             const component = element.querySelector("wsx-table-component") as WsxTableComponent;
+            
+            // 等待组件连接和渲染
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            await customElements.whenDefined("wsx-table-component");
 
             // Verify initial state
             expect(JSON.parse(component.getAttribute("headers")!)).toEqual(["Col1", "Col2"]);
@@ -367,6 +394,8 @@ describe("WsxTableTool", () => {
             // Save should return updated data
             const savedData = toolWithData.save();
             expect(savedData).toEqual(newData);
+            
+            element.remove();
         });
 
         test("should handle component lifecycle properly", () => {

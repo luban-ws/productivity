@@ -20,13 +20,6 @@ import { RouterUtils } from "@wsxjs/wsx-router";
 // Import SEO utilities
 import { MetaManager, type RouteMeta } from "./utils/meta-manager";
 import { getRouteMeta, routeMeta } from "./config/route-meta";
-// Define NavItem locally to avoid import issues
-interface NavItem {
-    label: string;
-    to: string;
-    exact?: boolean;
-    hideOnMobile?: boolean;
-}
 // Import route-based section components
 import "./components/HomeSection.wsx";
 // Import LanguageSwitcher component
