@@ -95,11 +95,7 @@ export async function executePublish(
         if (!npmAuth) {
             spinner.fail();
             const pmCommand =
-                packageManager === "pnpm"
-                    ? "pnpm"
-                    : packageManager === "yarn"
-                      ? "yarn"
-                      : "npm";
+                packageManager === "pnpm" ? "pnpm" : packageManager === "yarn" ? "yarn" : "npm";
             throw new Error(`未登录 NPM，请先运行: ${pmCommand} login`);
         }
         spinner.succeed(`已登录 NPM: ${chalk.cyan(npmAuth.username)}`);
