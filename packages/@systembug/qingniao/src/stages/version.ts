@@ -55,15 +55,21 @@ export function bumpVersion(
     let [, major, minor, patch] = match.map(Number);
     switch (versionType) {
         case "major":
+            // bump major: 增加 major，重置 minor 和 patch 为 0
+            // 例如: 1.2.3 -> 2.0.0
             major++;
             minor = 0;
             patch = 0;
             break;
         case "minor":
+            // bump minor: 保持 major，增加 minor，重置 patch 为 0
+            // 例如: 1.2.3 -> 1.3.0
             minor++;
             patch = 0;
             break;
         case "patch":
+            // bump patch: 保持 major 和 minor，只增加 patch
+            // 例如: 1.2.3 -> 1.2.4
             patch++;
             break;
         default:
