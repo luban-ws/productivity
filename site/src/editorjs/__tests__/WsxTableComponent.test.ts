@@ -13,14 +13,14 @@ describe("WsxTableComponent", () => {
         if (component && component.parentNode) {
             component.parentNode.removeChild(component);
         }
-        component = null as any;
+        component = null as unknown as WsxTableComponent;
 
         // 等待自定义元素定义
         await customElements.whenDefined("wsx-table-component");
 
         // Create component instance
         component = document.createElement("wsx-table-component") as WsxTableComponent;
-        
+
         // 确保 document.body 存在且有效
         if (document.body) {
             document.body.appendChild(component);
@@ -44,7 +44,7 @@ describe("WsxTableComponent", () => {
                 component.parentNode.removeChild(component);
             }
             // 确保组件完全清理
-            component = null as any;
+            component = null as unknown as WsxTableComponent;
         }
     });
 

@@ -8,6 +8,20 @@
       "content": "鲁班工坊工具文档\n\n欢迎来到鲁班工坊生产力工具文档中心！\n\n 我们的工具\n\n鲁班工坊提供一系列高质量的开源工具，帮助开发者提升工作效率。\n\n 🌌 青鸟 Qingniao/docs/tools/qingniao\n\n零配置优先的通用发布工具，专为 monorepo 项目设计。自动检测包管理器、workspace 类型、构建工具，让发布流程如青鸟飞行般优雅流畅。\n\n 📚 文心 Wenxin/docs/tools/wenxin\n\n通用 API 文档生成工具，支持 JSDoc 和 TypeScript。混合模式自动合并类型信息到 JSDoc 文档，让文档生成如文心雕龙般精美。\n\n 🚀 盘古 Pangu/docs/tools/pangu\n\n交互式开发服务器启动工具。从配置文件读取 demo 列表，快速启动开发服务器，如盘古开天辟地般开启开发之旅。\n\n 👂 谛听 Diting/docs/tools/diting\n\n平台中立的日志库，使用 chalk 和 pino 进行日志记录。如谛听能听万物、辨真伪、记录善恶，为应用程序提供全面的日志记录能力。\n\n 快速开始\n\n每个工具都支持零配置使用，大多"
     },
     {
+      "id": "tools/wenxin/quick-start",
+      "title": "文心快速开始",
+      "category": "tools/wenxin",
+      "route": "/docs/tools/wenxin/quick-start",
+      "content": "文心 Wenxin\n\n📚 通用 API 文档生成工具，支持 JSDoc 和 TypeScript\n\n> 文心雕龙，雕琢文档之美\n\n 简介\n\n文心是一个通用 API 文档生成工具，支持 JSDoc 和 TypeScript。混合模式自动合并类型信息到 JSDoc 文档，让文档生成如文心雕龙般精美。\n\n 功能特性\n\n- ✅ 支持 JSDoc 注释提取\n- ✅ 支持 TypeScript 类型信息提取\n- ✅ 混合模式：自动合并类型信息到 JSDoc 文档\n- ✅ 配置化：支持配置文件或命令行参数\n- ✅ 向后兼容：保留原有 JSDoc 工具的所有功能\n\n 安装\n\n\n\n 快速开始\n\n 初始化配置（可选）\n\n\n\n 基本使用\n\n\n\n 配置\n\n 零配置模式\n\n文心支持零配置模式，会自动检测项目类型和配置。\n\n 配置文件\n\n创建 wenxin.config.json：\n\n\n\n 更多信息\n\n- GitHub 仓库https://github.com/luban-ws/productivity/tree/main/packages/@systembug/wenxin\n- NPM 包https://ww"
+    },
+    {
+      "id": "tools/qingniao/quick-start",
+      "title": "青鸟快速开始",
+      "category": "tools/qingniao",
+      "route": "/docs/tools/qingniao/quick-start",
+      "content": "青鸟 Qingniao\n\n🌌 零配置优先的通用发布工具，专为 monorepo 项目设计\n\n 简介\n\n青鸟是中国神话中西王母的信使，负责将消息和物品准确、及时地传递到人间。正如李商隐《无题》所描绘：\"蓬山此去无多路，青鸟殷勤为探看\"，青鸟工具如诗中的信使一般，殷勤地将您的代码包准确、优雅地传递到 NPM 仓库。\n\n@systembug/qingniao 是一个完全零配置优先的发布工具，自动从 package.json 和 workspace 配置推断所有必要信息，让发布流程如青鸟飞行般优雅流畅。\n\n 核心特性\n\n 🎯 零配置优先\n\n- 自动检测：自动检测包管理器、workspace 类型、构建工具\n- 智能推断：从项目结构自动推断构建步骤、产物路径、版本策略\n- 开箱即用：大多数项目无需配置文件即可使用\n\n 🚀 深度集成\n\n- pnpm/yarn/npm workspace：完整支持，自动处理依赖顺序\n- Changeset：深度集成，自动检测和使用 changeset\n- Turbo：自动检测并使用 Turbo 的依赖图\n- Git：自动处理版本提交、标签创建、远程推送\n\n ⚙"
+    },
+    {
       "id": "tools/pangu/quick-start",
       "title": "盘古快速开始",
       "category": "tools/pangu",
@@ -20,20 +34,6 @@
       "category": "tools/diting",
       "route": "/docs/tools/diting/quick-start",
       "content": "谛听 Diting\n\n👂 平台中立的日志库，使用 chalk 和 pino 进行日志记录\n\n 简介\n\n谛听是地藏菩萨的坐骑，具有\"能听万物\"的神通，能够听到三界六道中的一切声音，辨别真伪，记录善恶。正如神话中的谛听能够听万物、辨真伪、记录善恶，谛听日志库也致力于为应用程序提供全面的日志记录能力。\n\n 特性\n\n- ✅ 平台中立（Node.js + 浏览器）\n- ✅ TypeScript支持\n- ✅ 多日志级别（DEBUG, INFO, WARN, ERROR）\n- ✅ 使用 chalk 进行彩色输出\n- ✅ 使用 pino 进行结构化日志记录\n- ✅ 可插拔传输器\n- ✅ 上下文支持\n- ✅ 生产环境自动禁用日志\n\n 安装\n\n\n\n 快速开始\n\n 基本使用\n\n\n\n 带上下文的日志\n\n\n\n 配置\n\n 日志级别\n\n\n\n 生产环境\n\n在生产环境中，日志会自动禁用，除非明确启用。\n\n 更多信息\n\n- GitHub 仓库https://github.com/luban-ws/productivity/tree/main/packages/@systembug/diting\n- NPM 包https"
-    },
-    {
-      "id": "tools/qingniao/quick-start",
-      "title": "青鸟快速开始",
-      "category": "tools/qingniao",
-      "route": "/docs/tools/qingniao/quick-start",
-      "content": "青鸟 Qingniao\n\n🌌 零配置优先的通用发布工具，专为 monorepo 项目设计\n\n 简介\n\n青鸟是中国神话中西王母的信使，负责将消息和物品准确、及时地传递到人间。正如李商隐《无题》所描绘：\"蓬山此去无多路，青鸟殷勤为探看\"，青鸟工具如诗中的信使一般，殷勤地将您的代码包准确、优雅地传递到 NPM 仓库。\n\n@systembug/qingniao 是一个完全零配置优先的发布工具，自动从 package.json 和 workspace 配置推断所有必要信息，让发布流程如青鸟飞行般优雅流畅。\n\n 核心特性\n\n 🎯 零配置优先\n\n- 自动检测：自动检测包管理器、workspace 类型、构建工具\n- 智能推断：从项目结构自动推断构建步骤、产物路径、版本策略\n- 开箱即用：大多数项目无需配置文件即可使用\n\n 🚀 深度集成\n\n- pnpm/yarn/npm workspace：完整支持，自动处理依赖顺序\n- Changeset：深度集成，自动检测和使用 changeset\n- Turbo：自动检测并使用 Turbo 的依赖图\n- Git：自动处理版本提交、标签创建、远程推送\n\n ⚙"
-    },
-    {
-      "id": "tools/wenxin/quick-start",
-      "title": "文心快速开始",
-      "category": "tools/wenxin",
-      "route": "/docs/tools/wenxin/quick-start",
-      "content": "文心 Wenxin\n\n📚 通用 API 文档生成工具，支持 JSDoc 和 TypeScript\n\n> 文心雕龙，雕琢文档之美\n\n 简介\n\n文心是一个通用 API 文档生成工具，支持 JSDoc 和 TypeScript。混合模式自动合并类型信息到 JSDoc 文档，让文档生成如文心雕龙般精美。\n\n 功能特性\n\n- ✅ 支持 JSDoc 注释提取\n- ✅ 支持 TypeScript 类型信息提取\n- ✅ 混合模式：自动合并类型信息到 JSDoc 文档\n- ✅ 配置化：支持配置文件或命令行参数\n- ✅ 向后兼容：保留原有 JSDoc 工具的所有功能\n\n 安装\n\n\n\n 快速开始\n\n 初始化配置（可选）\n\n\n\n 基本使用\n\n\n\n 配置\n\n 零配置模式\n\n文心支持零配置模式，会自动检测项目类型和配置。\n\n 配置文件\n\n创建 wenxin.config.json：\n\n\n\n 更多信息\n\n- GitHub 仓库https://github.com/luban-ws/productivity/tree/main/packages/@systembug/wenxin\n- NPM 包https://ww"
     }
   ],
   "options": {
