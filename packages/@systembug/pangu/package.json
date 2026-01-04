@@ -1,56 +1,56 @@
 {
-    "name": "@systembug/pangu",
-    "version": "0.0.7",
-    "description": "盘古 - 交互式开发服务器启动工具，从配置文件读取 demo 列表",
-    "type": "module",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "bin": {
-        "pangu": "./dist/cli-entry.js"
-    },
-    "files": [
-        "dist",
-        "README.md"
-    ],
-    "scripts": {
-        "build": "tsc && node scripts/build-cli.js",
-        "dev": "tsc --watch",
-        "lint": "eslint src --ext .ts",
-        "lint:fix": "eslint src --ext .ts --fix",
-        "typecheck": "tsc --noEmit",
-        "test": "vitest run",
-        "test:watch": "vitest",
-        "test:coverage": "vitest run --coverage",
-        "clean": "rm -rf dist"
-    },
-    "dependencies": {
-        "inquirer": "^9.2.15",
-        "ora": "^8.0.1",
-        "js-yaml": "^4.1.0"
-    },
-    "devDependencies": {
-        "@types/inquirer": "^9.0.7",
-        "@types/js-yaml": "^4.0.9",
-        "@types/node": "^20.10.0",
-        "@typescript-eslint/eslint-plugin": "^8.49.0",
-        "@typescript-eslint/parser": "^8.49.0",
-        "eslint": "^9.39.2",
-        "typescript": "^5.3.3",
-        "vitest": "^1.6.0"
-    },
-    "license": "MIT",
-    "publishConfig": {
-        "access": "public"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/quizerjs/quizerjs.git",
-        "directory": "packages/@systembug/pangu"
-    },
-    "keywords": [
-        "cli",
-        "dev-server",
-        "monorepo",
-        "development-tool"
-    ]
+  "name": "@systembug/pangu",
+  "version": "0.0.8",
+  "description": "盘古 - 交互式开发服务器启动工具，从配置文件读取 demo 列表",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "pangu": "./dist/cli-entry.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/build-cli.js",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "inquirer": "^9.2.15",
+    "ora": "^8.0.1",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.49.0",
+    "@typescript-eslint/parser": "^8.49.0",
+    "eslint": "^9.39.2",
+    "typescript": "^5.3.3",
+    "vitest": "^1.6.0"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quizerjs/quizerjs.git",
+    "directory": "packages/@systembug/pangu"
+  },
+  "keywords": [
+    "cli",
+    "dev-server",
+    "monorepo",
+    "development-tool"
+  ]
 }
