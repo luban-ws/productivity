@@ -63,7 +63,7 @@ export function loadConfigFromPackageJson(rootDir: string): Partial<PublishConfi
  */
 async function autoDetectConfig(rootDir: string): Promise<Partial<PublishConfig>> {
     let packageManager = detectPackageManager(rootDir);
-    
+
     // 如果无法检测到包管理器，询问用户选择
     if (!packageManager) {
         packageManager = await select(
@@ -76,7 +76,7 @@ async function autoDetectConfig(rootDir: string): Promise<Partial<PublishConfig>
             "pnpm", // 默认选择 pnpm
         );
     }
-    
+
     const workspace = detectWorkspace(rootDir);
     const hasChangeset = detectChangeset(rootDir);
     const hasTurbo = detectTurbo(rootDir);
