@@ -8,15 +8,6 @@
     "prev": null,
     "next": null
   },
-  "tools/wenxin/quick-start": {
-    "title": "文心快速开始",
-    "category": "tools/wenxin",
-    "route": "/docs/tools/wenxin/quick-start",
-    "order": 2,
-    "description": "通用 API 文档生成工具，支持 JSDoc 和 TypeScript。混合模式自动合并类型信息到 JSDoc 文档，让文档生成如文心雕龙般精美",
-    "prev": null,
-    "next": null
-  },
   "tools/qingniao/quick-start": {
     "title": "青鸟快速开始",
     "category": "tools/qingniao",
@@ -26,12 +17,12 @@
     "prev": null,
     "next": null
   },
-  "tools/pangu/quick-start": {
-    "title": "盘古快速开始",
-    "category": "tools/pangu",
-    "route": "/docs/tools/pangu/quick-start",
-    "order": 3,
-    "description": "交互式开发服务器启动工具。从配置文件读取 demo 列表，快速启动开发服务器，如盘古开天辟地般开启开发之旅",
+  "tools/wenxin/quick-start": {
+    "title": "文心快速开始",
+    "category": "tools/wenxin",
+    "route": "/docs/tools/wenxin/quick-start",
+    "order": 2,
+    "description": "通用 API 文档生成工具，支持 JSDoc 和 TypeScript。混合模式自动合并类型信息到 JSDoc 文档，让文档生成如文心雕龙般精美",
     "prev": null,
     "next": null
   },
@@ -41,6 +32,15 @@
     "route": "/docs/tools/diting/quick-start",
     "order": 4,
     "description": "平台中立的日志库，使用 chalk 和 pino 进行日志记录。如谛听能听万物、辨真伪、记录善恶，为应用程序提供全面的日志记录能力",
+    "prev": null,
+    "next": null
+  },
+  "tools/pangu/quick-start": {
+    "title": "盘古快速开始",
+    "category": "tools/pangu",
+    "route": "/docs/tools/pangu/quick-start",
+    "order": 3,
+    "description": "交互式开发服务器启动工具。从配置文件读取 demo 列表，快速启动开发服务器，如盘古开天辟地般开启开发之旅",
     "prev": null,
     "next": null
   }

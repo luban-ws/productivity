@@ -72,9 +72,9 @@ npx wx
 
 ```json
 {
-  "entryPoints": ["src/index.ts"],
-  "outDir": "docs",
-  "mode": "hybrid"
+    "entryPoints": ["src/index.ts"],
+    "outDir": "docs",
+    "mode": "hybrid"
 }
 ```
 

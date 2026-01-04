@@ -54,7 +54,7 @@ describe("LanguageSwitcher - 语言切换立即更新修复", () => {
 
         // 找到中文选项（第二个选项）
         const zhOption = Array.from(options).find(
-            (opt) => opt.querySelector(".language-code")?.textContent === "ZH"
+            (opt) => opt.querySelector(".language-code")?.textContent === "ZH",
         );
         expect(zhOption).not.toBeNull();
 

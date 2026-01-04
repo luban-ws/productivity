@@ -13,7 +13,7 @@ import type { Tokens } from "marked";
 render() {
     // 1. 使用 lexer 获取 tokens（不渲染）
     const tokens = marked.lexer(this.markdown);
-    
+
     // 2. 手动将 tokens 转换为 WSX JSX 元素
     return (
         <div class="marked-content">
@@ -37,9 +37,9 @@ private renderToken(token: Tokens.Generic): HTMLElement | null {
         case "code": {
             const codeToken = token as Tokens.Code;
             return (
-                <wsx-marked-code 
-                    code={codeToken.text} 
-                    language={codeToken.lang || ""} 
+                <wsx-marked-code
+                    code={codeToken.text}
+                    language={codeToken.lang || ""}
                 />
             );
         }
@@ -49,6 +49,7 @@ private renderToken(token: Tokens.Generic): HTMLElement | null {
 ```
 
 ### 优点
+
 - ✅ 返回实际的 WSX JSX 元素
 - ✅ 完全使用 WSX JSX 语法
 - ✅ 类型安全（TypeScript 支持）
@@ -56,6 +57,7 @@ private renderToken(token: Tokens.Generic): HTMLElement | null {
 - ✅ 不需要 HTML 转义
 
 ### 缺点
+
 - ❌ 需要手动处理所有 token 类型
 - ❌ 不使用 marked 的内置 renderer 系统
 
@@ -81,15 +83,15 @@ render() → 返回完整的 JSX 树
 
 ## Token 类型映射
 
-| Markdown Token | WSX Component |
-|---------------|---------------|
-| `heading` | `<wsx-marked-heading>` |
-| `code` | `<wsx-marked-code>` |
-| `blockquote` | `<wsx-marked-blockquote>` |
-| `paragraph` | `<wsx-marked-paragraph>` |
-| `list` | `<wsx-marked-list>` |
-| `html` | `<div innerHTML={...}>` |
-| `hr` | `<hr />` |
+| Markdown Token | WSX Component             |
+| -------------- | ------------------------- |
+| `heading`      | `<wsx-marked-heading>`    |
+| `code`         | `<wsx-marked-code>`       |
+| `blockquote`   | `<wsx-marked-blockquote>` |
+| `paragraph`    | `<wsx-marked-paragraph>`  |
+| `list`         | `<wsx-marked-list>`       |
+| `html`         | `<div innerHTML={...}>`   |
+| `hr`           | `<hr />`                  |
 
 ---
 
@@ -121,6 +123,7 @@ private renderToken(token: Tokens.Generic): HTMLElement | null {
 ## 总结
 
 使用 `marked.lexer()` + 手动 WSX JSX 渲染的方式，可以：
+
 - ✅ 返回实际的 WSX JSX 元素
 - ✅ 完全类型安全（TypeScript 支持）
 - ✅ 使用 JSX 语法，代码更清晰

@@ -58,7 +58,7 @@ describe("WsxTableComponent", () => {
             expect(component.getData().headers).toEqual(testHeaders);
 
             const headerInputs = component.shadowRoot?.querySelectorAll(
-                ".header-input"
+                ".header-input",
             ) as NodeListOf<HTMLInputElement>;
             expect(headerInputs).toHaveLength(3);
             expect(headerInputs[0].value).toBe("Name");
@@ -76,7 +76,7 @@ describe("WsxTableComponent", () => {
             expect(component.getData().rows).toEqual(testRows);
 
             const cellInputs = component.shadowRoot?.querySelectorAll(
-                "tbody .cell-input"
+                "tbody .cell-input",
             ) as NodeListOf<HTMLInputElement>;
             expect(cellInputs[0].value).toBe("John");
             expect(cellInputs[1].value).toBe("25");
@@ -151,7 +151,7 @@ describe("WsxTableComponent", () => {
     describe("User Interactions", () => {
         test("should update cell value when input changes", () => {
             const cellInput = component.shadowRoot?.querySelector(
-                "tbody .cell-input"
+                "tbody .cell-input",
             ) as HTMLInputElement;
 
             cellInput.value = "New Value";
@@ -163,7 +163,7 @@ describe("WsxTableComponent", () => {
 
         test("should update header value when header input changes", () => {
             const headerInput = component.shadowRoot?.querySelector(
-                ".header-input"
+                ".header-input",
             ) as HTMLInputElement;
 
             headerInput.value = "New Header";
@@ -184,7 +184,7 @@ describe("WsxTableComponent", () => {
             });
 
             const cellInput = component.shadowRoot?.querySelector(
-                "tbody .cell-input"
+                "tbody .cell-input",
             ) as HTMLInputElement;
             cellInput.value = "Test Value";
             cellInput.dispatchEvent(new Event("input", { bubbles: true }));
@@ -198,7 +198,7 @@ describe("WsxTableComponent", () => {
 
         test("should toggle headers when checkbox changes", () => {
             const checkbox = component.shadowRoot?.querySelector(
-                'input[type="checkbox"]'
+                'input[type="checkbox"]',
             ) as HTMLInputElement;
 
             checkbox.checked = false;
@@ -211,7 +211,7 @@ describe("WsxTableComponent", () => {
     describe("Column Management", () => {
         test("should add column when + Column button clicked", () => {
             const addColumnBtn = component.shadowRoot?.querySelector(
-                ".btn:nth-child(2)"
+                ".btn:nth-child(2)",
             ) as HTMLButtonElement;
             addColumnBtn?.click();
 
@@ -227,7 +227,7 @@ describe("WsxTableComponent", () => {
             component.setAttribute("rows", JSON.stringify([["1", "2", "3"]]));
 
             const removeColumnBtn = component.shadowRoot?.querySelector(
-                ".btn-danger:nth-child(4)"
+                ".btn-danger:nth-child(4)",
             ) as HTMLButtonElement;
             removeColumnBtn?.click();
 
@@ -242,7 +242,7 @@ describe("WsxTableComponent", () => {
             component.setAttribute("rows", JSON.stringify([["1"]]));
 
             const removeColumnBtn = component.shadowRoot?.querySelector(
-                ".btn-danger:nth-child(4)"
+                ".btn-danger:nth-child(4)",
             ) as HTMLButtonElement;
             removeColumnBtn?.click();
 
@@ -254,7 +254,7 @@ describe("WsxTableComponent", () => {
     describe("Row Management", () => {
         test("should add row when + Row button clicked", () => {
             const addRowBtn = component.shadowRoot?.querySelector(
-                ".btn:nth-child(3)"
+                ".btn:nth-child(3)",
             ) as HTMLButtonElement;
             addRowBtn?.click();
 
@@ -270,11 +270,11 @@ describe("WsxTableComponent", () => {
                 JSON.stringify([
                     ["A", "B"],
                     ["C", "D"],
-                ])
+                ]),
             );
 
             const removeRowBtn = component.shadowRoot?.querySelector(
-                ".btn-danger:nth-child(5)"
+                ".btn-danger:nth-child(5)",
             ) as HTMLButtonElement;
             removeRowBtn?.click();
 
@@ -287,7 +287,7 @@ describe("WsxTableComponent", () => {
             component.setAttribute("rows", JSON.stringify([["A", "B"]]));
 
             const removeRowBtn = component.shadowRoot?.querySelector(
-                ".btn-danger:nth-child(5)"
+                ".btn-danger:nth-child(5)",
             ) as HTMLButtonElement;
             removeRowBtn?.click();
 
@@ -333,11 +333,11 @@ describe("WsxTableComponent", () => {
                 JSON.stringify([
                     ["A", "B"],
                     ["C", "D"],
-                ])
+                ]),
             );
 
             const clearBtn = component.shadowRoot?.querySelector(
-                ".btn-outline:nth-child(2)"
+                ".btn-outline:nth-child(2)",
             ) as HTMLButtonElement;
             clearBtn?.click();
 
@@ -350,7 +350,7 @@ describe("WsxTableComponent", () => {
 
         test("should load sample data when Sample Data button clicked", () => {
             const sampleBtn = component.shadowRoot?.querySelector(
-                ".btn-outline:nth-child(3)"
+                ".btn-outline:nth-child(3)",
             ) as HTMLButtonElement;
             sampleBtn?.click();
 
@@ -379,11 +379,11 @@ describe("WsxTableComponent", () => {
                 JSON.stringify([
                     ["John", "25"],
                     ["Jane", "30"],
-                ])
+                ]),
             );
 
             const exportBtn = component.shadowRoot?.querySelector(
-                ".btn-outline:nth-child(1)"
+                ".btn-outline:nth-child(1)",
             ) as HTMLButtonElement;
             exportBtn?.click();
 
@@ -412,7 +412,7 @@ describe("WsxTableComponent", () => {
             component.setAttribute("readonly", "true");
 
             const cellInputs = component.shadowRoot?.querySelectorAll(
-                ".cell-input"
+                ".cell-input",
             ) as NodeListOf<HTMLInputElement>;
             cellInputs.forEach((input) => {
                 expect(input.readOnly).toBe(true);
@@ -437,7 +437,7 @@ describe("WsxTableComponent", () => {
                 JSON.stringify([
                     ["1", "2", "3"],
                     ["4", "5", "6"],
-                ])
+                ]),
             );
 
             const tableInfo = component.shadowRoot?.querySelector(".table-info");
@@ -446,7 +446,7 @@ describe("WsxTableComponent", () => {
 
         test("should update dimensions when structure changes", () => {
             const addColumnBtn = component.shadowRoot?.querySelector(
-                ".btn:nth-child(2)"
+                ".btn:nth-child(2)",
             ) as HTMLButtonElement;
             addColumnBtn?.click();
 
@@ -481,24 +481,24 @@ describe("WsxTableComponent", () => {
 
         test("should have proper placeholders", () => {
             const headerInput = component.shadowRoot?.querySelector(
-                ".header-input"
+                ".header-input",
             ) as HTMLInputElement;
             expect(headerInput?.placeholder).toBe("Column 1");
 
             const cellInput = component.shadowRoot?.querySelector(
-                "tbody .cell-input"
+                "tbody .cell-input",
             ) as HTMLInputElement;
             expect(cellInput?.placeholder).toBe("Enter data...");
         });
 
         test("should have proper button text", () => {
             const addColumnBtn = component.shadowRoot?.querySelector(
-                ".btn:nth-child(2)"
+                ".btn:nth-child(2)",
             ) as HTMLButtonElement;
             expect(addColumnBtn?.textContent?.trim()).toBe("+ Column");
 
             const exportBtn = component.shadowRoot?.querySelector(
-                ".btn-outline:nth-child(1)"
+                ".btn-outline:nth-child(1)",
             ) as HTMLButtonElement;
             expect(exportBtn?.textContent?.trim()).toBe("📄 Export CSV");
         });

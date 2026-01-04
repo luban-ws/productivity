@@ -80,10 +80,10 @@ npx qn
 
 ```json
 {
-  "packageManager": "pnpm",
-  "workspaceType": "pnpm",
-  "buildTool": "vite",
-  "versionStrategy": "changeset"
+    "packageManager": "pnpm",
+    "workspaceType": "pnpm",
+    "buildTool": "vite",
+    "versionStrategy": "changeset"
 }
 ```
 

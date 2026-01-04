@@ -39,29 +39,29 @@ yarn add @systembug/diting
 ### 基本使用
 
 ```typescript
-import { createLogger } from '@systembug/diting';
+import { createLogger } from "@systembug/diting";
 
 // 创建 logger
-const logger = createLogger('MyService');
+const logger = createLogger("MyService");
 
 // 使用不同级别的日志
-logger.debug('Debug message');
-logger.info('Info message');
-logger.warn('Warning message');
-logger.error('Error message');
+logger.debug("Debug message");
+logger.info("Info message");
+logger.warn("Warning message");
+logger.error("Error message");
 ```
 
 ### 带上下文的日志
 
 ```typescript
-const logger = createLogger('MyService', {
-  context: {
-    userId: '123',
-    requestId: 'abc'
-  }
+const logger = createLogger("MyService", {
+    context: {
+        userId: "123",
+        requestId: "abc",
+    },
 });
 
-logger.info('User action', { action: 'login' });
+logger.info("User action", { action: "login" });
 ```
 
 ## 配置
@@ -69,10 +69,10 @@ logger.info('User action', { action: 'login' });
 ### 日志级别
 
 ```typescript
-import { setLogLevel } from '@systembug/diting';
+import { setLogLevel } from "@systembug/diting";
 
 // 设置全局日志级别
-setLogLevel('info'); // 只显示 info 及以上级别
+setLogLevel("info"); // 只显示 info 及以上级别
 ```
 
 ### 生产环境

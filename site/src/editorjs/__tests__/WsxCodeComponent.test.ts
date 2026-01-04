@@ -61,7 +61,7 @@ describe("WsxCodeComponent", () => {
             expect(component.getData().code).toBe(testCode);
 
             const textarea = component.shadowRoot?.querySelector(
-                ".code-editor"
+                ".code-editor",
             ) as HTMLTextAreaElement;
             expect(textarea?.value).toBe(testCode);
         });
@@ -73,7 +73,7 @@ describe("WsxCodeComponent", () => {
             expect(component.getData().language).toBe("python");
 
             const select = component.shadowRoot?.querySelector(
-                ".language-select"
+                ".language-select",
             ) as HTMLSelectElement;
             expect(select?.value).toBe("python");
         });
@@ -85,7 +85,7 @@ describe("WsxCodeComponent", () => {
             expect(component.getData().showLineNumbers).toBe(false);
 
             const checkbox = component.shadowRoot?.querySelector(
-                'input[type="checkbox"]'
+                'input[type="checkbox"]',
             ) as HTMLInputElement;
             expect(checkbox?.checked).toBe(false);
         });
@@ -95,12 +95,12 @@ describe("WsxCodeComponent", () => {
             await waitForUpdate();
 
             const textarea = component.shadowRoot?.querySelector(
-                ".code-editor"
+                ".code-editor",
             ) as HTMLTextAreaElement;
             expect(textarea?.readOnly).toBe(true);
 
             const select = component.shadowRoot?.querySelector(
-                ".language-select"
+                ".language-select",
             ) as HTMLSelectElement;
             expect(select?.disabled).toBe(true);
         });
@@ -109,7 +109,7 @@ describe("WsxCodeComponent", () => {
     describe("User Interactions", () => {
         test("should update code when typing in textarea", () => {
             const textarea = component.shadowRoot?.querySelector(
-                ".code-editor"
+                ".code-editor",
             ) as HTMLTextAreaElement;
             const testCode = "const x = 42;";
 
@@ -131,7 +131,7 @@ describe("WsxCodeComponent", () => {
             });
 
             const textarea = component.shadowRoot?.querySelector(
-                ".code-editor"
+                ".code-editor",
             ) as HTMLTextAreaElement;
             textarea.value = testCode;
             textarea.dispatchEvent(new Event("input", { bubbles: true }));
@@ -145,7 +145,7 @@ describe("WsxCodeComponent", () => {
 
         test("should change language when select value changes", () => {
             const select = component.shadowRoot?.querySelector(
-                ".language-select"
+                ".language-select",
             ) as HTMLSelectElement;
 
             select.value = "typescript";
@@ -164,7 +164,7 @@ describe("WsxCodeComponent", () => {
             });
 
             const select = component.shadowRoot?.querySelector(
-                ".language-select"
+                ".language-select",
             ) as HTMLSelectElement;
             select.value = "css";
             select.dispatchEvent(new Event("change", { bubbles: true }));
@@ -178,7 +178,7 @@ describe("WsxCodeComponent", () => {
 
         test("should toggle line numbers when checkbox changes", () => {
             const checkbox = component.shadowRoot?.querySelector(
-                'input[type="checkbox"]'
+                'input[type="checkbox"]',
             ) as HTMLInputElement;
 
             checkbox.checked = false;
@@ -197,7 +197,7 @@ describe("WsxCodeComponent", () => {
             });
 
             const checkbox = component.shadowRoot?.querySelector(
-                'input[type="checkbox"]'
+                'input[type="checkbox"]',
             ) as HTMLInputElement;
             checkbox.checked = false;
             checkbox.dispatchEvent(new Event("change", { bubbles: true }));
@@ -288,13 +288,13 @@ describe("WsxCodeComponent", () => {
             await waitForUpdate();
 
             const textarea = component.shadowRoot?.querySelector(
-                ".code-editor"
+                ".code-editor",
             ) as HTMLTextAreaElement;
             const select = component.shadowRoot?.querySelector(
-                ".language-select"
+                ".language-select",
             ) as HTMLSelectElement;
             const checkbox = component.shadowRoot?.querySelector(
-                'input[type="checkbox"]'
+                'input[type="checkbox"]',
             ) as HTMLInputElement;
 
             expect(textarea.readOnly).toBe(true);
@@ -334,7 +334,7 @@ describe("WsxCodeComponent", () => {
             component.setAttribute("code", unformattedJson);
 
             const formatBtn = component.shadowRoot?.querySelector(
-                ".format-btn"
+                ".format-btn",
             ) as HTMLButtonElement;
             formatBtn?.click();
 
@@ -347,7 +347,7 @@ describe("WsxCodeComponent", () => {
             component.setAttribute("code", unformattedJs);
 
             const formatBtn = component.shadowRoot?.querySelector(
-                ".format-btn"
+                ".format-btn",
             ) as HTMLButtonElement;
             formatBtn?.click();
 
@@ -362,7 +362,7 @@ describe("WsxCodeComponent", () => {
             component.setAttribute("code", invalidJson);
 
             const formatBtn = component.shadowRoot?.querySelector(
-                ".format-btn"
+                ".format-btn",
             ) as HTMLButtonElement;
             formatBtn?.click();
 
@@ -386,7 +386,7 @@ describe("WsxCodeComponent", () => {
             ];
 
             const select = component.shadowRoot?.querySelector(
-                ".language-select"
+                ".language-select",
             ) as HTMLSelectElement;
             const options = Array.from(select.options).map((option) => option.value);
 
@@ -397,10 +397,10 @@ describe("WsxCodeComponent", () => {
 
         test("should capitalize language names in select options", () => {
             const select = component.shadowRoot?.querySelector(
-                ".language-select"
+                ".language-select",
             ) as HTMLSelectElement;
             const javascriptOption = Array.from(select.options).find(
-                (option) => option.value === "javascript"
+                (option) => option.value === "javascript",
             );
 
             expect(javascriptOption?.textContent).toBe("Javascript");
@@ -418,7 +418,7 @@ describe("WsxCodeComponent", () => {
 
         test("should have proper button titles", () => {
             const formatBtn = component.shadowRoot?.querySelector(
-                ".format-btn"
+                ".format-btn",
             ) as HTMLButtonElement;
             const copyBtn = component.shadowRoot?.querySelector(".copy-btn") as HTMLButtonElement;
 
@@ -431,7 +431,7 @@ describe("WsxCodeComponent", () => {
             await waitForUpdate();
 
             const textarea = component.shadowRoot?.querySelector(
-                ".code-editor"
+                ".code-editor",
             ) as HTMLTextAreaElement;
             expect(textarea?.placeholder).toBe("Enter python code here...");
         });

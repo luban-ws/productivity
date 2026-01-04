@@ -40,22 +40,22 @@ yarn add -D @systembug/pangu
 
 ```json
 {
-  "projectName": "my-project",
-  "packageManager": "pnpm",
-  "demos": [
-    {
-      "name": "Vue Demo",
-      "value": "vue",
-      "description": "Vue 3 演示项目",
-      "package": "@myproject/demo-vue"
-    },
-    {
-      "name": "React Demo",
-      "value": "react",
-      "description": "React 18 演示项目",
-      "package": "@myproject/demo-react"
-    }
-  ]
+    "projectName": "my-project",
+    "packageManager": "pnpm",
+    "demos": [
+        {
+            "name": "Vue Demo",
+            "value": "vue",
+            "description": "Vue 3 演示项目",
+            "package": "@myproject/demo-vue"
+        },
+        {
+            "name": "React Demo",
+            "value": "react",
+            "description": "React 18 演示项目",
+            "package": "@myproject/demo-react"
+        }
+    ]
 }
 ```
 
@@ -78,10 +78,10 @@ npx pg
 - `projectName`: 项目名称
 - `packageManager`: 包管理器（pnpm/npm/yarn）
 - `demos`: Demo 列表，每个 demo 包含：
-  - `name`: 显示名称
-  - `value`: 标识值
-  - `description`: 描述
-  - `package`: 包名
+    - `name`: 显示名称
+    - `value`: 标识值
+    - `description`: 描述
+    - `package`: 包名
 
 ## 更多信息
 
