@@ -1,0 +1,20 @@
+{
+    "hero": {
+        "badge": "🛠️ 鲁班工坊",
+        "title": "生产力工具集",
+        "subtitle": "Luban Workshop Productivity Tools",
+        "description": "专为 monorepo 项目设计的零配置优先工具集，让开发流程如行云流水般优雅。",
+        "getStarted": "开始使用",
+        "viewTools": "查看工具",
+        "viewDocs": "查看文档",
+        "viewGitHub": "查看 GitHub"
+    },
+    "tools": {
+        "title": "我们的工具",
+        "description": "鲁班工坊提供一系列生产力工具，帮助开发者更高效地构建和维护项目。"
+    },
+    "quickStart": {
+        "title": "快速开始",
+        "description": "立即体验鲁班工坊的强大工具，只需几步即可集成到您的项目中。"
+    }
+}

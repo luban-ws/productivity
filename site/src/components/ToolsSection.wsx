@@ -1,0 +1,36 @@
+/** @jsxImportSource @wsxjs/wsx-core */
+/**
+ * ToolsSection Component - 工具介绍区域
+ * 展示所有鲁班工坊生产力工具
+ */
+import { WebComponent, autoRegister } from "@wsxjs/wsx-core";
+import { i18n } from "@wsxjs/wsx-i18next";
+import styles from "./ToolsSection.css?inline";
+import { tools } from "../data/tools";
+import "./ToolCard.wsx"; // 导入 ToolCard 组件以触发自动注册
+
+@autoRegister({ tagName: "tools-section" })
+@i18n("home")
+export default class ToolsSection extends WebComponent {
+    constructor() {
+        super({ styles, styleName: "tools-section" });
+    }
+
+    render() {
+        return (
+            <section class="tools-section">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="section-title">{this.t("tools.title")}</h2>
+                        <p class="section-description">{this.t("tools.description")}</p>
+                    </div>
+                    <div class="tools-grid">
+                        {tools.map((tool) => (
+                            <tool-card key={tool.id} tool={tool}></tool-card>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+    }
+}

@@ -1,0 +1,12 @@
+{
+    "projectName": "鲁班工坊",
+    "packageManager": "pnpm",
+    "demos": [
+        {
+            "name": "Site - 生产力工具集展示网站",
+            "value": "site",
+            "description": "启动展示网站开发服务器",
+            "package": "@luban-ws/productivity"
+        }
+    ]
+}

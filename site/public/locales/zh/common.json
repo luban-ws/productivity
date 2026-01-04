@@ -1,0 +1,44 @@
+{
+    "language": {
+        "switcher": {
+            "label": "语言",
+            "current": "当前语言"
+        },
+        "names": {
+            "en": "English",
+            "zh": "中文",
+            "es": "Español",
+            "fr": "Français",
+            "de": "Deutsch",
+            "ja": "日本語",
+            "ko": "한국어"
+        }
+    },
+    "nav": {
+        "home": "首页",
+        "tools": "工具",
+        "docs": "文档"
+    },
+    "brand": {
+        "name": "鲁班工坊"
+    },
+    "footer": {
+        "tagline": "鲁班工坊致力于提供一系列高质量的开源工具，帮助开发者提升工作效率。",
+        "resources": "资源",
+        "tools": "工具",
+        "legal": "法律",
+        "documentation": "文档",
+        "githubRepo": "GitHub",
+        "mitLicense": "MIT 许可证",
+        "privacyPolicy": "隐私政策",
+        "termsOfService": "服务条款",
+        "copyright": "© 2026 鲁班工坊。基于 MIT 许可证发布。",
+        "madeWith": "由鲁班工坊团队用 ❤️ 制作"
+    },
+    "notFound": {
+        "title": "页面未找到",
+        "description": "您访问的页面不存在或已被移动。",
+        "goHome": "返回首页",
+        "goBack": "返回上一页"
+    }
+}

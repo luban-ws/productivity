@@ -1,0 +1,148 @@
+/** @jsxImportSource @wsxjs/wsx-core */
+/**
+ * ToolCard Component - 工具卡片组件
+ * 展示单个工具的信息，使用黑白卡通风格
+ */
+import { WebComponent, autoRegister, state } from "@wsxjs/wsx-core";
+import { i18nInstance } from "@wsxjs/wsx-i18next";
+import type { Tool } from "../data/tools";
+import styles from "./ToolCard.css?inline";
+
+@autoRegister({ tagName: "tool-card" })
+export default class ToolCard extends WebComponent {
+    // @state 需要默认值，不能是 null 或 undefined
+    @state private tool: Tool = {
+        id: "",
+        name: "",
+        nameEn: "",
+        icon: "",
+        description: "",
+        descriptionEn: "",
+        descriptionJa: "",
+        descriptionKo: "",
+        features: [],
+        featuresEn: [],
+        featuresJa: [],
+        featuresKo: [],
+        githubUrl: "",
+        npmUrl: "",
+    };
+    @state private currentLanguage: string = "zh-CN";
+
+    constructor() {
+        super({ styles, styleName: "tool-card" });
+    }
+
+    /**
+     * 接收工具数据的 property setter/getter
+     * WSXJS 使用 property 方式传递复杂数据
+     */
+    set toolData(value: Tool | string) {
+        if (typeof value === "string") {
+            try {
+                this.tool = JSON.parse(value);
+            } catch (e) {
+                console.error("Failed to parse tool data:", e);
+            }
+        } else {
+            this.tool = value;
+        }
+    }
+
+    get toolData(): Tool {
+        return this.tool;
+    }
+
+    protected onConnected(): void {
+        super.onConnected?.();
+
+        // 初始化语言状态
+        this.currentLanguage = i18nInstance.language || "zh-CN";
+
+        // 监听语言变化
+        i18nInstance.on("languageChanged", this.handleLanguageChanged);
+    }
+
+    protected onDisconnected(): void {
+        super.onDisconnected?.();
+        i18nInstance.off("languageChanged", this.handleLanguageChanged);
+    }
+
+    private handleLanguageChanged = (lang: string): void => {
+        this.currentLanguage = lang;
+        this.rerender();
+    };
+
+    render() {
+        // 检查是否有有效数据（通过 id 判断）
+        if (!this.tool.id) {
+            return <div class="tool-card-loading">Loading...</div>;
+        }
+
+        // 检测当前语言并选择对应的描述和特性
+        const lang = this.currentLanguage.split("-")[0];
+        let description: string;
+        let features: string[];
+
+        switch (lang) {
+            case "zh":
+                description = this.tool.description;
+                features = this.tool.features;
+                break;
+            case "ja":
+                description = this.tool.descriptionJa || this.tool.descriptionEn;
+                features = this.tool.featuresJa || this.tool.featuresEn;
+                break;
+            case "ko":
+                description = this.tool.descriptionKo || this.tool.descriptionEn;
+                features = this.tool.featuresKo || this.tool.featuresEn;
+                break;
+            default:
+                description = this.tool.descriptionEn;
+                features = this.tool.featuresEn;
+                break;
+        }
+
+        return (
+            <div class="tool-card">
+                <div class="tool-card-header">
+                    <div class="tool-icon">{this.tool.icon}</div>
+                    <div class="tool-names">
+                        <h3 class="tool-name">{this.tool.name}</h3>
+                        <span class="tool-name-en">{this.tool.nameEn}</span>
+                    </div>
+                </div>
+                <p class="tool-description">{description}</p>
+                <div class="tool-features">
+                    {features &&
+                        Array.isArray(features) &&
+                        features.map((feature, index) => (
+                            <span key={index} class="tool-feature">
+                                {feature}
+                            </span>
+                        ))}
+                </div>
+                <div class="tool-footer">
+                    <a
+                        href={this.tool.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="tool-link"
+                    >
+                        GitHub →
+                    </a>
+                    {this.tool.npmUrl && (
+                        <a
+                            href={this.tool.npmUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="tool-link tool-link-npm"
+                        >
+                            NPM →
+                        </a>
+                    )}
+                </div>
+            </div>
+        );
+    }
+}

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__electron-mcp-server__take_screenshot",
+      "mcp__electron-mcp-server__send_command_to_electron"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "memory",
+    "executeautomation-playwright-server"
+  ]
+}

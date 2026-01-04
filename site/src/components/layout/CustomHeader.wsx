@@ -1,0 +1,48 @@
+/** @jsxImportSource @wsxjs/wsx-core */
+/**
+ * CustomHeader Component - 自定义手写风格 Header
+ * 完全控制样式，符合黑白卡通手写风格
+ */
+import { LightComponent, autoRegister } from "@wsxjs/wsx-core";
+import { i18n } from "@wsxjs/wsx-i18next";
+import "@wsxjs/wsx-base-components";
+import "@wsxjs/wsx-router";
+import styles from "./CustomHeader.css?inline";
+import "../LanguageSwitcher.wsx";
+
+@autoRegister({ tagName: "custom-header" })
+@i18n("common")
+export default class CustomHeader extends LightComponent {
+    constructor() {
+        super({ styles, styleName: "custom-header" });
+    }
+
+    render() {
+        return (
+            <header class="header">
+                <div class="header-container">
+                    <div class="header-brand">
+                        <wsx-link to="/" class="brand-link">
+                            <span class="brand-icon">🛠️</span>
+                            <span class="brand-text">{this.t("brand.name")}</span>
+                        </wsx-link>
+                    </div>
+
+                    <nav class="header-nav">
+                        <wsx-link to="/" class="nav-link" active-class="nav-link-active" exact>
+                            {this.t("nav.home")}
+                        </wsx-link>
+                        <wsx-link
+                            to="/docs/productivity"
+                            class="nav-link"
+                            active-class="nav-link-active"
+                        >
+                            {this.t("nav.docs")}
+                        </wsx-link>
+                        <language-switcher />
+                    </nav>
+                </div>
+            </header>
+        );
+    }
+}

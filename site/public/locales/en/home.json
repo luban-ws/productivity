@@ -1,0 +1,20 @@
+{
+    "hero": {
+        "badge": "🛠️ Luban Workshop",
+        "title": "Productivity Tools",
+        "subtitle": "Zero-config-first Tools for Monorepo",
+        "description": "A collection of zero-config-first productivity tools designed for monorepo projects, making development workflows elegant and smooth.",
+        "getStarted": "Get Started",
+        "viewTools": "View Tools",
+        "viewDocs": "View Docs",
+        "viewGitHub": "View on GitHub"
+    },
+    "tools": {
+        "title": "Our Tools",
+        "description": "Luban Workshop provides a collection of productivity tools to help developers build and maintain projects more efficiently."
+    },
+    "quickStart": {
+        "title": "Quick Start",
+        "description": "Experience the power of Luban Workshop's tools now. Integrate them into your project in just a few steps."
+    }
+}

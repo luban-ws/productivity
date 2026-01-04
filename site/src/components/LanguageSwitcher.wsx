@@ -1,0 +1,155 @@
+/** @jsxImportSource @wsxjs/wsx-core */
+/**
+ * LanguageSwitcher Component
+ * 语言切换器组件，用于切换 i18next 的语言
+ * 不使用国旗图标，使用语言名称显示
+ *
+ * 这是一个示例组件，展示如何在 WSXJS 中使用 i18next
+ * 参考 RFC-0029: i18next 国际化支持
+ */
+import { WebComponent, autoRegister, state } from "@wsxjs/wsx-core";
+import { i18nInstance } from "@wsxjs/wsx-i18next";
+
+/**
+ * 语言选项接口
+ */
+export interface LanguageOption {
+    /** 语言代码（如 'en', 'zh'） */
+    code: string;
+    /** 语言显示名称（如 'English', '中文'） */
+    name: string;
+}
+
+@autoRegister({ tagName: "language-switcher" })
+export default class LanguageSwitcher extends WebComponent {
+    /** 支持的语言列表 */
+    private languages: LanguageOption[] = [
+        { code: "en", name: "English" },
+        { code: "zh", name: "中文" },
+        { code: "ja", name: "日本語" },
+        { code: "ko", name: "한국어" },
+    ];
+
+    /** 当前选中的语言代码 */
+    @state private currentLanguage: string = "en";
+
+    /** 下拉菜单是否打开 */
+    @state private isOpen: boolean = false;
+
+    /** 下拉菜单元素引用 */
+    private dropdownElement?: HTMLElement;
+    private buttonElement?: HTMLElement;
+
+    /**
+     * 切换下拉菜单
+     */
+    private handleToggleDropdown(): void {
+        this.isOpen = !this.isOpen;
+    }
+
+    /**
+     * 处理点击外部区域
+     */
+    private handleOutsideClick(_event: Event): void {
+        this.isOpen = false;
+    }
+
+    /**
+     * 选择语言
+     */
+    private handleSelectLanguage(languageCode: string): void {
+        if (languageCode === this.currentLanguage) {
+            this.isOpen = false;
+            return;
+        }
+
+        // 立即更新状态（同步），确保 UI 立即响应
+        this.currentLanguage = languageCode;
+        this.isOpen = false;
+
+        requestAnimationFrame(() => {
+            i18nInstance.changeLanguage(languageCode);
+        });
+    }
+
+    /**
+     * 组件连接时初始化
+     */
+    protected onConnected(): void {
+        super.onConnected?.();
+
+        this.currentLanguage = i18nInstance.language;
+        // 监听 i18next 语言变化事件
+        i18nInstance.off("languageChanged", this.handleLanguageChanged);
+        i18nInstance.on("languageChanged", this.handleLanguageChanged);
+        document.removeEventListener("click", this.handleOutsideClick, true);
+        document.addEventListener("click", this.handleOutsideClick, true);
+    }
+
+    /**
+     * 组件断开连接时清理
+     */
+    protected onDisconnected(): void {
+        super.onDisconnected?.();
+        i18nInstance.off("languageChanged", this.handleLanguageChanged);
+        document.removeEventListener("click", this.handleOutsideClick, true);
+    }
+
+    /**
+     * 处理 i18next 语言变化事件
+     */
+    private handleLanguageChanged = (lng: string): void => {
+        const baseLanguage = lng.split("-")[0];
+        // 始终更新 currentLanguage，即使值相同也要更新（确保状态同步）
+        // 这解决了当本地化改变时，语言切换器没有更新的问题
+        if (this.currentLanguage !== baseLanguage) {
+            this.currentLanguage = baseLanguage;
+        }
+    };
+
+    render(): HTMLElement {
+        // 使用响应式的 this.currentLanguage，而不是 i18nInstance.language
+        const currentLang = this.languages.find((lang) => lang.code === this.currentLanguage);
+        const displayName = currentLang?.name || this.currentLanguage.toUpperCase();
+
+        return (
+            <div class="language-switcher-container">
+                <button
+                    ref={(el) => (this.buttonElement = el)}
+                    class="language-switcher-btn"
+                    onClick={() => this.handleToggleDropdown()}
+                    aria-label={`Current language: ${displayName}`}
+                    aria-expanded={this.isOpen}
+                    aria-haspopup="listbox"
+                >
+                    <span class="language-switcher-icon">🌐</span>
+                    <span class="language-switcher-text">{displayName}</span>
+                    <span class="language-switcher-arrow">{this.isOpen ? "▲" : "▼"}</span>
+                </button>
+
+                {this.isOpen && (
+                    <div
+                        ref={(el) => (this.dropdownElement = el)}
+                        class="language-switcher-dropdown"
+                        role="listbox"
+                    >
+                        {this.languages.map((lang) => (
+                            <button
+                                key={lang.code}
+                                class={`language-switcher-option ${
+                                    lang.code === this.currentLanguage ? "active" : ""
+                                }`}
+                                onClick={() => this.handleSelectLanguage(lang.code)}
+                                role="option"
+                                aria-selected={lang.code === this.currentLanguage}
+                            >
+                                <span class="language-name">{lang.name}</span>
+                                <span class="language-code">{lang.code.toUpperCase()}</span>
+                            </button>
+                        ))}
+                    </div>
+                )}
+            </div>
+        );
+    }
+}

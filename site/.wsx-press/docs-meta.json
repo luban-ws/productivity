@@ -1,0 +1,47 @@
+{
+  "productivity": {
+    "title": "工具文档快速开始",
+    "category": "tools",
+    "route": "/docs/productivity",
+    "order": 0,
+    "description": "鲁班工坊生产力工具文档中心，包含青鸟、文心、盘古、谛听等工具的完整文档",
+    "prev": null,
+    "next": null
+  },
+  "tools/wenxin/quick-start": {
+    "title": "文心快速开始",
+    "category": "tools/wenxin",
+    "route": "/docs/tools/wenxin/quick-start",
+    "order": 2,
+    "description": "通用 API 文档生成工具，支持 JSDoc 和 TypeScript。混合模式自动合并类型信息到 JSDoc 文档，让文档生成如文心雕龙般精美",
+    "prev": null,
+    "next": null
+  },
+  "tools/qingniao/quick-start": {
+    "title": "青鸟快速开始",
+    "category": "tools/qingniao",
+    "route": "/docs/tools/qingniao/quick-start",
+    "order": 1,
+    "description": "零配置优先的通用发布工具，专为 monorepo 项目设计。自动检测包管理器、workspace 类型、构建工具，让发布流程如青鸟飞行般优雅流畅",
+    "prev": null,
+    "next": null
+  },
+  "tools/pangu/quick-start": {
+    "title": "盘古快速开始",
+    "category": "tools/pangu",
+    "route": "/docs/tools/pangu/quick-start",
+    "order": 3,
+    "description": "交互式开发服务器启动工具。从配置文件读取 demo 列表，快速启动开发服务器，如盘古开天辟地般开启开发之旅",
+    "prev": null,
+    "next": null
+  },
+  "tools/diting/quick-start": {
+    "title": "谛听快速开始",
+    "category": "tools/diting",
+    "route": "/docs/tools/diting/quick-start",
+    "order": 4,
+    "description": "平台中立的日志库，使用 chalk 和 pino 进行日志记录。如谛听能听万物、辨真伪、记录善恶，为应用程序提供全面的日志记录能力",
+    "prev": null,
+    "next": null
+  }
+}

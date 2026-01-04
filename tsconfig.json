@@ -1,0 +1,43 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "skipLibCheck": true,
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "jsxImportSource": "@wsxjs/wsx-core",
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "useDefineForClassFields": false,
+        "declaration": true,
+        "declarationMap": true,
+        "sourceMap": true,
+        "types": ["jest", "@types/jest", "node"],
+        "baseUrl": ".",
+        "paths": {
+            "@wsxjs/wsx-core": ["./packages/core/src"],
+            "@wsxjs/wsx-core/*": ["./packages/core/types/*"],
+            "@wsxjs/wsx-vite-plugin": ["./packages/vite-plugin/src"],
+            "@wsxjs/eslint-plugin-wsx": ["./packages/eslint-plugin/src"]
+        }
+    },
+    "include": [
+        "packages/*/src/**/*",
+        "packages/*/__tests__/**/*",
+        "packages/vite-plugin/test/setup.ts",
+        "packages/core/types/wsx-types.d.ts",
+        "wsx.d.ts",
+        "packages/eslint-plugin/test/setup.ts",
+        "packages/wsx-i18next/src/**/*"
+    ],
+    "exclude": ["node_modules", "dist"]
+}

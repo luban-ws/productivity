@@ -1,4 +1,4 @@
-name: Deploy VitePress to GitHub Pages
+name: Deploy Site to GitHub Pages
 
 on:
     # 在推送到 main 分支时触发
@@ -26,7 +26,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
               with:
-                  fetch-depth: 0 # 获取完整历史记录，用于 last-updated
+                  fetch-depth: 0 # 获取完整历史记录
 
             - name: Setup pnpm
               uses: pnpm/action-setup@v4
@@ -42,12 +42,13 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
 
-            - name: Build VitePress for GitHub Pages
-              run: pnpm docs:build
+            - name: Build Site for GitHub Pages
+              working-directory: site
+              run: pnpm build:pages
               env:
                   NODE_ENV: production
-                  # GitHub Pages 部署路径：https://<username>.github.io/productivity/
-                  VITEPRESS_BASE: /productivity/
+                  GITHUB_PAGES: true
+                  CUSTOM_DOMAIN: true
 
             - name: Setup Pages
               uses: actions/configure-pages@v5
@@ -55,7 +56,7 @@ jobs:
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3
               with:
-                  path: docs/.vitepress/dist
+                  path: site/dist
 
             - name: Deploy to GitHub Pages
               id: deployment

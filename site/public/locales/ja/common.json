@@ -1,0 +1,41 @@
+{
+    "language": {
+        "switcher": {
+            "label": "言語",
+            "current": "現在の言語"
+        },
+        "names": {
+            "en": "English",
+            "zh": "中文",
+            "ja": "日本語",
+            "ko": "한국어"
+        }
+    },
+    "nav": {
+        "home": "ホーム",
+        "tools": "ツール",
+        "docs": "ドキュメント"
+    },
+    "brand": {
+        "name": "魯班工房"
+    },
+    "footer": {
+        "tagline": "魯班工房は、開発者の生産性向上を支援する高品質なオープンソースツールスイートの提供に専念しています。",
+        "resources": "リソース",
+        "tools": "ツール",
+        "legal": "法的",
+        "documentation": "ドキュメント",
+        "githubRepo": "GitHub",
+        "mitLicense": "MIT ライセンス",
+        "privacyPolicy": "プライバシーポリシー",
+        "termsOfService": "利用規約",
+        "copyright": "© 2026 魯班工房。MIT ライセンスの下で公開されています。",
+        "madeWith": "魯班工房チームが ❤️ で作成"
+    },
+    "notFound": {
+        "title": "ページが見つかりません",
+        "description": "お探しのページは存在しないか、移動された可能性があります。",
+        "goHome": "ホームに戻る",
+        "goBack": "戻る"
+    }
+}

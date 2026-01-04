@@ -1,0 +1,67 @@
+/** @jsxImportSource @wsxjs/wsx-core */
+/**
+ * Home Section - 首页主区域
+ * 包含 Hero Section 和所有新增的价值主张组件
+ */
+import { WebComponent, autoRegister } from "@wsxjs/wsx-core";
+import { i18n } from "@wsxjs/wsx-i18next";
+import styles from "./HomeSection.css?inline";
+import "@wsxjs/wsx-base-components";
+import "@wsxjs/wsx-router";
+import "./ToolsSection.wsx"; // 导入工具介绍区域
+
+@autoRegister({ tagName: "home-section" })
+@i18n("home")
+export default class HomeSection extends WebComponent {
+    constructor() {
+        super({ styles });
+    }
+
+    render() {
+        return (
+            <div class="home-container">
+                {/* 工具展示区域 - 主要焦点 */}
+                <tools-section></tools-section>
+
+                {/* 快速开始区域 */}
+                <section class="quick-start-section">
+                    <div class="container">
+                        <h2 class="section-title">{this.t("quickStart.title")}</h2>
+                        <p class="section-description">{this.t("quickStart.description")}</p>
+                        <div class="code-example">
+                            <pre class="code-block">
+                                <code>{`# Install Qingniao publishing tool
+pnpm add -D @systembug/qingniao
+
+# Run publishing process
+pnpm qingniao
+
+# Install Diting logging library
+pnpm add @systembug/diting
+
+# Use Diting
+import { createLogger } from '@systembug/diting';
+const logger = createLogger('MyService');
+logger.info('Hello from Diting!');`}</code>
+                            </pre>
+                        </div>
+                        <div class="quick-start-actions">
+                            <wsx-link to="/docs" class="btn-primary">
+                                {this.t("hero.viewDocs")}
+                            </wsx-link>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        );
+    }
+
+    private openGitHub = (): void => {
+        window.open("https://github.com/systembug/productivity", "_blank");
+    };
+
+    private openPlayground = (): void => {
+        // TODO: 链接到 Playground 页面（当实现后）
+        window.location.href = "/playground";
+    };
+}

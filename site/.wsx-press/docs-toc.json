@@ -1,0 +1,350 @@
+{
+  "productivity": [
+    {
+      "level": 1,
+      "text": "鲁班工坊工具文档",
+      "id": "",
+      "children": [
+        {
+          "level": 2,
+          "text": "我们的工具",
+          "id": "",
+          "children": [
+            {
+              "level": 3,
+              "text": "🌌 ",
+              "id": "-",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "📚 ",
+              "id": "-",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "🚀 ",
+              "id": "-",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "👂 ",
+              "id": "-",
+              "children": []
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "text": "快速开始",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "获取帮助",
+          "id": "",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "tools/wenxin/quick-start": [
+    {
+      "level": 1,
+      "text": "文心 (Wenxin)",
+      "id": "-wenxin",
+      "children": [
+        {
+          "level": 2,
+          "text": "简介",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "功能特性",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "安装",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "快速开始",
+          "id": "",
+          "children": [
+            {
+              "level": 3,
+              "text": "初始化配置（可选）",
+              "id": "",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "基本使用",
+              "id": "",
+              "children": []
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "text": "配置",
+          "id": "",
+          "children": [
+            {
+              "level": 3,
+              "text": "零配置模式",
+              "id": "",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "配置文件",
+              "id": "",
+              "children": []
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "text": "更多信息",
+          "id": "",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "tools/qingniao/quick-start": [
+    {
+      "level": 1,
+      "text": "青鸟 (Qingniao)",
+      "id": "-qingniao",
+      "children": [
+        {
+          "level": 2,
+          "text": "简介",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "核心特性",
+          "id": "",
+          "children": [
+            {
+              "level": 3,
+              "text": "🎯 零配置优先",
+              "id": "-",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "🚀 深度集成",
+              "id": "-",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "⚙️ 灵活配置",
+              "id": "-",
+              "children": []
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "text": "安装",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "快速开始",
+          "id": "",
+          "children": [
+            {
+              "level": 3,
+              "text": "基本使用",
+              "id": "",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "发布流程",
+              "id": "",
+              "children": []
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "text": "配置",
+          "id": "",
+          "children": [
+            {
+              "level": 3,
+              "text": "零配置模式",
+              "id": "",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "配置文件",
+              "id": "",
+              "children": []
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "text": "更多信息",
+          "id": "",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "tools/pangu/quick-start": [
+    {
+      "level": 1,
+      "text": "盘古 (Pangu)",
+      "id": "-pangu",
+      "children": [
+        {
+          "level": 2,
+          "text": "简介",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "功能特性",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "安装",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "使用方法",
+          "id": "",
+          "children": [
+            {
+              "level": 3,
+              "text": "1. 创建配置文件",
+              "id": "1-",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "2. 运行盘古",
+              "id": "2-",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "3. 选择 Demo",
+              "id": "3-demo",
+              "children": []
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "text": "配置选项",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "更多信息",
+          "id": "",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "tools/diting/quick-start": [
+    {
+      "level": 1,
+      "text": "谛听 (Diting)",
+      "id": "-diting",
+      "children": [
+        {
+          "level": 2,
+          "text": "简介",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "特性",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "安装",
+          "id": "",
+          "children": []
+        },
+        {
+          "level": 2,
+          "text": "快速开始",
+          "id": "",
+          "children": [
+            {
+              "level": 3,
+              "text": "基本使用",
+              "id": "",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "带上下文的日志",
+              "id": "",
+              "children": []
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "text": "配置",
+          "id": "",
+          "children": [
+            {
+              "level": 3,
+              "text": "日志级别",
+              "id": "",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "生产环境",
+              "id": "",
+              "children": []
+            }
+          ]
+        },
+        {
+          "level": 2,
+          "text": "更多信息",
+          "id": "",
+          "children": []
+        }
+      ]
+    }
+  ]
+}

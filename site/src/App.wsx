@@ -1,0 +1,402 @@
+/** @jsxImportSource @wsxjs/wsx-core */
+/**
+ * 鲁班工坊生产力工具网站 - 主应用组件
+ *
+ * 功能：
+ * - 基于 WSX Router 的路由导航
+ * - 路由组件加载
+ * - 活跃链接高亮
+ * - 响应式导航
+ * - 组件分离
+ */
+
+import { LightComponent, autoRegister } from "@wsxjs/wsx-core";
+import { i18n } from "@wsxjs/wsx-i18next";
+import styles from "./App.css?inline";
+// Import base components and router
+import "@wsxjs/wsx-base-components";
+import "@wsxjs/wsx-router";
+import { RouterUtils } from "@wsxjs/wsx-router";
+// Import SEO utilities
+import { MetaManager, type RouteMeta } from "./utils/meta-manager";
+import { getRouteMeta, routeMeta } from "./config/route-meta";
+// Define NavItem locally to avoid import issues
+interface NavItem {
+    label: string;
+    to: string;
+    exact?: boolean;
+    hideOnMobile?: boolean;
+}
+// Import route-based section components
+import "./components/HomeSection.wsx";
+// Import LanguageSwitcher component
+import "./components/LanguageSwitcher.wsx";
+// Import NotFound component
+import "./components/NotFoundSection.wsx";
+// Import DocSection component
+import "./components/DocSection.wsx";
+// Import Custom Header component
+import "./components/layout/CustomHeader.wsx";
+// Import WSX-Press components
+import "@wsxjs/wsx-press/client";
+
+export interface AppConfig {
+    title?: string;
+}
+
+@autoRegister({ tagName: "wsx-app" })
+@i18n("common")
+export default class App extends LightComponent {
+    constructor(config: AppConfig = {}) {
+        super({
+            styles,
+            styleName: "wsx-app",
+            ...config,
+        });
+    }
+
+    render() {
+        return (
+            <div class="app-container">
+                {/* Navigation */}
+                {this.renderNavigation()}
+                <div class="app-content">
+                    {/* Router Container */}
+                    <wsx-router>
+                        {/* Home Page */}
+                        <wsx-view route="/" component="home-section"></wsx-view>
+                        {/* Documentation routes - must be before 404 */}
+                        <wsx-view route="/docs/*" component="doc-section"></wsx-view>
+                        {/* 404 页面 - 通配符路由，必须放在最后 */}
+                        <wsx-view route="*" component="not-found-section"></wsx-view>
+                    </wsx-router>
+                </div>
+                {/* Footer */}
+                {this.renderFooter()}
+            </div>
+        );
+    }
+
+    /**
+     * Render navigation with router links
+     */
+    private renderNavigation() {
+        return <custom-header></custom-header>;
+    }
+
+    /**
+     * Render footer
+     */
+    private renderFooter() {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const t = ((this as any).t as (key: string, options?: object) => string).bind(this);
+
+        return (
+            <footer class="footer">
+                <div class="footer-container">
+                    <div class="footer-main">
+                        <div class="footer-brand">
+                            <span class="footer-icon">🛠️</span>
+                            <h3>{t("brand.name")}</h3>
+                        </div>
+                        <div class="footer-links">
+                            <a
+                                href="https://github.com/systembug/productivity"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    this.openGitHub();
+                                }}
+                            >
+                                {t("footer.githubRepo")}
+                            </a>
+                            <span class="footer-divider">•</span>
+                            <wsx-link to="/docs/productivity">{t("nav.docs")}</wsx-link>
+                            <span class="footer-divider">•</span>
+                            <a
+                                href="https://github.com/systembug/productivity/blob/main/LICENSE"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    this.openLicense();
+                                }}
+                            >
+                                {t("footer.mitLicense")}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="footer-bottom">
+                        <p>© 2026 {t("brand.name")}</p>
+                    </div>
+                </div>
+            </footer>
+        );
+    }
+
+    // Event handlers
+
+    private openGitHub = (): void => {
+        window.open("https://github.com/systembug/productivity", "_blank", "noopener,noreferrer");
+    };
+
+    private openGitHubDiscussions = (): void => {
+        window.open(
+            "https://github.com/systembug/productivity/discussions",
+            "_blank",
+            "noopener,noreferrer",
+        );
+    };
+
+    private openDocs = (): void => {
+        RouterUtils.navigate("/docs/productivity");
+    };
+
+    private openDiscord = (): void => {
+        window.open(
+            "https://github.com/systembug/productivity/discussions",
+            "_blank",
+            "noopener,noreferrer",
+        );
+    };
+
+    private openTwitter = (): void => {
+        window.open("https://github.com/systembug/productivity", "_blank", "noopener,noreferrer");
+    };
+
+    private openBlog = (): void => {
+        // TODO: 当博客系统准备好后，使用路由导航
+        // 目前暂时导航到首页，避免使用阻塞性的 alert
+        RouterUtils.navigate("/");
+    };
+
+    private openLicense = (): void => {
+        window.open(
+            "https://github.com/systembug/productivity/blob/main/LICENSE",
+            "_blank",
+            "noopener,noreferrer",
+        );
+    };
+
+    // Privacy 和 Terms 现在使用 wsx-link，这些函数保留用于向后兼容
+    private openPrivacy = (): void => {
+        RouterUtils.navigate("/privacy");
+    };
+
+    private openTerms = (): void => {
+        RouterUtils.navigate("/terms");
+    };
+
+    /**
+     * Component lifecycle - connected to DOM
+     */
+    protected onConnected(): void {
+        super.onConnected?.();
+        // Add scroll listener for navigation effects
+        window.addEventListener("scroll", this.handleScroll);
+
+        // 监听路由变化，更新 SEO meta 标签
+        this.setupRouteMetaListener();
+
+        // 初始化当前路由的 meta 标签
+        this.updateRouteMeta(window.location.pathname);
+    }
+
+    /**
+     * Component lifecycle - disconnected from DOM
+     */
+    protected onDisconnected(): void {
+        super.onDisconnected?.();
+        window.removeEventListener("scroll", this.handleScroll);
+        this.removeRouteMetaListener();
+    }
+
+    /**
+     * Handle scroll effects
+     */
+    private handleScroll = (): void => {
+        const scrolled = window.scrollY;
+        const nav = document.querySelector(".main-nav") as HTMLElement;
+
+        if (nav) {
+            // Navigation scroll effects
+            if (scrolled > 100) {
+                nav.classList.add("nav-scrolled");
+            } else {
+                nav.classList.remove("nav-scrolled");
+            }
+        }
+    };
+
+    /**
+     * 处理路由变化，更新 meta 标签
+     * 使用绑定方法确保 addEventListener 和 removeEventListener 引用同一个函数
+     */
+    private handleRouteChange = (): void => {
+        const path = window.location.pathname;
+        this.updateRouteMeta(path);
+    };
+
+    /**
+     * 设置路由 meta 标签监听器
+     */
+    private setupRouteMetaListener(): void {
+        // 监听 wsx-router 触发的 route-changed 事件
+        document.addEventListener("route-changed", this.handleRouteChange);
+        // 也监听 popstate 事件（浏览器前进/后退）
+        window.addEventListener("popstate", this.handleRouteChange);
+    }
+
+    /**
+     * 移除路由 meta 标签监听器
+     */
+    private removeRouteMetaListener(): void {
+        document.removeEventListener("route-changed", this.handleRouteChange);
+        window.removeEventListener("popstate", this.handleRouteChange);
+    }
+
+    /**
+     * 更新当前路由的 meta 标签和结构化数据
+     */
+    private updateRouteMeta(path: string): void {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const t = ((this as any).t as (key: string, options?: object) => string).bind(this);
+        const brandName = t("brand.name");
+
+        // 如果是文档路由，异步加载文档元数据以获取实际标题
+        if (path.startsWith("/docs/")) {
+            // 支持多级路径：/docs/guide/essentials/getting-started
+            const docPath = path.slice(6); // 移除 "/docs/" 前缀
+            if (docPath) {
+                this.updateDocRouteMeta(path, docPath);
+                return;
+            }
+        }
+
+        let meta = getRouteMeta(path);
+
+        // 根据当前语言动态更新 meta 中的品牌名称
+        if (meta.title.includes("鲁班工坊")) {
+            meta = {
+                ...meta,
+                title: meta.title.replace(/鲁班工坊/g, brandName),
+                description: meta.description?.replace(/鲁班工坊/g, brandName) || meta.description,
+                keywords: meta.keywords?.replace(/鲁班工坊/g, brandName) || meta.keywords,
+            };
+        }
+
+        MetaManager.update(meta);
+
+        // 根据路由类型添加不同的结构化数据
+        const structuredData = this.getStructuredDataForRoute(path, meta);
+        MetaManager.setStructuredData(structuredData);
+    }
+
+    /**
+     * 更新文档路由的 meta 标签（从文档元数据获取实际标题）
+     */
+    private async updateDocRouteMeta(path: string, docPath: string): Promise<void> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const t = ((this as any).t as (key: string, options?: object) => string).bind(this);
+
+        try {
+            // 加载文档元数据
+            const response = await fetch("/.wsx-press/docs-meta.json");
+            if (response.ok) {
+                const metadataMap = (await response.json()) as Record<
+                    string,
+                    { title: string; description?: string }
+                >;
+                // docPath 已经是完整的路径，例如：guide/essentials/getting-started
+                const docMeta = metadataMap[docPath];
+
+                if (docMeta) {
+                    // 使用文档的实际标题和描述
+                    const brandName = t("brand.name");
+                    const meta = {
+                        title: `${docMeta.title} - ${t("nav.docs")} | ${brandName}`,
+                        description: docMeta.description || `${brandName} ${t("nav.docs")}`,
+                        keywords: `${brandName} ${t("nav.docs")}, 生产力工具文档, 工具使用指南`,
+                        image: "/og-image.png",
+                    };
+                    MetaManager.update(meta);
+                    const structuredData = this.getStructuredDataForRoute(path, meta);
+                    MetaManager.setStructuredData(structuredData);
+                    return;
+                }
+            }
+        } catch (error) {
+            // 如果加载失败，使用默认的文档 meta
+            console.warn("Failed to load document metadata for route meta:", error);
+        }
+
+        // 回退到默认的文档 meta
+        const meta = getRouteMeta(path);
+        MetaManager.update(meta);
+        const structuredData = this.getStructuredDataForRoute(path, meta);
+        MetaManager.setStructuredData(structuredData);
+    }
+
+    /**
+     * 根据路由类型获取相应的结构化数据
+     */
+    private getStructuredDataForRoute(path: string, meta: RouteMeta): Record<string, unknown> {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const t = ((this as any).t as (key: string, options?: object) => string).bind(this);
+        const brandName = t("brand.name");
+
+        // 404 页面（使用通配符 meta）使用 WebPage schema
+        const is404Page = path !== "/" && !routeMeta[path] && meta.title.includes("404");
+        if (is404Page) {
+            return {
+                "@context": "https://schema.org",
+                "@type": "WebPage",
+                name: meta.title,
+                description: meta.description,
+                url: meta.url || `https://systembug.github.io/productivity${path}`,
+            };
+        }
+
+        // 文档相关路由使用 Article schema
+        if (path.startsWith("/docs") || path.startsWith("/guide")) {
+            return {
+                "@context": "https://schema.org",
+                "@type": "Article",
+                headline: meta.title,
+                description: meta.description,
+                url: meta.url || `https://systembug.github.io/productivity${path}`,
+                author: {
+                    "@type": "Organization",
+                    name: `${brandName} Team`,
+                },
+                publisher: {
+                    "@type": "Organization",
+                    name: `${brandName} Team`,
+                },
+                datePublished: meta.publishedTime,
+                dateModified: meta.modifiedTime || meta.publishedTime,
+            };
+        }
+
+        // 首页和其他页面使用 SoftwareApplication schema
+        return {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: brandName,
+            applicationCategory: "Developer Tools",
+            operatingSystem: "Web",
+            description: meta.description,
+            url: meta.url || `https://systembug.github.io/productivity${path}`,
+            offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD",
+            },
+            author: {
+                "@type": "Organization",
+                name: brandName,
+            },
+        };
+    }
+}

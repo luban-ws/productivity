@@ -1,5 +1,4 @@
 packages:
-    - "apps/*"
+    - "site/"
     - "packages/*"
-    - "packages/@zouwu-wf/*"
     - "packages/@systembug/*"
