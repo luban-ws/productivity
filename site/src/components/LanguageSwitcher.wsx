@@ -110,7 +110,7 @@ export default class LanguageSwitcher extends WebComponent {
     render(): HTMLElement {
         // 使用响应式的 this.currentLanguage，而不是 i18nInstance.language
         const currentLang = this.languages.find((lang) => lang.code === this.currentLanguage);
-        const displayName = currentLang?.name || this.currentLanguage.toUpperCase();
+        const displayName = currentLang?.name || this.currentLanguage?.toUpperCase();
 
         return (
             <div class="language-switcher-container">
