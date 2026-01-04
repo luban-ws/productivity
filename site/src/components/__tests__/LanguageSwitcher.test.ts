@@ -4,19 +4,27 @@
  */
 
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
+// 先导入组件文件，确保 @autoRegister 装饰器执行
+import "../LanguageSwitcher.wsx";
 
 describe("LanguageSwitcher - 语言切换立即更新修复", () => {
     let component: HTMLElement;
 
-    beforeEach(() => {
+    beforeEach(async () => {
         // 清理 DOM
         while (document.body.firstChild) {
             document.body.removeChild(document.body.firstChild);
         }
 
+        // 等待自定义元素定义
+        await customElements.whenDefined("language-switcher");
+
         // 创建组件
         component = document.createElement("language-switcher");
         document.body.appendChild(component);
+
+        // 等待组件连接和渲染
+        await new Promise((resolve) => setTimeout(resolve, 50));
     });
 
     afterEach(() => {
@@ -24,9 +32,6 @@ describe("LanguageSwitcher - 语言切换立即更新修复", () => {
     });
 
     test("选择新语言后，按钮标签应该立即更新", async () => {
-        // 等待组件渲染
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
         // 获取 shadow root
         const shadowRoot = component.shadowRoot;
         expect(shadowRoot).not.toBeNull();
@@ -73,12 +78,14 @@ describe("LanguageSwitcher - 语言切换立即更新修复", () => {
     });
 
     test("render 方法应该使用响应式状态 currentLanguage 而不是 i18nInstance.language", async () => {
-        // 等待组件渲染
-        await new Promise((resolve) => setTimeout(resolve, 100));
-
         const shadowRoot = component.shadowRoot;
+        expect(shadowRoot).not.toBeNull();
+
         const button = shadowRoot!.querySelector(".language-switcher-btn");
+        expect(button).not.toBeNull();
+
         const textSpan = button!.querySelector(".language-switcher-text");
+        expect(textSpan).not.toBeNull();
 
         // 验证初始状态
         expect(textSpan!.textContent).toBe("English");

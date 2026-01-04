@@ -13,15 +13,26 @@ vi.mock("@editorjs/header", () => ({ default: vi.fn() }));
 vi.mock("@editorjs/paragraph", () => ({ default: vi.fn() }));
 vi.mock("../WsxAlertTool.wsx", () => ({ default: vi.fn() }));
 vi.mock("../WsxHighlightTool.wsx", () => ({ default: vi.fn() }));
+vi.mock("../WsxCodeTool.wsx", () => ({ default: vi.fn() }));
+vi.mock("../WsxTableTool.wsx", () => ({ default: vi.fn() }));
 
-import EditorJSDemo from "../EditorJSDemo.wsx";
+// 先导入组件文件，确保装饰器执行
+import "../EditorJSDemo.wsx";
+import type EditorJSDemo from "../EditorJSDemo.wsx";
 
 describe("EditorJSDemo Component", () => {
     let component: EditorJSDemo;
 
-    beforeEach(() => {
-        component = new EditorJSDemo();
+    beforeEach(async () => {
+        // 等待自定义元素定义
+        await customElements.whenDefined("editorjs-demo");
+
+        // 创建组件实例
+        component = document.createElement("editorjs-demo") as EditorJSDemo;
         document.body.appendChild(component);
+
+        // 等待组件连接和渲染
+        await new Promise((resolve) => setTimeout(resolve, 50));
     });
 
     afterEach(() => {

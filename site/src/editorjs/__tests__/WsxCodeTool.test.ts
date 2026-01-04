@@ -2,7 +2,7 @@ import { describe, test, expect, beforeEach, vi } from "vitest";
 import WsxCodeTool from "../WsxCodeTool.wsx";
 import type { CodeData } from "../WsxCodeTool.wsx";
 import type WsxCodeComponent from "../WsxCodeComponent.wsx";
-import "./WsxCodeComponent.wsx";
+import "../WsxCodeComponent.wsx";
 // Mock the stylesheet import
 vi.mock("./WsxCodeTool.css", () => ({ default: "" }));
 

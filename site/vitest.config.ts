@@ -28,7 +28,8 @@ export default defineConfig({
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "./src"),
-            "@wsxjs/wsx-core": path.resolve(__dirname, "../core/src"),
+            // 使用 node_modules 中的包，而不是本地路径
+            // 这样测试环境可以正确解析 wsx 文件中的导入
         },
     },
     esbuild: {
