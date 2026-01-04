@@ -2,6 +2,7 @@
     "name": "@systembug/wenxin",
     "version": "0.1.0",
     "description": "文心 - 通用 API 文档生成工具，支持 JSDoc 和 TypeScript",
+    "private": true,
     "keywords": [
         "jsdoc",
         "typescript",
