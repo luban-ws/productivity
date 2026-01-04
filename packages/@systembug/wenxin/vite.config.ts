@@ -2,70 +2,54 @@ import { defineConfig } from "vite";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
 
-export default defineConfig([
-    // 主构建：index 和 cli
-    {
-        build: {
-            lib: {
-                entry: {
-                    index: resolve(__dirname, "src/index.ts"),
-                    cli: resolve(__dirname, "src/cli.ts"),
-                },
-                formats: ["es", "cjs"],
-                fileName: (format, entryName) => {
-                    if (format === "es") {
-                        return `${entryName}.mjs`;
-                    }
-                    return `${entryName}.cjs`;
-                },
+export default defineConfig({
+    build: {
+        lib: {
+            entry: {
+                index: resolve(__dirname, "src/index.ts"),
+                cli: resolve(__dirname, "src/cli.ts"),
             },
-            rollupOptions: {
-                external: [
-                    "commander",
-                    "jsdoc",
-                    "typedoc",
-                    "typescript",
-                    "fs",
-                    "path",
-                    "child_process",
-                    "os",
-                    "glob",
-                ],
-                output: {
+        },
+        rollupOptions: {
+            external: [
+                "commander",
+                "jsdoc",
+                "typedoc",
+                "typescript",
+                "fs",
+                "path",
+                "url",
+                "child_process",
+                "os",
+                "glob",
+            ],
+            output: [
+                // ESM 输出
+                {
+                    format: "es",
+                    entryFileNames: "[name].mjs",
                     preserveModules: false,
                     exports: "named",
                 },
-            },
-            sourcemap: true,
-            target: "es2020",
-            minify: false,
-        },
-        plugins: [
-            dts({
-                include: ["src/index.ts", "src/cli.ts"],
-                exclude: ["src/**/*.test.ts"],
-                outDir: "dist",
-                rollupTypes: true,
-            }) as any,
-        ],
-    },
-    // jsdoc-aliases 单独构建为 CommonJS（JSDoc 需要）
-    {
-        build: {
-            lib: {
-                entry: resolve(__dirname, "src/jsdoc-aliases.ts"),
-                formats: ["cjs"],
-                fileName: () => "jsdoc-aliases.js",
-            },
-            rollupOptions: {
-                output: {
+                // CommonJS 输出
+                {
                     format: "cjs",
-                    exports: "auto", // 自动检测导出方式
+                    entryFileNames: "[name].cjs",
+                    preserveModules: false,
+                    exports: "named",
                 },
-            },
-            sourcemap: false,
-            target: "es2020",
-            minify: false,
+            ],
         },
+        sourcemap: true,
+        target: "es2020",
+        minify: false,
     },
-]);
+    plugins: [
+        dts({
+            include: ["src/index.ts", "src/cli.ts"],
+            exclude: ["src/**/*.test.ts"],
+            outDir: "dist",
+            rollupTypes: true,
+        }) as any,
+    ],
+});
