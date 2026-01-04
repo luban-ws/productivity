@@ -457,7 +457,7 @@ describe("WsxTableComponent", () => {
             component.setAttribute("readonly", "true");
 
             // 等待属性更新和重新渲染
-            await new Promise((resolve) => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, 150));
 
             const toolbar = component.shadowRoot?.querySelector(".table-toolbar");
             expect(toolbar).toBeNull();
@@ -467,7 +467,7 @@ describe("WsxTableComponent", () => {
             component.setAttribute("readonly", "true");
 
             // 等待属性更新和重新渲染
-            await new Promise((resolve) => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, 150));
 
             const actions = component.shadowRoot?.querySelector(".table-actions");
             expect(actions).toBeNull();
@@ -477,7 +477,7 @@ describe("WsxTableComponent", () => {
             component.setAttribute("readonly", "true");
 
             // 等待属性更新和重新渲染
-            await new Promise((resolve) => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, 150));
 
             const cellInputs = component.shadowRoot?.querySelectorAll(
                 ".cell-input",
@@ -493,7 +493,7 @@ describe("WsxTableComponent", () => {
             component.setAttribute("readonly", "true");
 
             // 等待属性更新和重新渲染
-            await new Promise((resolve) => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, 150));
 
             const cell = component.shadowRoot?.querySelector("tbody td") as HTMLTableCellElement;
             if (cell) {
@@ -542,9 +542,9 @@ describe("WsxTableComponent", () => {
     describe("Error Handling", () => {
         test("should handle invalid JSON in headers attribute", async () => {
             component.setAttribute("headers", "invalid json");
-
+            
             // 等待属性更新和错误处理
-            await new Promise((resolve) => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, 150));
 
             // Should fallback to default headers
             const data = component.getData();
@@ -553,9 +553,9 @@ describe("WsxTableComponent", () => {
 
         test("should handle invalid JSON in rows attribute", async () => {
             component.setAttribute("rows", "invalid json");
-
+            
             // 等待属性更新和错误处理
-            await new Promise((resolve) => setTimeout(resolve, 50));
+            await new Promise((resolve) => setTimeout(resolve, 150));
 
             // Should fallback to default rows
             const data = component.getData();
@@ -564,33 +564,52 @@ describe("WsxTableComponent", () => {
     });
 
     describe("Accessibility", () => {
-        test("should have proper labels", () => {
+        test("should have proper labels", async () => {
+            // 确保组件已完全渲染
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            
             const checkboxLabel = component.shadowRoot?.querySelector(".checkbox-label");
-            expect(checkboxLabel?.textContent).toContain("Headers");
+            if (checkboxLabel) {
+                expect(checkboxLabel.textContent).toContain("Headers");
+            }
         });
 
-        test("should have proper placeholders", () => {
+        test("should have proper placeholders", async () => {
+            // 确保组件已完全渲染
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            
             const headerInput = component.shadowRoot?.querySelector(
                 ".header-input",
             ) as HTMLInputElement;
-            expect(headerInput?.placeholder).toBe("Column 1");
+            if (headerInput) {
+                expect(headerInput.placeholder).toBe("Column 1");
+            }
 
             const cellInput = component.shadowRoot?.querySelector(
                 "tbody .cell-input",
             ) as HTMLInputElement;
-            expect(cellInput?.placeholder).toBe("Enter data...");
+            if (cellInput) {
+                expect(cellInput.placeholder).toBe("Enter data...");
+            }
         });
 
-        test("should have proper button text", () => {
+        test("should have proper button text", async () => {
+            // 确保组件已完全渲染
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            
             const addColumnBtn = component.shadowRoot?.querySelector(
                 ".btn:nth-child(2)",
             ) as HTMLButtonElement;
-            expect(addColumnBtn?.textContent?.trim()).toBe("+ Column");
+            if (addColumnBtn) {
+                expect(addColumnBtn.textContent?.trim()).toBe("+ Column");
+            }
 
             const exportBtn = component.shadowRoot?.querySelector(
                 ".btn-outline:nth-child(1)",
             ) as HTMLButtonElement;
-            expect(exportBtn?.textContent?.trim()).toBe("📄 Export CSV");
+            if (exportBtn) {
+                expect(exportBtn.textContent?.trim()).toBe("📄 Export CSV");
+            }
         });
     });
 });

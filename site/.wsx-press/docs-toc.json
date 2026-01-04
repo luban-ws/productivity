@@ -122,11 +122,11 @@
       ]
     }
   ],
-  "tools/qingniao/quick-start": [
+  "tools/diting/quick-start": [
     {
       "level": 1,
-      "text": "青鸟 (Qingniao)",
-      "id": "-qingniao",
+      "text": "谛听 (Diting)",
+      "id": "-diting",
       "children": [
         {
           "level": 2,
@@ -136,28 +136,9 @@
         },
         {
           "level": 2,
-          "text": "核心特性",
+          "text": "特性",
           "id": "",
-          "children": [
-            {
-              "level": 3,
-              "text": "🎯 零配置优先",
-              "id": "-",
-              "children": []
-            },
-            {
-              "level": 3,
-              "text": "🚀 深度集成",
-              "id": "-",
-              "children": []
-            },
-            {
-              "level": 3,
-              "text": "⚙️ 灵活配置",
-              "id": "-",
-              "children": []
-            }
-          ]
+          "children": []
         },
         {
           "level": 2,
@@ -178,7 +159,7 @@
             },
             {
               "level": 3,
-              "text": "发布流程",
+              "text": "带上下文的日志",
               "id": "",
               "children": []
             }
@@ -191,13 +172,13 @@
           "children": [
             {
               "level": 3,
-              "text": "零配置模式",
+              "text": "日志级别",
               "id": "",
               "children": []
             },
             {
               "level": 3,
-              "text": "配置文件",
+              "text": "生产环境",
               "id": "",
               "children": []
             }
@@ -276,11 +257,11 @@
       ]
     }
   ],
-  "tools/diting/quick-start": [
+  "tools/qingniao/quick-start": [
     {
       "level": 1,
-      "text": "谛听 (Diting)",
-      "id": "-diting",
+      "text": "青鸟 (Qingniao)",
+      "id": "-qingniao",
       "children": [
         {
           "level": 2,
@@ -290,9 +271,28 @@
         },
         {
           "level": 2,
-          "text": "特性",
+          "text": "核心特性",
           "id": "",
-          "children": []
+          "children": [
+            {
+              "level": 3,
+              "text": "🎯 零配置优先",
+              "id": "-",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "🚀 深度集成",
+              "id": "-",
+              "children": []
+            },
+            {
+              "level": 3,
+              "text": "⚙️ 灵活配置",
+              "id": "-",
+              "children": []
+            }
+          ]
         },
         {
           "level": 2,
@@ -313,7 +313,7 @@
             },
             {
               "level": 3,
-              "text": "带上下文的日志",
+              "text": "发布流程",
               "id": "",
               "children": []
             }
@@ -326,13 +326,13 @@
           "children": [
             {
               "level": 3,
-              "text": "日志级别",
+              "text": "零配置模式",
               "id": "",
               "children": []
             },
             {
               "level": 3,
-              "text": "生产环境",
+              "text": "配置文件",
               "id": "",
               "children": []
             }
