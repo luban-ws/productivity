@@ -604,8 +604,9 @@ export async function executePublish(
 
         // 确认发布
         if (!options.yes && config.prompts?.confirmPublish !== false) {
+            const packageManager = config.project?.packageManager || "npm";
             const shouldPublish = await confirm(
-                `确认发布 ${publicPackages.length} 个包到 NPM?`,
+                `确认发布 ${publicPackages.length} 个包到 NPM? (使用 ${packageManager} 发布)`,
                 false,
             );
             if (!shouldPublish) {
@@ -638,7 +639,9 @@ export async function executePublish(
         }
 
         // 发布前提示（OTP）
+        const packageManager = config.project?.packageManager || "npm";
         logger.info("📱 准备发布到 NPM");
+        logger.info(`📦 使用包管理器: ${chalk.cyan(packageManager)}`);
         logger.info("如果启用了 NPM 2FA，发布时会提示输入 OTP（一次性密码）");
         logger.info("请准备好您的认证器应用以获取 OTP");
 
