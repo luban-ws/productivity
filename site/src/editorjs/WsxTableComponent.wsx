@@ -296,10 +296,19 @@ export default class WsxTableComponent extends WebComponent {
     }
 
     private updateInputElements() {
-        const data = this.tableData;
+        // Ensure tableData is always valid
+        const data = this.tableData || {
+            headers: ["Column 1", "Column 2"],
+            rows: [["", ""]],
+            withHeadings: true,
+        };
+        
+        // Ensure rows and headers are arrays
+        const headers = Array.isArray(data.headers) ? data.headers : ["Column 1", "Column 2"];
+        const rows = Array.isArray(data.rows) ? data.rows : [["", ""]];
 
         // Update header inputs only if they're not focused
-        data.headers.forEach((header, colIndex) => {
+        headers.forEach((header, colIndex) => {
             const input = this.headerInputs.get(colIndex);
             if (input && input !== document.activeElement) {
                 input.value = header;
@@ -307,7 +316,7 @@ export default class WsxTableComponent extends WebComponent {
         });
 
         // Update cell inputs only if they're not focused
-        data.rows.forEach((row, rowIndex) => {
+        rows.forEach((row, rowIndex) => {
             row.forEach((cell, colIndex) => {
                 const key = `${rowIndex}-${colIndex}`;
                 const input = this.cellInputs.get(key);
