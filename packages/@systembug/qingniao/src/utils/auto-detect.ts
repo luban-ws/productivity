@@ -8,8 +8,9 @@ import { execSilent } from "./exec";
 
 /**
  * 检测包管理器
+ * @returns 检测到的包管理器，如果无法检测则返回 null
  */
-export function detectPackageManager(rootDir: string): "npm" | "pnpm" | "yarn" {
+export function detectPackageManager(rootDir: string): "npm" | "pnpm" | "yarn" | null {
     // 检测 packageManager 字段
     const packageJsonPath = join(rootDir, "package.json");
     if (existsSync(packageJsonPath)) {
@@ -30,7 +31,7 @@ export function detectPackageManager(rootDir: string): "npm" | "pnpm" | "yarn" {
     if (existsSync(join(rootDir, "yarn.lock"))) return "yarn";
     if (existsSync(join(rootDir, "package-lock.json"))) return "npm";
 
-    return "pnpm"; // 默认
+    return null; // 无法检测，需要用户选择
 }
 
 /**

@@ -40,7 +40,7 @@ export async function processTypeScript(
 
         // 配置 TypeDoc 选项
         const entryPoints = options.entryPoints.map((entry) => resolve(cwd, entry));
-        
+
         // 设置选项
         app.options.setValue("entryPoints", entryPoints);
         app.options.setValue("out", outputDir);

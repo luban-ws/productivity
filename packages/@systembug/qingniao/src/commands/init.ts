@@ -5,93 +5,13 @@
 
 import { readFileSync, existsSync } from "fs";
 import { join } from "path";
-import { execSync } from "child_process";
-
-/**
- * 检测包管理器
- */
-function detectPackageManager(rootDir: string): "npm" | "pnpm" | "yarn" {
-    // 检测 packageManager 字段
-    const packageJsonPath = join(rootDir, "package.json");
-    if (existsSync(packageJsonPath)) {
-        try {
-            const pkg = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
-            if (pkg.packageManager) {
-                if (pkg.packageManager.startsWith("pnpm")) return "pnpm";
-                if (pkg.packageManager.startsWith("yarn")) return "yarn";
-                if (pkg.packageManager.startsWith("npm")) return "npm";
-            }
-        } catch {
-            // 忽略解析错误
-        }
-    }
-
-    // 检测 lockfile
-    if (existsSync(join(rootDir, "pnpm-lock.yaml"))) return "pnpm";
-    if (existsSync(join(rootDir, "yarn.lock"))) return "yarn";
-    if (existsSync(join(rootDir, "package-lock.json"))) return "npm";
-
-    return "pnpm"; // 默认
-}
-
-/**
- * 检测 workspace 类型
- */
-function detectWorkspace(rootDir: string): {
-    type: "pnpm" | "yarn" | "npm" | null;
-    configPath?: string;
-} {
-    // 检测 pnpm workspace
-    const pnpmWorkspacePath = join(rootDir, "pnpm-workspace.yaml");
-    if (existsSync(pnpmWorkspacePath)) {
-        return { type: "pnpm", configPath: "pnpm-workspace.yaml" };
-    }
-
-    // 检测 package.json workspaces
-    const packageJsonPath = join(rootDir, "package.json");
-    if (existsSync(packageJsonPath)) {
-        try {
-            const pkg = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
-            if (pkg.workspaces) {
-                return { type: "yarn", configPath: "package.json" };
-            }
-        } catch {
-            // 忽略解析错误
-        }
-    }
-
-    return { type: null };
-}
-
-/**
- * 检测 changeset
- */
-function detectChangeset(rootDir: string): boolean {
-    return existsSync(join(rootDir, ".changeset"));
-}
-
-/**
- * 检测 Turbo
- */
-function detectTurbo(rootDir: string): boolean {
-    return existsSync(join(rootDir, "turbo.json"));
-}
-
-/**
- * 检测 Git 分支
- */
-function detectGitBranch(): string | null {
-    try {
-        // 使用同步方式检测，避免异步问题
-        const result = execSync("git branch --show-current", {
-            encoding: "utf-8",
-            stdio: "pipe",
-        });
-        return result.toString().trim() || null;
-    } catch {
-        return null;
-    }
-}
+import {
+    detectPackageManager as detectPM,
+    detectWorkspace,
+    detectChangeset,
+    detectTurbo,
+    detectGitBranch,
+} from "../utils/auto-detect";
 
 /**
  * 从 package.json 读取项目名称
@@ -138,7 +58,9 @@ function detectBuildSteps(rootDir: string): string[] {
  */
 export function generateConfigTemplate(format: "ts" | "js" | "json" = "ts"): string {
     const rootDir = process.cwd();
-    const packageManager = detectPackageManager(rootDir);
+    const detectedPM = detectPM(rootDir);
+    // 在生成模板时，如果检测不到包管理器，使用 pnpm 作为默认值
+    const packageManager = detectedPM || "pnpm";
     const workspace = detectWorkspace(rootDir);
     const hasChangeset = detectChangeset(rootDir);
     const hasTurbo = detectTurbo(rootDir);

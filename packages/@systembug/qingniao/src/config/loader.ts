@@ -14,6 +14,7 @@ import {
     detectNx,
     detectGitBranch,
 } from "../utils/auto-detect";
+import { select } from "../utils/prompts";
 
 /**
  * 查找配置文件
@@ -60,8 +61,22 @@ export function loadConfigFromPackageJson(rootDir: string): Partial<PublishConfi
 /**
  * 自动检测并填充配置
  */
-function autoDetectConfig(rootDir: string): Partial<PublishConfig> {
-    const packageManager = detectPackageManager(rootDir);
+async function autoDetectConfig(rootDir: string): Promise<Partial<PublishConfig>> {
+    let packageManager = detectPackageManager(rootDir);
+    
+    // 如果无法检测到包管理器，询问用户选择
+    if (!packageManager) {
+        packageManager = await select(
+            "无法自动检测包管理器，请选择您使用的包管理器：",
+            [
+                { label: "pnpm", value: "pnpm" as const },
+                { label: "npm", value: "npm" as const },
+                { label: "yarn", value: "yarn" as const },
+            ],
+            "pnpm", // 默认选择 pnpm
+        );
+    }
+    
     const workspace = detectWorkspace(rootDir);
     const hasChangeset = detectChangeset(rootDir);
     const hasTurbo = detectTurbo(rootDir);
@@ -141,7 +156,7 @@ export async function loadConfig(configPath?: string): Promise<PublishConfig> {
     let config: Partial<PublishConfig> = {};
 
     // 1. 零配置自动检测（基础配置）
-    config = deepMerge(config, autoDetectConfig(rootDir));
+    config = deepMerge(config, await autoDetectConfig(rootDir));
 
     // 2. 从 package.json 加载配置（覆盖自动检测）
     const packageConfig = loadConfigFromPackageJson(rootDir);
