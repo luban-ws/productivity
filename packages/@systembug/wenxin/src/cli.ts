@@ -15,7 +15,7 @@ import { join } from "path";
 import { generateDocs } from "./index.js";
 import { getDefaultConfig } from "./config.js";
 import { generateConfigTemplate } from "./commands/init.js";
-import type { ApiDocConfig } from "./types.js";
+import type { ApiDocConfig, DocMode } from "./types.js";
 
 const program = new Command();
 
@@ -74,7 +74,7 @@ program
             const configOptions: Partial<ApiDocConfig> = {};
 
             if (options.mode) {
-                configOptions.mode = options.mode as any;
+                configOptions.mode = options.mode as DocMode;
             }
 
             if (options.jsdocOnly) {

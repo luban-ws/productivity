@@ -81,7 +81,7 @@ export async function processTypeScript(
 export async function extractTypeInfo(
     options: TypeDocOptions,
     cwd: string = process.cwd(),
-): Promise<Record<string, any>> {
+): Promise<Record<string, unknown>> {
     if (!options.enabled) {
         return {};
     }
@@ -104,38 +104,48 @@ export async function extractTypeInfo(
 
         // 提取类型信息（这里需要根据实际需求实现）
         // 这是一个简化的实现，实际应该遍历 project 的反射树
-        const typeInfo: Record<string, any> = {};
+        const typeInfo: Record<string, unknown> = {};
 
         // TODO: 实现类型信息提取逻辑
         // 可以遍历 project.children 来提取类型、接口、函数等信息
         // 示例：遍历项目反射树
-        const extractReflection = (reflection: any, prefix: string = "") => {
-            if (!reflection) return;
+        const extractReflection = (reflection: unknown, prefix: string = "") => {
+            if (!reflection || typeof reflection !== "object" || reflection === null) return;
 
-            const name = reflection.name;
-            const kind = reflection.kind;
+            const reflectionObj = reflection as {
+                name?: string;
+                kind?: unknown;
+                type?: unknown;
+                signatures?: unknown;
+                children?: unknown[];
+            };
+            const name = reflectionObj.name;
+            const kind = reflectionObj.kind;
             const longname = prefix ? `${prefix}#${name}` : name;
 
             if (name && kind) {
                 typeInfo[longname] = {
                     name,
                     kind,
-                    type: reflection.type,
-                    signatures: reflection.signatures,
-                    children: reflection.children,
+                    type: reflectionObj.type,
+                    signatures: reflectionObj.signatures,
+                    children: reflectionObj.children,
                 };
             }
 
             // 递归处理子项
-            if (reflection.children) {
-                reflection.children.forEach((child: any) => {
-                    extractReflection(child, longname);
-                });
+            if (typeof reflection === "object" && reflection !== null && "children" in reflection) {
+                const reflectionWithChildren = reflection as { children?: unknown[] };
+                if (Array.isArray(reflectionWithChildren.children)) {
+                    reflectionWithChildren.children.forEach((child) => {
+                        extractReflection(child, longname);
+                    });
+                }
             }
         };
 
         if (project.children) {
-            project.children.forEach((child: any) => {
+            project.children.forEach((child) => {
                 extractReflection(child);
             });
         }

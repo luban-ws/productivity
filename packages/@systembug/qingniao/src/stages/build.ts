@@ -58,10 +58,11 @@ export function checkBuildArtifact(
                 message: `构建产物为空: ${distPath}`,
             };
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
         return {
             success: false,
-            message: `无法读取构建产物: ${distPath} - ${error.message}`,
+            message: `无法读取构建产物: ${distPath} - ${errorMessage}`,
         };
     }
 
@@ -87,11 +88,12 @@ export async function executeBuildSteps(config: PublishConfig, context: Context)
                     cwd: step.cwd || rootDir,
                     silent: step.silent,
                 });
-            } catch (error: any) {
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
                 if (step.skipOnError) {
                     // 跳过错误，继续执行
                 } else {
-                    throw new Error(`构建步骤失败: ${step.name} - ${error.message}`);
+                    throw new Error(`构建步骤失败: ${step.name} - ${errorMessage}`);
                 }
             }
         }

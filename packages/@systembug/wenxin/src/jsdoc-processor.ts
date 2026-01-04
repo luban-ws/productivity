@@ -5,7 +5,7 @@
 
 import { execSync } from "child_process";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
-import { resolve, dirname, join } from "path";
+import { resolve, join } from "path";
 import { tmpdir } from "os";
 import type { JSDocOptions, ProcessResult } from "./types.js";
 
@@ -109,10 +109,10 @@ function createJSDocConfig(options: JSDocOptions, cwd: string): string {
 /**
  * 构建 JSDoc 命令
  * @param configPath 配置文件路径
- * @param options JSDoc 选项
+ * @param _options JSDoc 选项（未使用，保留用于未来扩展）
  * @returns 命令字符串
  */
-function buildJSDocCommand(configPath: string, options: JSDocOptions): string {
+function buildJSDocCommand(configPath: string, _options: JSDocOptions): string {
     const parts = ["jsdoc", "-c", configPath];
 
     return parts.join(" ");

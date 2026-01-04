@@ -53,8 +53,9 @@ export async function publishPackagesDryRun(
                 const isScoped = pkg.name.startsWith("@");
                 const accessFlag = isScoped ? " --access public" : "";
                 exec(`${publishCommand} --dry-run${accessFlag}`, { cwd: pkg.path });
-            } catch (error: any) {
-                throw new Error(`包 ${pkg.name} dry-run 失败: ${error.message}`);
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                throw new Error(`包 ${pkg.name} dry-run 失败: ${errorMessage}`);
             }
         }
     }
@@ -126,8 +127,8 @@ export async function publishPackages(config: PublishConfig, context: Context): 
                     cwd: pkg.path,
                     silent: false, // 允许交互式输入 OTP
                 });
-            } catch (error: any) {
-                const errorMessage = error.message || String(error);
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
                 if (
                     errorMessage.includes("OTP") ||
                     errorMessage.includes("one-time") ||

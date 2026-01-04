@@ -10,7 +10,7 @@ import type { PackageInfo } from "../types";
 /**
  * 读取 package.json
  */
-export function readPackageJson(path: string): any {
+export function readPackageJson(path: string): Record<string, unknown> | null {
     const packageJsonPath = join(path, "package.json");
     if (!existsSync(packageJsonPath)) {
         return null;
@@ -26,7 +26,7 @@ export function readPackageJson(path: string): any {
 /**
  * 发现所有包（使用 pnpm list，包括私有包）
  */
-export async function discoverAllPackagesWithPnpm(rootDir: string): Promise<PackageInfo[]> {
+export async function discoverAllPackagesWithPnpm(_rootDir: string): Promise<PackageInfo[]> {
     try {
         const output = execSilent("pnpm list -r --depth -1 --json");
         if (!output) return [];
@@ -35,7 +35,7 @@ export async function discoverAllPackagesWithPnpm(rootDir: string): Promise<Pack
         const list = JSON.parse(output);
 
         // pnpm list 返回的是数组或对象，需要处理
-        const processItem = (item: any) => {
+        const processItem = (item: Record<string, unknown>) => {
             if (item.name && item.path) {
                 const pkgJson = readPackageJson(item.path);
                 if (pkgJson) {

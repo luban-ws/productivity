@@ -57,7 +57,7 @@ export interface TypeDocOptions {
     /** 是否包含内部成员 */
     excludeInternal?: boolean;
     /** 其他 TypeDoc 选项 */
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 /**

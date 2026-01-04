@@ -4,11 +4,12 @@
  */
 
 import { readFileSync, existsSync } from "fs";
-import { resolve, dirname, join } from "path";
+import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import type { ApiDocConfig, JSDocOptions, TypeDocOptions } from "./types.js";
 
 // 尝试加载 JSON Schema 验证器（可选依赖）
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let Ajv: any = null;
 let ajvLoaded = false;
 
@@ -106,7 +107,8 @@ export async function loadConfig(configPath?: string): Promise<ApiDocConfig> {
                 }
 
                 // 移除 $schema，它不是配置的一部分
-                const { $schema, ...configWithoutSchema } = config;
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { $schema: _schema, ...configWithoutSchema } = config;
                 return mergeConfig(configWithoutSchema, dirname(resolve(configPath)));
             } else if (configPath.endsWith(".js") || configPath.endsWith(".ts")) {
                 // 对于 JS/TS 文件，需要动态导入（这里简化处理，实际应该使用 require 或 import）
@@ -124,13 +126,19 @@ export async function loadConfig(configPath?: string): Promise<ApiDocConfig> {
 /**
  * 验证 JSON Schema（如果可用）
  */
-async function validateSchema(config: any, configPath: string): Promise<void> {
+async function validateSchema(
+    config: Partial<ApiDocConfig> & { $schema?: string },
+    configPath: string,
+): Promise<void> {
     if (!Ajv) {
         return; // 如果没有 Ajv，跳过验证
     }
 
     try {
         // 尝试加载 schema
+        if (!config.$schema) {
+            return;
+        }
         const schemaPath = resolve(dirname(configPath), config.$schema.replace(/^\.\//, ""));
 
         if (existsSync(schemaPath)) {
@@ -167,7 +175,7 @@ function mergeConfig(
 
     // 合并 JSDoc 配置
     if (userConfig.jsdoc !== undefined) {
-        config.jsdoc = deepMerge(DEFAULT_JSDOC_CONFIG, userConfig.jsdoc);
+        config.jsdoc = deepMerge(DEFAULT_JSDOC_CONFIG, userConfig.jsdoc as Record<string, unknown>);
         // 解析相对路径
         if (config.jsdoc?.opts?.template) {
             config.jsdoc.opts.template = resolve(baseDir, config.jsdoc.opts.template);
@@ -214,7 +222,7 @@ function mergeConfig(
 /**
  * 深度合并对象
  */
-function deepMerge<T extends Record<string, any>>(target: T, source: Partial<T>): T {
+function deepMerge<T extends Record<string, unknown>>(target: T, source: Partial<T>): T {
     const result = { ...target } as T;
 
     for (const key in source) {

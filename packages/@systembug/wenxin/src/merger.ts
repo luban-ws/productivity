@@ -10,9 +10,9 @@
  * @returns 合并后的数据
  */
 export function mergeTypeInfo(
-    jsdocData: Record<string, any>[],
-    typeInfo: Record<string, any>,
-): Record<string, any>[] {
+    jsdocData: Record<string, unknown>[],
+    typeInfo: Record<string, unknown>,
+): Record<string, unknown>[] {
     // 如果类型信息为空，直接返回 JSDoc 数据
     if (!typeInfo || Object.keys(typeInfo).length === 0) {
         return jsdocData;
@@ -24,7 +24,8 @@ export function mergeTypeInfo(
     // 合并每个 doclet
     return jsdocData.map((doclet) => {
         const merged = { ...doclet };
-        const typeData = typeIndex[doclet.longname];
+        const longname = typeof doclet.longname === "string" ? doclet.longname : undefined;
+        const typeData = longname ? typeIndex[longname] : undefined;
 
         if (typeData) {
             // 如果 JSDoc 中没有类型信息，使用 TypeScript 类型
@@ -33,11 +34,12 @@ export function mergeTypeInfo(
             }
 
             // 如果 JSDoc 中没有参数类型，使用 TypeScript 参数类型
-            if (!merged.params && typeData.params) {
-                merged.params = typeData.params;
-            } else if (merged.params && typeData.params) {
+            const typeDataParams = Array.isArray(typeData.params) ? typeData.params : undefined;
+            if (!merged.params && typeDataParams) {
+                merged.params = typeDataParams;
+            } else if (Array.isArray(merged.params) && typeDataParams) {
                 // 合并参数类型信息
-                merged.params = mergeParams(merged.params, typeData.params);
+                merged.params = mergeParams(merged.params, typeDataParams);
             }
 
             // 如果 JSDoc 中没有返回类型，使用 TypeScript 返回类型
@@ -46,8 +48,10 @@ export function mergeTypeInfo(
             }
 
             // 合并其他类型信息
-            if (typeData.properties) {
-                merged.properties = mergeProperties(merged.properties || [], typeData.properties);
+            const typeDataProperties = Array.isArray(typeData.properties) ? typeData.properties : undefined;
+            if (typeDataProperties) {
+                const mergedProperties = Array.isArray(merged.properties) ? merged.properties : [];
+                merged.properties = mergeProperties(mergedProperties, typeDataProperties);
             }
         }
 
@@ -60,32 +64,42 @@ export function mergeTypeInfo(
  * @param typeInfo 类型信息对象
  * @returns 以 longname 为键的索引
  */
-function createTypeIndex(typeInfo: Record<string, any>): Record<string, any> {
-    const index: Record<string, any> = {};
+function createTypeIndex(typeInfo: Record<string, unknown>): Record<string, unknown> {
+    const index: Record<string, unknown> = {};
 
     // 递归遍历类型信息，建立索引
-    function indexType(obj: any, prefix: string = "") {
+    function indexType(obj: unknown, prefix: string = "") {
         if (!obj || typeof obj !== "object") {
             return;
         }
 
-        if (obj.name && obj.kind) {
-            const longname = prefix ? `${prefix}#${obj.name}` : obj.name;
+        if (typeof obj === "object" && obj !== null && "name" in obj && "kind" in obj) {
+            const objWithName = obj as { name: string };
+            const longname = prefix ? `${prefix}#${objWithName.name}` : objWithName.name;
             index[longname] = obj;
         }
 
         // 处理子成员
-        if (obj.children) {
-            const newPrefix = prefix ? `${prefix}#${obj.name || ""}` : obj.name || "";
-            obj.children.forEach((child: any) => indexType(child, newPrefix));
+        if (typeof obj === "object" && obj !== null && "children" in obj) {
+            const objWithChildren = obj as { name?: string; children?: unknown[] };
+            const newPrefix = prefix
+                ? `${prefix}#${objWithChildren.name || ""}`
+                : objWithChildren.name || "";
+            if (Array.isArray(objWithChildren.children)) {
+                objWithChildren.children.forEach((child) => indexType(child, newPrefix));
+            }
         }
 
         // 处理其他可能的嵌套结构
-        Object.keys(obj).forEach((key) => {
-            if (key !== "children" && Array.isArray(obj[key])) {
-                obj[key].forEach((item: any) => indexType(item, prefix));
-            }
-        });
+        if (typeof obj === "object" && obj !== null) {
+            Object.keys(obj).forEach((key) => {
+                if (key !== "children" && Array.isArray((obj as Record<string, unknown>)[key])) {
+                    ((obj as Record<string, unknown>)[key] as unknown[]).forEach((item) =>
+                        indexType(item, prefix),
+                    );
+                }
+            });
+        }
     }
 
     // 如果 typeInfo 是数组，遍历每个项
@@ -104,14 +118,17 @@ function createTypeIndex(typeInfo: Record<string, any>): Record<string, any> {
  * @param tsParams TypeScript 参数
  * @returns 合并后的参数
  */
-function mergeParams(jsdocParams: any[], tsParams: any[]): any[] {
+function mergeParams(jsdocParams: unknown[], tsParams: unknown[]): unknown[] {
     const merged = [...jsdocParams];
 
     tsParams.forEach((tsParam, index) => {
-        if (merged[index]) {
+        const mergedItem = merged[index];
+        if (mergedItem && typeof mergedItem === "object" && mergedItem !== null) {
+            const mergedObj = mergedItem as Record<string, unknown>;
+            const tsParamObj = tsParam && typeof tsParam === "object" && tsParam !== null ? (tsParam as Record<string, unknown>) : null;
             // 如果 JSDoc 参数没有类型，使用 TypeScript 类型
-            if (!merged[index].type && tsParam.type) {
-                merged[index].type = tsParam.type;
+            if (!mergedObj.type && tsParamObj?.type) {
+                mergedObj.type = tsParamObj.type;
             }
         } else {
             // 如果 JSDoc 中没有该参数，添加它
@@ -128,28 +145,31 @@ function mergeParams(jsdocParams: any[], tsParams: any[]): any[] {
  * @param tsProps TypeScript 属性
  * @returns 合并后的属性
  */
-function mergeProperties(jsdocProps: any[], tsProps: any[]): any[] {
-    const propMap = new Map<string, any>();
+function mergeProperties(jsdocProps: unknown[], tsProps: unknown[]): unknown[] {
+    const propMap = new Map<string, unknown>();
 
     // 先添加 JSDoc 属性
     jsdocProps.forEach((prop) => {
-        if (prop.name) {
-            propMap.set(prop.name, prop);
+        if (prop && typeof prop === "object" && prop !== null && "name" in prop) {
+            const propObj = prop as { name: string };
+            propMap.set(propObj.name, prop);
         }
     });
 
     // 然后合并 TypeScript 属性
     tsProps.forEach((prop) => {
-        if (prop.name) {
-            const existing = propMap.get(prop.name);
-            if (existing) {
+        if (prop && typeof prop === "object" && prop !== null && "name" in prop) {
+            const propObj = prop as { name: string; type?: unknown };
+            const existing = propMap.get(propObj.name);
+            if (existing && typeof existing === "object" && existing !== null) {
+                const existingObj = existing as { type?: unknown };
                 // 合并现有属性
-                if (!existing.type && prop.type) {
-                    existing.type = prop.type;
+                if (!existingObj.type && propObj.type) {
+                    existingObj.type = propObj.type;
                 }
             } else {
                 // 添加新属性
-                propMap.set(prop.name, prop);
+                propMap.set(propObj.name, prop);
             }
         }
     });

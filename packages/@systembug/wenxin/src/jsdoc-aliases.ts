@@ -11,13 +11,13 @@
  */
 
 interface Doclet {
-    [key: string]: any;
+    [key: string]: unknown;
     longname?: string;
     memberof?: string;
     name?: string;
-    returns?: any;
-    examples?: any[];
-    meta?: any;
+    returns?: unknown;
+    examples?: unknown[];
+    meta?: unknown;
     aliases?: string[];
     category?: string;
     description?: string;

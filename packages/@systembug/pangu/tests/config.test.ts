@@ -24,8 +24,15 @@ function setupTestDir(): void {
  */
 function cleanupTestDir(): void {
     if (existsSync(TEST_DIR)) {
-        // 删除目录中的所有文件
-        const files = ["dev.config.json", "dev.config.yaml", "dev.config.yml"];
+        // 删除目录中的所有配置文件
+        const files = [
+            "dev.config.json",
+            "dev.config.yaml",
+            "dev.config.yml",
+            "pangu.config.json",
+            "pangu.config.yaml",
+            "pangu.config.yml",
+        ];
         files.forEach((file) => {
             const filePath = join(TEST_DIR, file);
             if (existsSync(filePath)) {
@@ -149,6 +156,42 @@ demos:
 
             // 验证 YAML 配置优先
             expect(config.projectName).toBe("yaml-project");
+        });
+
+        it("pangu.config.json 优先级应高于 dev.config.json", async () => {
+            const { loadConfig } = await import("../src/config.js");
+
+            // 创建两个配置文件
+            const devConfig = {
+                projectName: "dev-project",
+                packageManager: "npm",
+                demos: [
+                    { name: "Dev Demo", value: "dev", description: "Dev", package: "@test/dev" },
+                ],
+            };
+
+            const panguConfig = {
+                projectName: "pangu-project",
+                packageManager: "pnpm",
+                demos: [
+                    {
+                        name: "Pangu Demo",
+                        value: "pangu",
+                        description: "Pangu",
+                        package: "@test/pangu",
+                    },
+                ],
+            };
+
+            writeFileSync(join(TEST_DIR, "dev.config.json"), JSON.stringify(devConfig));
+            writeFileSync(join(TEST_DIR, "pangu.config.json"), JSON.stringify(panguConfig));
+
+            const config = loadConfig(TEST_DIR);
+
+            // 验证 pangu.config.json 优先
+            expect(config.projectName).toBe("pangu-project");
+            expect(config.packageManager).toBe("pnpm");
+            expect(config.demos[0].name).toBe("Pangu Demo");
         });
 
         it("应该在配置文件格式错误时返回默认配置", async () => {

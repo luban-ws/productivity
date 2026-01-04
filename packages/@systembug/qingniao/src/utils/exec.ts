@@ -20,8 +20,9 @@ export function exec(command: string, options: ExecOptions = {}): string {
             cwd: options.cwd || process.cwd(),
             encoding: options.encoding || "utf-8",
         }) as string;
-    } catch (error: any) {
-        throw new Error(`命令执行失败: ${command} ${error.message}`);
+    } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        throw new Error(`命令执行失败: ${command} ${errorMessage}`);
     }
 }
 

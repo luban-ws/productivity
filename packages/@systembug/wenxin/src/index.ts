@@ -6,7 +6,6 @@
 import { loadConfig, validateConfig } from "./config.js";
 import { processJSDoc } from "./jsdoc-processor.js";
 import { processTypeScript, extractTypeInfo } from "./typescript-processor.js";
-import { mergeTypeInfo } from "./merger.js";
 import type { ApiDocConfig, ProcessResult } from "./types.js";
 
 /**
@@ -65,9 +64,9 @@ export async function generateDocs(
                 }
                 // 如果启用类型合并，提取类型信息
                 if (config.mergeTypes && config.jsdoc?.enabled) {
-                    const typeInfo = await extractTypeInfo(typedocOptions, cwd);
                     // 注意：这里需要访问 JSDoc 的内部数据结构
                     // 实际实现可能需要更复杂的集成
+                    await extractTypeInfo(typedocOptions, cwd);
                 }
                 result = typedocResult;
             }

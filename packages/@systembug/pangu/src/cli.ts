@@ -143,7 +143,9 @@ export async function main(): Promise<void> {
         // 检查是否有可用的 demo
         if (demos.length === 0) {
             console.error("❌ 配置文件中没有找到任何 demo 选项");
-            console.error("请创建 dev.config.json 或 dev.config.yaml 配置文件");
+            console.error(
+                "请创建 pangu.config.json、pangu.config.yaml、dev.config.json 或 dev.config.yaml 配置文件",
+            );
             process.exit(1);
         }
 

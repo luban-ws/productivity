@@ -126,7 +126,10 @@ async function autoDetectConfig(rootDir: string): Promise<Partial<PublishConfig>
 /**
  * 深度合并配置
  */
-function deepMerge(target: any, source: any): any {
+function deepMerge(
+    target: Record<string, unknown>,
+    source: Record<string, unknown>,
+): Record<string, unknown> {
     const output = { ...target };
     if (isObject(target) && isObject(source)) {
         Object.keys(source).forEach((key) => {
@@ -144,7 +147,7 @@ function deepMerge(target: any, source: any): any {
     return output;
 }
 
-function isObject(item: any): boolean {
+function isObject(item: unknown): boolean {
     return item && typeof item === "object" && !Array.isArray(item);
 }
 

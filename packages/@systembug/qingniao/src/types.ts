@@ -20,7 +20,7 @@ export interface Context {
     packages: PackageInfo[];
     config: PublishConfig;
     rootDir: string;
-    [key: string]: any;
+    [key: string]: unknown;
 }
 
 /**

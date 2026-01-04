@@ -3,40 +3,13 @@
  * 生成文心配置文件模板
  */
 
-import { existsSync, readFileSync } from "fs";
+import { existsSync } from "fs";
 import { join } from "path";
-
-/**
- * 检测包管理器
- */
-function detectPackageManager(rootDir: string): "npm" | "pnpm" | "yarn" {
-    // 检测 packageManager 字段
-    const packageJsonPath = join(rootDir, "package.json");
-    if (existsSync(packageJsonPath)) {
-        try {
-            const pkg = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
-            if (pkg.packageManager) {
-                if (pkg.packageManager.startsWith("pnpm")) return "pnpm";
-                if (pkg.packageManager.startsWith("yarn")) return "yarn";
-                if (pkg.packageManager.startsWith("npm")) return "npm";
-            }
-        } catch {
-            // 忽略解析错误
-        }
-    }
-
-    // 检测 lockfile
-    if (existsSync(join(rootDir, "pnpm-lock.yaml"))) return "pnpm";
-    if (existsSync(join(rootDir, "yarn.lock"))) return "yarn";
-    if (existsSync(join(rootDir, "package-lock.json"))) return "npm";
-
-    return "pnpm"; // 默认使用 pnpm
-}
 
 /**
  * 获取包路径（支持 pnpm/npm/yarn，都使用 node_modules）
  */
-function getPackagePath(rootDir: string): string {
+function getPackagePath(_rootDir: string): string {
     // 所有包管理器都使用 node_modules 目录
     // pnpm 使用符号链接，但路径仍然是 node_modules/@systembug/wenxin
     return "./node_modules/@systembug/wenxin";
