@@ -56,7 +56,7 @@ export const tools: Tool[] = [
             "스마트 버전 관리",
         ],
         githubUrl:
-            "https://github.com/systembug/productivity/tree/main/packages/@systembug/qingniao",
+            "https://github.com/luban-ws/productivity/tree/main/packages/@systembug/qingniao",
         npmUrl: "https://www.npmjs.com/package/@systembug/qingniao",
     },
     {
@@ -94,7 +94,7 @@ export const tools: Tool[] = [
             "제로 설정",
             "하위 호환성",
         ],
-        githubUrl: "https://github.com/systembug/productivity/tree/main/packages/@systembug/wenxin",
+        githubUrl: "https://github.com/luban-ws/productivity/tree/main/packages/@systembug/wenxin",
         npmUrl: "https://www.npmjs.com/package/@systembug/wenxin",
     },
     {
@@ -132,7 +132,7 @@ export const tools: Tool[] = [
             "빠른 시작",
             "JSON/YAML 설정",
         ],
-        githubUrl: "https://github.com/systembug/productivity/tree/main/packages/@systembug/pangu",
+        githubUrl: "https://github.com/luban-ws/productivity/tree/main/packages/@systembug/pangu",
         npmUrl: "https://www.npmjs.com/package/@systembug/pangu",
     },
     {
@@ -170,7 +170,7 @@ export const tools: Tool[] = [
             "구조화된 로그",
             "플러그 가능한 전송",
         ],
-        githubUrl: "https://github.com/systembug/productivity/tree/main/packages/@systembug/diting",
+        githubUrl: "https://github.com/luban-ws/productivity/tree/main/packages/@systembug/diting",
         npmUrl: "https://www.npmjs.com/package/@systembug/diting",
     },
 ];

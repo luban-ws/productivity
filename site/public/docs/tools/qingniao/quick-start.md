@@ -89,5 +89,5 @@ npx qn
 
 ## 更多信息
 
-- [GitHub 仓库](https://github.com/systembug/productivity/tree/main/packages/@systembug/qingniao)
+- [GitHub 仓库](https://github.com/luban-ws/productivity/tree/main/packages/@systembug/qingniao)
 - [NPM 包](https://www.npmjs.com/package/@systembug/qingniao)

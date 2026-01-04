@@ -31,7 +31,7 @@
 ## 📚 其他资源
 
 - **[RFCs](./rfc/README.md)** - 设计文档和规范
-- **[GitHub Repository](https://github.com/systembug/productivity)**
+- **[GitHub Repository](https://github.com/luban-ws/productivity)**
 
 ## 🚀 快速开始
 

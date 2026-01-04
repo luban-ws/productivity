@@ -96,12 +96,17 @@ export default class App extends LightComponent {
                 <div class="footer-container">
                     <div class="footer-main">
                         <div class="footer-brand">
-                            <span class="footer-icon">🛠️</span>
+                            <img
+                                src="/favicon.svg"
+                                class="footer-icon"
+                                alt="Luban"
+                                style="width: 24px; height: 24px; margin-right: 8px;"
+                            />
                             <h3>{t("brand.name")}</h3>
                         </div>
                         <div class="footer-links">
                             <a
-                                href="https://github.com/systembug/productivity"
+                                href="https://github.com/luban-ws/productivity"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => {
@@ -115,7 +120,7 @@ export default class App extends LightComponent {
                             <wsx-link to="/docs/productivity">{t("nav.docs")}</wsx-link>
                             <span class="footer-divider">•</span>
                             <a
-                                href="https://github.com/systembug/productivity/blob/main/LICENSE"
+                                href="https://github.com/luban-ws/productivity/blob/main/LICENSE"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 onClick={(e) => {
@@ -138,12 +143,12 @@ export default class App extends LightComponent {
     // Event handlers
 
     private openGitHub = (): void => {
-        window.open("https://github.com/systembug/productivity", "_blank", "noopener,noreferrer");
+        window.open("https://github.com/luban-ws/productivity", "_blank", "noopener,noreferrer");
     };
 
     private openGitHubDiscussions = (): void => {
         window.open(
-            "https://github.com/systembug/productivity/discussions",
+            "https://github.com/luban-ws/productivity/discussions",
             "_blank",
             "noopener,noreferrer",
         );
@@ -155,14 +160,14 @@ export default class App extends LightComponent {
 
     private openDiscord = (): void => {
         window.open(
-            "https://github.com/systembug/productivity/discussions",
+            "https://github.com/luban-ws/productivity/discussions",
             "_blank",
             "noopener,noreferrer",
         );
     };
 
     private openTwitter = (): void => {
-        window.open("https://github.com/systembug/productivity", "_blank", "noopener,noreferrer");
+        window.open("https://github.com/luban-ws/productivity", "_blank", "noopener,noreferrer");
     };
 
     private openBlog = (): void => {
@@ -173,7 +178,7 @@ export default class App extends LightComponent {
 
     private openLicense = (): void => {
         window.open(
-            "https://github.com/systembug/productivity/blob/main/LICENSE",
+            "https://github.com/luban-ws/productivity/blob/main/LICENSE",
             "_blank",
             "noopener,noreferrer",
         );
@@ -354,7 +359,7 @@ export default class App extends LightComponent {
                 "@type": "WebPage",
                 name: meta.title,
                 description: meta.description,
-                url: meta.url || `https://systembug.github.io/productivity${path}`,
+                url: meta.url || `https://conouch.io/productivity${path}`,
             };
         }
 
@@ -365,7 +370,7 @@ export default class App extends LightComponent {
                 "@type": "Article",
                 headline: meta.title,
                 description: meta.description,
-                url: meta.url || `https://systembug.github.io/productivity${path}`,
+                url: meta.url || `https://conouch.io/productivity${path}`,
                 author: {
                     "@type": "Organization",
                     name: `${brandName} Team`,
@@ -387,7 +392,7 @@ export default class App extends LightComponent {
             applicationCategory: "Developer Tools",
             operatingSystem: "Web",
             description: meta.description,
-            url: meta.url || `https://systembug.github.io/productivity${path}`,
+            url: meta.url || `https://conouch.io/productivity${path}`,
             offers: {
                 "@type": "Offer",
                 price: "0",

@@ -53,7 +53,7 @@ export default withMermaid(
                 },
             ],
 
-            socialLinks: [{ icon: "github", link: "https://github.com/systembug/productivity" }],
+            socialLinks: [{ icon: "github", link: "https://github.com/luban-ws/productivity" }],
 
             search: {
                 provider: "local",

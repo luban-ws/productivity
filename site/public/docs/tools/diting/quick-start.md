@@ -81,5 +81,5 @@ setLogLevel("info"); // 只显示 info 及以上级别
 
 ## 更多信息
 
-- [GitHub 仓库](https://github.com/systembug/productivity/tree/main/packages/@systembug/diting)
+- [GitHub 仓库](https://github.com/luban-ws/productivity/tree/main/packages/@systembug/diting)
 - [NPM 包](https://www.npmjs.com/package/@systembug/diting)

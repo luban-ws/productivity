@@ -57,7 +57,7 @@ logger.info('Hello from Diting!');`}</code>
     }
 
     private openGitHub = (): void => {
-        window.open("https://github.com/systembug/productivity", "_blank");
+        window.open("https://github.com/luban-ws/productivity", "_blank");
     };
 
     private openPlayground = (): void => {

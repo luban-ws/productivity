@@ -1,6 +1,6 @@
 {
     "hero": {
-        "badge": "🛠️ 鲁班工坊",
+        "badge": "鲁班工坊",
         "title": "生产力工具集",
         "subtitle": "Luban Workshop Productivity Tools",
         "description": "专为 monorepo 项目设计的零配置优先工具集，让开发流程如行云流水般优雅。",

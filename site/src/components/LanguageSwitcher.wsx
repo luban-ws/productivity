@@ -122,7 +122,28 @@ export default class LanguageSwitcher extends WebComponent {
                     aria-expanded={this.isOpen}
                     aria-haspopup="listbox"
                 >
-                    <span class="language-switcher-icon">🌐</span>
+                    <span class="language-switcher-icon">
+                        <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            style="display: inline-block; vertical-align: middle;"
+                        >
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                            <ellipse
+                                cx="12"
+                                cy="12"
+                                rx="10"
+                                ry="4"
+                                transform="rotate(90 12 12)"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            />
+                            <path d="M2 12H22" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </span>
                     <span class="language-switcher-text">{displayName}</span>
                     <span class="language-switcher-arrow">{this.isOpen ? "▲" : "▼"}</span>
                 </button>

@@ -12,7 +12,7 @@ This monorepo contains various productivity tools and utilities that streamline 
 
 ## Documentation
 
-- 📖 **[在线文档](https://systembug.github.io/productivity/)** - 完整的工具使用指南
+- 📖 **[在线文档](https://conouch.io/productivity/)** - 完整的工具使用指南
 - 📖 **[RFCs](docs/rfc/)** - Design documents and standards
 
 ### 本地查看文档

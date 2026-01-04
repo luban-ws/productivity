@@ -50,5 +50,5 @@ import { createLogger } from '@systembug/diting';
 ## 获取帮助
 
 - 查看每个工具的详细文档
-- 访问 [GitHub 仓库](https://github.com/systembug/productivity)
+- 访问 [GitHub 仓库](https://github.com/luban-ws/productivity)
 - 提交 Issue 或 Pull Request

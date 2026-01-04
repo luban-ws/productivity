@@ -85,5 +85,5 @@ npx pg
 
 ## 更多信息
 
-- [GitHub 仓库](https://github.com/systembug/productivity/tree/main/packages/@systembug/pangu)
+- [GitHub 仓库](https://github.com/luban-ws/productivity/tree/main/packages/@systembug/pangu)
 - [NPM 包](https://www.npmjs.com/package/@systembug/pangu)
