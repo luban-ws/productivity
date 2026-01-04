@@ -41,44 +41,94 @@ export default class WsxTableComponent extends WebComponent {
     }
 
     onAttributeChanged(name: string, oldValue: string, newValue: string) {
+        // Ensure tableData is always initialized
+        if (!this.tableData) {
+            this.tableData = {
+                headers: ["Column 1", "Column 2"],
+                rows: [["", ""]],
+                withHeadings: true,
+            };
+        }
+
         switch (name) {
             case "headers":
                 try {
                     const headers = JSON.parse(newValue || '["Column 1", "Column 2"]');
                     if (Array.isArray(headers)) {
-                        this.tableData = { ...this.tableData, headers };
+                        this.tableData = {
+                            ...this.tableData,
+                            headers,
+                            rows: this.tableData.rows || [["", ""]],
+                            withHeadings: this.tableData.withHeadings ?? true,
+                        };
                         this.rerender();
                     }
                 } catch (e) {
                     logger.error("Failed to parse headers:", e);
-                    // Keep existing headers on parse error
+                    // Ensure tableData remains valid with default headers
+                    this.tableData = {
+                        ...this.tableData,
+                        headers: ["Column 1", "Column 2"],
+                        rows: this.tableData.rows || [["", ""]],
+                        withHeadings: this.tableData.withHeadings ?? true,
+                    };
+                    this.rerender();
                 }
                 break;
             case "rows":
                 try {
                     const rows = JSON.parse(newValue || '[["", ""]]');
                     if (Array.isArray(rows)) {
-                        this.tableData = { ...this.tableData, rows };
+                        this.tableData = {
+                            ...this.tableData,
+                            headers: this.tableData.headers || ["Column 1", "Column 2"],
+                            rows,
+                            withHeadings: this.tableData.withHeadings ?? true,
+                        };
                         this.rerender();
                     }
                 } catch (e) {
                     logger.error("Failed to parse rows:", e);
-                    // Keep existing rows on parse error
+                    // Ensure tableData remains valid with default rows
+                    this.tableData = {
+                        ...this.tableData,
+                        headers: this.tableData.headers || ["Column 1", "Column 2"],
+                        rows: [["", ""]],
+                        withHeadings: this.tableData.withHeadings ?? true,
+                    };
+                    this.rerender();
                 }
                 break;
             case "withheadings":
-                this.tableData = { ...this.tableData, withHeadings: newValue === "true" };
+                this.tableData = {
+                    ...this.tableData,
+                    headers: this.tableData.headers || ["Column 1", "Column 2"],
+                    rows: this.tableData.rows || [["", ""]],
+                    withHeadings: newValue === "true",
+                };
                 this.rerender();
                 break;
             case "readonly":
                 this.isReadonly = newValue === "true";
+                // Ensure tableData is valid before rendering
+                this.tableData = {
+                    ...this.tableData,
+                    headers: this.tableData.headers || ["Column 1", "Column 2"],
+                    rows: this.tableData.rows || [["", ""]],
+                    withHeadings: this.tableData.withHeadings ?? true,
+                };
                 this.rerender();
                 break;
         }
     }
 
     private updateTableData(updates: Partial<TableData>) {
-        this.tableData = { ...this.tableData, ...updates };
+        // Ensure tableData is always complete
+        this.tableData = {
+            headers: updates.headers ?? this.tableData?.headers ?? ["Column 1", "Column 2"],
+            rows: updates.rows ?? this.tableData?.rows ?? [["", ""]],
+            withHeadings: updates.withHeadings ?? this.tableData?.withHeadings ?? true,
+        };
         this.dispatchEvent(new CustomEvent("datachange", { detail: this.tableData }));
     }
 

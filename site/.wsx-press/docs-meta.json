@@ -8,15 +8,6 @@
     "prev": null,
     "next": null
   },
-  "tools/wenxin/quick-start": {
-    "title": "文心快速开始",
-    "category": "tools/wenxin",
-    "route": "/docs/tools/wenxin/quick-start",
-    "order": 2,
-    "description": "通用 API 文档生成工具，支持 JSDoc 和 TypeScript。混合模式自动合并类型信息到 JSDoc 文档，让文档生成如文心雕龙般精美",
-    "prev": null,
-    "next": null
-  },
   "tools/pangu/quick-start": {
     "title": "盘古快速开始",
     "category": "tools/pangu",
@@ -41,6 +32,15 @@
     "route": "/docs/tools/qingniao/quick-start",
     "order": 1,
     "description": "零配置优先的通用发布工具，专为 monorepo 项目设计。自动检测包管理器、workspace 类型、构建工具，让发布流程如青鸟飞行般优雅流畅",
+    "prev": null,
+    "next": null
+  },
+  "tools/wenxin/quick-start": {
+    "title": "文心快速开始",
+    "category": "tools/wenxin",
+    "route": "/docs/tools/wenxin/quick-start",
+    "order": 2,
+    "description": "通用 API 文档生成工具，支持 JSDoc 和 TypeScript。混合模式自动合并类型信息到 JSDoc 文档，让文档生成如文心雕龙般精美",
     "prev": null,
     "next": null
   }

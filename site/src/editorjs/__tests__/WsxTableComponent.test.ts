@@ -9,26 +9,42 @@ describe("WsxTableComponent", () => {
     let component: WsxTableComponent;
 
     beforeEach(async () => {
+        // 清理之前的组件（如果有）
+        if (component && component.parentNode) {
+            component.parentNode.removeChild(component);
+        }
+        component = null as any;
+
         // 等待自定义元素定义
         await customElements.whenDefined("wsx-table-component");
 
         // Create component instance
         component = document.createElement("wsx-table-component") as WsxTableComponent;
-        document.body.appendChild(component);
+        
+        // 确保 document.body 存在且有效
+        if (document.body) {
+            document.body.appendChild(component);
+        }
 
         // Wait for component to be connected and rendered
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        
+        await new Promise((resolve) => setTimeout(resolve, 150));
+
         // 确保组件已完全初始化
-        const data = component.getData();
-        expect(data).toBeDefined();
-        expect(data.headers).toBeDefined();
-        expect(data.rows).toBeDefined();
+        if (component) {
+            const data = component.getData();
+            expect(data).toBeDefined();
+            expect(data.headers).toBeDefined();
+            expect(data.rows).toBeDefined();
+        }
     });
 
     afterEach(() => {
-        if (component && component.parentNode) {
-            component.parentNode.removeChild(component);
+        if (component) {
+            if (component.parentNode) {
+                component.parentNode.removeChild(component);
+            }
+            // 确保组件完全清理
+            component = null as any;
         }
     });
 
@@ -356,14 +372,14 @@ describe("WsxTableComponent", () => {
         test("should select cell on click", async () => {
             // 确保组件已完全渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
-            
+
             const cell = component.shadowRoot?.querySelector("tbody td") as HTMLTableCellElement;
             if (cell) {
                 cell.click();
-                
+
                 // 等待点击事件处理
                 await new Promise((resolve) => setTimeout(resolve, 50));
-                
+
                 // 验证单元格是否被选中（可能通过 class 或其他方式）
                 // 如果 class 不存在，至少验证点击没有抛出错误
                 expect(cell).toBeTruthy();
@@ -375,11 +391,11 @@ describe("WsxTableComponent", () => {
         test("should show cell info when cell is selected", async () => {
             // 确保组件已完全渲染
             await new Promise((resolve) => setTimeout(resolve, 50));
-            
+
             const cell = component.shadowRoot?.querySelector("tbody td") as HTMLTableCellElement;
             if (cell) {
                 cell.click();
-                
+
                 // 等待点击事件处理和重新渲染
                 await new Promise((resolve) => setTimeout(resolve, 50));
 
@@ -483,6 +499,21 @@ describe("WsxTableComponent", () => {
     });
 
     describe("Readonly Mode", () => {
+        beforeEach(async () => {
+            // 确保组件已完全初始化
+            if (!component || !component.isConnected) {
+                if (component && component.parentNode) {
+                    component.parentNode.removeChild(component);
+                }
+                await customElements.whenDefined("wsx-table-component");
+                component = document.createElement("wsx-table-component") as WsxTableComponent;
+                if (document.body) {
+                    document.body.appendChild(component);
+                }
+                await new Promise((resolve) => setTimeout(resolve, 150));
+            }
+        });
+
         test("should hide toolbar in readonly mode", async () => {
             component.setAttribute("readonly", "true");
 
@@ -534,6 +565,21 @@ describe("WsxTableComponent", () => {
     });
 
     describe("Table Info Display", () => {
+        beforeEach(async () => {
+            // 确保组件已完全初始化
+            if (!component || !component.isConnected) {
+                if (component && component.parentNode) {
+                    component.parentNode.removeChild(component);
+                }
+                await customElements.whenDefined("wsx-table-component");
+                component = document.createElement("wsx-table-component") as WsxTableComponent;
+                if (document.body) {
+                    document.body.appendChild(component);
+                }
+                await new Promise((resolve) => setTimeout(resolve, 150));
+            }
+        });
+
         test("should show correct table dimensions", async () => {
             component.setAttribute("headers", JSON.stringify(["A", "B", "C"]));
             component.setAttribute(
@@ -585,6 +631,21 @@ describe("WsxTableComponent", () => {
     });
 
     describe("Error Handling", () => {
+        beforeEach(async () => {
+            // 确保组件已完全初始化
+            if (!component || !component.isConnected) {
+                if (component && component.parentNode) {
+                    component.parentNode.removeChild(component);
+                }
+                await customElements.whenDefined("wsx-table-component");
+                component = document.createElement("wsx-table-component") as WsxTableComponent;
+                if (document.body) {
+                    document.body.appendChild(component);
+                }
+                await new Promise((resolve) => setTimeout(resolve, 150));
+            }
+        });
+
         test("should handle invalid JSON in headers attribute", async () => {
             component.setAttribute("headers", "invalid json");
 
@@ -609,10 +670,25 @@ describe("WsxTableComponent", () => {
     });
 
     describe("Accessibility", () => {
+        beforeEach(async () => {
+            // 确保组件已完全初始化
+            if (!component || !component.isConnected) {
+                if (component && component.parentNode) {
+                    component.parentNode.removeChild(component);
+                }
+                await customElements.whenDefined("wsx-table-component");
+                component = document.createElement("wsx-table-component") as WsxTableComponent;
+                if (document.body) {
+                    document.body.appendChild(component);
+                }
+                await new Promise((resolve) => setTimeout(resolve, 150));
+            }
+        });
+
         test("should have proper labels", async () => {
             // 确保组件已完全渲染
             await new Promise((resolve) => setTimeout(resolve, 100));
-            
+
             // 确保组件数据已初始化
             const data = component.getData();
             expect(data).toBeDefined();
@@ -626,7 +702,7 @@ describe("WsxTableComponent", () => {
         test("should have proper placeholders", async () => {
             // 确保组件已完全渲染
             await new Promise((resolve) => setTimeout(resolve, 100));
-            
+
             // 确保组件数据已初始化
             const data = component.getData();
             expect(data).toBeDefined();
@@ -649,7 +725,7 @@ describe("WsxTableComponent", () => {
         test("should have proper button text", async () => {
             // 确保组件已完全渲染
             await new Promise((resolve) => setTimeout(resolve, 100));
-            
+
             // 确保组件数据已初始化
             const data = component.getData();
             expect(data).toBeDefined();
