@@ -90,10 +90,17 @@ export async function executePublish(
     // 1. 检查 NPM 认证
     if (config.checks?.auth !== false) {
         const spinner = ora("检查 NPM 认证").start();
-        const npmAuth = await checkNpmAuth();
+        const packageManager = config.project?.packageManager;
+        const npmAuth = await checkNpmAuth(packageManager);
         if (!npmAuth) {
             spinner.fail();
-            throw new Error("未登录 NPM，请先运行: npm login");
+            const pmCommand =
+                packageManager === "pnpm"
+                    ? "pnpm"
+                    : packageManager === "yarn"
+                      ? "yarn"
+                      : "npm";
+            throw new Error(`未登录 NPM，请先运行: ${pmCommand} login`);
         }
         spinner.succeed(`已登录 NPM: ${chalk.cyan(npmAuth.username)}`);
 
