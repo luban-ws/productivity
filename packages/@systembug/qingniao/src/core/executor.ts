@@ -446,7 +446,8 @@ export async function executePublish(
                     pushSpinner.succeed();
                 }
 
-                logger.info(`版本更新完成! 新版本: v${newVersion}`);
+                // 使用 ora 显示版本更新完成消息，保持 CLI 设计一致性
+                ora(`版本更新完成! 新版本: v${newVersion}`).succeed();
             }
 
             // 版本更新后，重新发现包以获取更新后的版本信息
