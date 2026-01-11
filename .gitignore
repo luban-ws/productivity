@@ -44,7 +44,9 @@ docs/.vitepress/dist
 .turbo
 **/generated/*
 
-
+# WSX-Press generated files
+.wsx-press
+**/.wsx-press
 
 .nx/cache
 .nx/workspace-data
