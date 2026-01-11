@@ -416,13 +416,13 @@ export async function executePublish(
                     // 可能没有 format 脚本
                 }
 
-                // 提交版本更新
+                // 提交版本更新（包括格式化后的所有更改）
                 const commitSpinner = ora("提交版本更新到 Git").start();
                 const commitMessage =
                     typeof config.git?.commitMessage === "function"
                         ? config.git.commitMessage(newVersion)
                         : config.git?.commitMessage;
-                commitVersionUpdate(newVersion, commitMessage);
+                commitVersionUpdate(newVersion, commitMessage, true); // 传入 true 表示包含格式化后的文件
                 commitSpinner.succeed();
 
                 // 创建 Git 标签

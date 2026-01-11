@@ -56,21 +56,33 @@ export function pullRemoteUpdates(branch = "main"): void {
 
 /**
  * 提交版本更新
+ * @param version 版本号
+ * @param message 提交消息
+ * @param includeAllChanges 是否包含所有更改（包括格式化后的文件）
  */
-export function commitVersionUpdate(version: string, message?: string): void {
+export function commitVersionUpdate(
+    version: string,
+    message?: string,
+    includeAllChanges = false,
+): void {
     const commitMessage = message || `chore: release v${version}\n\n[skip ci]`;
 
-    // 添加文件：根目录 package.json 和所有子包的 package.json
     try {
-        // 添加根目录 package.json
-        exec("git add package.json", { silent: true });
+        if (includeAllChanges) {
+            // 格式化后，添加所有更改的文件
+            exec("git add -A", { silent: true });
+        } else {
+            // 只添加版本相关的文件：根目录 package.json 和所有子包的 package.json
+            // 添加根目录 package.json
+            exec("git add package.json", { silent: true });
 
-        // 使用 find 命令添加所有 packages 目录下的 package.json（包括嵌套目录）
-        // 这样可以确保找到所有嵌套的包，如 packages/@systembug/qingniao/package.json
-        exec("find packages -name package.json -type f -exec git add {} +", { silent: true });
+            // 使用 find 命令添加所有 packages 目录下的 package.json（包括嵌套目录）
+            // 这样可以确保找到所有嵌套的包，如 packages/@systembug/qingniao/package.json
+            exec("find packages -name package.json -type f -exec git add {} +", { silent: true });
 
-        // 添加 CHANGELOG 和 changeset 文件
-        exec("git add CHANGELOG.md .changeset/", { silent: true });
+            // 添加 CHANGELOG 和 changeset 文件
+            exec("git add CHANGELOG.md .changeset/", { silent: true });
+        }
     } catch {
         // 可能没有需要添加的文件
     }
