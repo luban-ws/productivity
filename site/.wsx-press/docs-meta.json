@@ -17,21 +17,21 @@
     "prev": null,
     "next": null
   },
-  "tools/qingniao/quick-start": {
-    "title": "青鸟快速开始",
-    "category": "tools/qingniao",
-    "route": "/docs/tools/qingniao/quick-start",
-    "order": 1,
-    "description": "零配置优先的通用发布工具，专为 monorepo 项目设计。自动检测包管理器、workspace 类型、构建工具，让发布流程如青鸟飞行般优雅流畅",
-    "prev": null,
-    "next": null
-  },
   "tools/pangu/quick-start": {
     "title": "盘古快速开始",
     "category": "tools/pangu",
     "route": "/docs/tools/pangu/quick-start",
     "order": 3,
     "description": "交互式开发服务器启动工具。从配置文件读取 demo 列表，快速启动开发服务器，如盘古开天辟地般开启开发之旅",
+    "prev": null,
+    "next": null
+  },
+  "tools/qingniao/quick-start": {
+    "title": "青鸟快速开始",
+    "category": "tools/qingniao",
+    "route": "/docs/tools/qingniao/quick-start",
+    "order": 1,
+    "description": "零配置优先的通用发布工具，专为 monorepo 项目设计。自动检测包管理器、workspace 类型、构建工具，让发布流程如青鸟飞行般优雅流畅",
     "prev": null,
     "next": null
   },
