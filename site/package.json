@@ -19,9 +19,6 @@
         "lint:fix": "eslint . --fix"
     },
     "dependencies": {
-        "@editorjs/editorjs": "^2.29.1",
-        "@editorjs/header": "^2.8.8",
-        "@editorjs/paragraph": "^2.11.7",
         "@unocss/preset-attributify": "^66.3.3",
         "@unocss/preset-uno": "^66.3.3",
         "@wsxjs/wsx-base-components": "^0.0.25",

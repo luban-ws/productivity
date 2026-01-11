@@ -4,7 +4,6 @@ import { i18n } from "@wsxjs/wsx-i18next";
 import styles from "./ExamplesSection.css?inline";
 import "@wsxjs/wsx-base-components";
 import "@wsxjs/wsx-router";
-import "../editorjs/EditorJSDemo.wsx";
 // Import example components from local examples directory
 import "./examples/SimpleReactiveDemo.wsx";
 import "./examples/SvgDemo.wsx";
@@ -183,37 +182,6 @@ export default class ExamplesSection extends WebComponent {
                         </div>
                     </div>
 
-                    {/* Integrations Category */}
-                    <div class="category-section">
-                        <h3 class="category-title">
-                            {this.t("examplesSection.categories.integrations")}
-                        </h3>
-                        <div class="examples-grid">
-                            <div class="example-card full-width">
-                                <div class="example-header">
-                                    <h3>{this.t("examplesSection.examples.editorjs.title")}</h3>
-                                    <span class="example-badge">
-                                        {this.t("examplesSection.examples.editorjs.badge")}
-                                    </span>
-                                </div>
-                                <p>{this.t("examplesSection.examples.editorjs.description")}</p>
-                                <div class="example-demo">
-                                    <p style="padding: 20px; text-align: center; color: #666;">
-                                        <wsx-link
-                                            to="/editorjs"
-                                            style="
-                                                color: #3498db;
-                                                text-decoration: none;
-                                                font-weight: 600;
-                                            "
-                                        >
-                                            {this.t("examplesSection.examples.editorjs.link")}
-                                        </wsx-link>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         );

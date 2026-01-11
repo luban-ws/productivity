@@ -21,7 +21,6 @@ export const i18n = initI18n({
         "privacy",
         "terms",
         "usecase",
-        "editorjs",
         "marked",
         "ecosystem",
     ],
