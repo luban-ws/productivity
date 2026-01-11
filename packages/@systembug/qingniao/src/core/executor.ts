@@ -448,6 +448,41 @@ export async function executePublish(
 
                 logger.info(`版本更新完成! 新版本: v${newVersion}`);
             }
+
+            // 版本更新后，重新发现包以获取更新后的版本信息
+            if (newVersion) {
+                const refreshSpinner = ora("刷新包版本信息").start();
+                const workspace = config.workspace;
+                let refreshedPackages: typeof packages;
+                if (workspace?.enabled) {
+                    refreshedPackages = await discoverPackagesWithPnpm(rootDir);
+                } else if (config.packages?.pattern) {
+                    const patterns = Array.isArray(config.packages.pattern)
+                        ? config.packages.pattern
+                        : [config.packages.pattern];
+                    refreshedPackages = await discoverPackagesWithPattern(rootDir, patterns);
+                } else {
+                    refreshedPackages = await discoverPackagesWithPnpm(rootDir);
+                }
+
+                // 应用过滤
+                if (config.packages?.filter) {
+                    refreshedPackages = refreshedPackages.filter(config.packages.filter);
+                }
+
+                // 验证每个包的发布配置
+                const validRefreshedPackages: typeof packages = [];
+                for (const pkg of refreshedPackages) {
+                    const validation = validatePackageForPublish(pkg.path);
+                    if (validation.valid) {
+                        validRefreshedPackages.push(pkg);
+                    }
+                }
+
+                packages = validRefreshedPackages;
+                context.packages = packages;
+                refreshSpinner.succeed("包版本信息已刷新");
+            }
         }
     }
 
