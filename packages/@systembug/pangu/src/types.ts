@@ -21,6 +21,20 @@ export interface DemoOption {
      * 包名（用于 pnpm --filter）
      */
     package: string;
+
+    /**
+     * 包管理器命令（可选）
+     * 如果未指定，使用全局的 packageManager
+     * 可选值: "pnpm" | "npm" | "yarn" | "bun" 等
+     */
+    packageManager?: string;
+
+    /**
+     * 额外的启动参数（可选）
+     * 这些参数会被传递给 dev 命令
+     * 例如: ["--port", "3000", "--host"]
+     */
+    args?: string[];
 }
 
 /**

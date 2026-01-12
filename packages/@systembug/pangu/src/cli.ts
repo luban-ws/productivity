@@ -79,7 +79,12 @@ async function selectDemo(demos: DemoOption[]): Promise<string> {
 /**
  * 启动开发服务器
  */
-function startDevServer(demo: string, demos: DemoOption[], packageManager: string): void {
+function startDevServer(
+    demo: string,
+    demos: DemoOption[],
+    defaultPackageManager: string,
+    extraArgs: string[] = [],
+): void {
     // 确保 demo 名称是小写的
     const demoLower = demo.toLowerCase();
     const option = demos.find((opt) => opt.value === demoLower);
@@ -88,19 +93,37 @@ function startDevServer(demo: string, demos: DemoOption[], packageManager: strin
         process.exit(1);
     }
 
+    // 使用 demo 特定的 packageManager，如果没有则使用全局的
+    const packageManager = option.packageManager || defaultPackageManager;
+
     const spinner = ora({
         text: `正在启动 ${option.name} 开发服务器...`,
         color: "cyan",
     }).start();
 
+    // 合并配置中的参数和命令行额外参数
+    const allArgs = [...(option.args || []), ...extraArgs];
+
+    // 构建命令参数
+    // 如果提供了 args，直接使用 args；否则默认使用 "dev"
+    const commandArgs = ["--filter", option.package];
+    if (allArgs.length > 0) {
+        // 如果提供了 args，直接使用这些 args（不自动添加 dev）
+        commandArgs.push(...allArgs);
+    } else {
+        // 如果没有 args，默认使用 "dev"
+        commandArgs.push("dev");
+    }
+
     // 执行包管理器命令启动开发服务器
-    const command = `${packageManager} --filter ${option.package} dev`;
+    const command = `${packageManager} ${commandArgs.join(" ")}`;
     spinner.succeed(`✅ 正在启动 ${option.name} 开发服务器`);
     console.log(`\n📦 包名: ${option.package}`);
+    console.log(`🔧 包管理器: ${packageManager}`);
     console.log(`🔧 命令: ${command}\n`);
 
     // 使用 spawn 启动开发服务器（非阻塞，支持长时间运行）
-    const childProcess = spawn(packageManager, ["--filter", option.package, "dev"], {
+    const childProcess = spawn(packageManager, commandArgs, {
         stdio: "inherit",
         cwd: process.cwd(),
         shell: process.platform === "win32", // Windows 需要 shell
@@ -162,8 +185,10 @@ export async function main(): Promise<void> {
         if (args.length > 0) {
             const demoArg = args[0].toLowerCase();
             if (isValidDemo(demoArg, demos)) {
-                // 直接启动指定的 demo
-                startDevServer(demoArg, demos, config.packageManager || "pnpm");
+                // 提取额外的参数（demo 名称之后的所有参数）
+                const extraArgs = args.slice(1);
+                // 直接启动指定的 demo，并传递额外参数
+                startDevServer(demoArg, demos, config.packageManager || "pnpm", extraArgs);
                 return;
             } else {
                 // 参数无效，显示错误和帮助

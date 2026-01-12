@@ -98,6 +98,10 @@ export function loadConfig(cwd?: string): DevConfig {
             if (!demo.name || !demo.value || !demo.package) {
                 throw new Error("每个 demo 必须包含 name、value 和 package 字段");
             }
+            // args 是可选的，但如果存在必须是数组
+            if (demo.args !== undefined && !Array.isArray(demo.args)) {
+                throw new Error("demo 的 args 字段必须是字符串数组");
+            }
         }
 
         return {
