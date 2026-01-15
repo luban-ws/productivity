@@ -15,13 +15,6 @@ import { writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import { generateConfigTemplate } from "./commands/init";
 import ora from "ora";
-import { createLogger } from "@systembug/diting";
-
-// 创建 logger 实例
-const logger = createLogger({
-    context: "qingniao:cli",
-    level: 1, // INFO
-});
 
 const program = new Command();
 
@@ -41,8 +34,8 @@ program
 
         // 检查文件是否已存在
         if (existsSync(configPath) && !options.force) {
-            logger.warn(`配置文件已存在: ${configFileName}`);
-            logger.info("使用 --force 选项可覆盖现有文件");
+            console.log(`⚠️  配置文件已存在: ${configFileName}`);
+            console.log("使用 --force 选项可覆盖现有文件");
             process.exit(1);
         }
 
@@ -52,13 +45,13 @@ program
             writeFileSync(configPath, content, "utf-8");
             spinner.succeed(`配置文件已生成: ${configFileName}`);
 
-            logger.info("💡 提示：");
-            logger.info(" - 配置文件完全可选，青鸟支持零配置");
-            logger.info(" - 只需配置需要覆盖自动检测的部分");
-            logger.info(" - 删除配置文件即可恢复零配置模式");
+            console.log("💡 提示：");
+            console.log(" - 配置文件完全可选，青鸟支持零配置");
+            console.log(" - 只需配置需要覆盖自动检测的部分");
+            console.log(" - 删除配置文件即可恢复零配置模式");
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
-            logger.error(`生成配置文件失败: ${errorMessage}`);
+            console.error(`❌ 生成配置文件失败: ${errorMessage}`);
             process.exit(1);
         }
     });
@@ -104,10 +97,10 @@ program
                     yes: options.yes,
                 });
 
-                logger.info("✓ 发布流程成功完成");
+                // 成功消息已在 executor 中显示，这里不需要重复
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
-                logger.error(`✗ ${errorMessage}`);
+                console.error(`❌ ${errorMessage}`);
                 process.exit(1);
             }
         },

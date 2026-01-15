@@ -41,13 +41,13 @@ const logger = createLogger({
 function showPackageList(
     packages: Array<{ name: string; version: string; path: string; private?: boolean }>,
 ) {
-    logger.info("\n📦 将被更新版本的包:\n");
+    console.log("\n📦 将被更新版本的包:\n");
     packages.forEach((pkg) => {
         const icon = pkg.private ? "🔒" : "📦";
         const status = pkg.private ? " (私有)" : "";
-        logger.info(`${icon} ${pkg.name} @ ${pkg.version}${status}`);
+        console.log(`${icon} ${pkg.name} @ ${pkg.version}${status}`);
     });
-    logger.info(`\n共 ${packages.length} 个包将被更新版本号\n`);
+    console.log(`\n共 ${packages.length} 个包将被更新版本号\n`);
 }
 
 /**
@@ -446,8 +446,8 @@ export async function executePublish(
                     pushSpinner.succeed();
                 }
 
-                // 使用 ora 显示版本更新完成消息，保持 CLI 设计一致性
-                ora(`版本更新完成! 新版本: v${newVersion}`).succeed();
+                // 使用 console.log 显示版本更新完成消息，保持 CLI 设计一致性
+                console.log(chalk.green(`✅ 版本更新完成! 新版本: v${newVersion}`));
             }
 
             // 版本更新后，重新发现包以获取更新后的版本信息
@@ -618,12 +618,12 @@ export async function executePublish(
             verifySpinner.succeed();
         }
         // 显示将要发布的包列表
-        logger.info("📦 将要发布的包:");
+        console.log("📦 将要发布的包:");
         const existingPackages: Array<{ name: string; version: string }> = [];
         for (const pkg of publicPackages) {
             const exists = checkPackageExists(pkg.name, pkg.version);
             const status = exists ? `(已存在 v${pkg.version})` : `(新版本 v${pkg.version})`;
-            logger.info(`  • ${pkg.name} ${status}`);
+            console.log(`  • ${pkg.name} ${status}`);
             if (exists) {
                 existingPackages.push({ name: pkg.name, version: pkg.version });
             }
@@ -680,10 +680,10 @@ export async function executePublish(
 
         // 发布前提示（OTP）
         const packageManager = config.project?.packageManager || "npm";
-        logger.info("📱 准备发布到 NPM");
-        logger.info(`📦 使用包管理器: ${chalk.cyan(packageManager)}`);
-        logger.info("如果启用了 NPM 2FA，发布时会提示输入 OTP（一次性密码）");
-        logger.info("请准备好您的认证器应用以获取 OTP");
+        console.log("📱 准备发布到 NPM");
+        console.log(`📦 使用包管理器: ${chalk.cyan(packageManager)}`);
+        console.log("如果启用了 NPM 2FA，发布时会提示输入 OTP（一次性密码）");
+        console.log("请准备好您的认证器应用以获取 OTP");
 
         if (!options.yes) {
             const ready = await confirm("准备好发布到 NPM?（如果启用 2FA，请准备好 OTP）", true);
@@ -702,7 +702,7 @@ export async function executePublish(
 
         try {
             await publishPackages(config, context);
-            logger.info("✅ 所有包已发布到 NPM");
+            console.log(chalk.green("✅ 所有包已发布到 NPM"));
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             if (
@@ -711,25 +711,25 @@ export async function executePublish(
                 errorMessage.includes("Enter one-time password") ||
                 errorMessage.includes("one-time pass")
             ) {
-                logger.warn("💡 提示: 发布需要 OTP 验证");
-                logger.info("   请重新运行发布命令");
-                logger.info("   或者在发布时准备好 OTP 并输入");
+                console.log(chalk.yellow("💡 提示: 发布需要 OTP 验证"));
+                console.log("   请重新运行发布命令");
+                console.log("   或者在发布时准备好 OTP 并输入");
             } else {
-                logger.error(`错误: ${errorMessage}`);
+                console.error(chalk.red(`错误: ${errorMessage}`));
             }
             throw error;
         }
     }
 
     // 完成
-    logger.info("✅ 发布流程成功完成!");
+    console.log(chalk.green("✅ 发布流程成功完成!"));
     if (newVersion) {
-        logger.info(`📦 所有包已发布到 NPM (v${newVersion})`);
+        console.log(chalk.green(`📦 所有包已发布到 NPM (v${newVersion})`));
         if (config.git?.enabled !== false) {
-            logger.info(`🏷️  Git 标签已创建 (v${newVersion})`);
-            logger.info("📝 版本更新已提交并推送");
+            console.log(chalk.green(`🏷️  Git 标签已创建 (v${newVersion})`));
+            console.log(chalk.green("📝 版本更新已提交并推送"));
         }
     } else {
-        logger.info("📦 所有包已发布到 NPM");
+        console.log(chalk.green("📦 所有包已发布到 NPM"));
     }
 }
