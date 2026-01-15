@@ -34,8 +34,8 @@ program
 
         // 检查文件是否已存在
         if (existsSync(configPath) && !options.force) {
-            console.log(`⚠️  配置文件已存在: ${configFileName}`);
-            console.log("使用 --force 选项可覆盖现有文件");
+            ora().warn(`配置文件已存在: ${configFileName}`);
+            ora().info("使用 --force 选项可覆盖现有文件");
             process.exit(1);
         }
 
@@ -45,13 +45,13 @@ program
             writeFileSync(configPath, content, "utf-8");
             spinner.succeed(`配置文件已生成: ${configFileName}`);
 
-            console.log("💡 提示：");
-            console.log(" - 配置文件完全可选，青鸟支持零配置");
-            console.log(" - 只需配置需要覆盖自动检测的部分");
-            console.log(" - 删除配置文件即可恢复零配置模式");
+            ora().info("💡 提示：");
+            ora().info(" - 配置文件完全可选，青鸟支持零配置");
+            ora().info(" - 只需配置需要覆盖自动检测的部分");
+            ora().info(" - 删除配置文件即可恢复零配置模式");
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
-            console.error(`❌ 生成配置文件失败: ${errorMessage}`);
+            ora(`生成配置文件失败: ${errorMessage}`).fail();
             process.exit(1);
         }
     });
@@ -100,7 +100,7 @@ program
                 // 成功消息已在 executor 中显示，这里不需要重复
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
-                console.error(`❌ ${errorMessage}`);
+                ora(errorMessage).fail();
                 process.exit(1);
             }
         },

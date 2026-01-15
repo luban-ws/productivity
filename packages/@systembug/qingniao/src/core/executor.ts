@@ -25,15 +25,7 @@ import {
 import { hasChangesetFiles as checkHasChangesetFiles, detectChangeset } from "../utils/auto-detect";
 import { discoverAllWorkspacePackages } from "../stages/version";
 import { confirm, select } from "../utils/prompts";
-import chalk from "chalk";
-import { createLogger } from "@systembug/diting";
 import { readPackageJson, validatePackageForPublish } from "../utils/package";
-
-// 创建 logger 实例
-const logger = createLogger({
-    context: "qingniao",
-    level: 1, // INFO
-});
 
 /**
  * 显示包列表
@@ -41,13 +33,13 @@ const logger = createLogger({
 function showPackageList(
     packages: Array<{ name: string; version: string; path: string; private?: boolean }>,
 ) {
-    console.log("\n📦 将被更新版本的包:\n");
+    ora().info("\n📦 将被更新版本的包:\n");
     packages.forEach((pkg) => {
         const icon = pkg.private ? "🔒" : "📦";
         const status = pkg.private ? " (私有)" : "";
-        console.log(`${icon} ${pkg.name} @ ${pkg.version}${status}`);
+        ora().info(`${icon} ${pkg.name} @ ${pkg.version}${status}`);
     });
-    console.log(`\n共 ${packages.length} 个包将被更新版本号\n`);
+    ora().info(`\n共 ${packages.length} 个包将被更新版本号\n`);
 }
 
 /**
@@ -63,15 +55,9 @@ function checkPublishConfigNamespace(rootDir: string): void {
             ? (rootPkg.publishConfig as Record<string, unknown>)
             : null;
     if (publishConfig?.namespace) {
-        logger.warn(
-            chalk.yellow(`⚠️  警告: 检测到 package.json 中存在 publishConfig.namespace 配置`),
-        );
-        logger.warn(chalk.yellow(`   NPM 不支持 publishConfig.namespace，此配置将被忽略。`));
-        logger.warn(
-            chalk.yellow(
-                `   如需使用命名空间，请考虑使用 scoped packages (如 @namespace/package-name)`,
-            ),
-        );
+        ora().warn("⚠️  警告: 检测到 package.json 中存在 publishConfig.namespace 配置");
+        ora().warn("   NPM 不支持 publishConfig.namespace，此配置将被忽略。");
+        ora().warn("   如需使用命名空间，请考虑使用 scoped packages (如 @namespace/package-name)");
     }
 }
 
@@ -102,11 +88,11 @@ export async function executePublish(
                 packageManager === "pnpm" ? "pnpm" : packageManager === "yarn" ? "yarn" : "npm";
             throw new Error(`未登录 NPM，请先运行: ${pmCommand} login`);
         }
-        spinner.succeed(`已登录 NPM: ${chalk.cyan(npmAuth.username)}`);
+        spinner.succeed(`已登录 NPM: ${npmAuth.username}`);
 
         // 检查 registry 警告
         if (!npmAuth.registry.includes("npmjs.org")) {
-            logger.warn(`当前 registry: ${npmAuth.registry}`);
+            ora().warn(`⚠️  当前 registry: ${npmAuth.registry}`);
             if (!options.yes) {
                 const shouldContinue = await confirm("是否继续使用此 registry?", false);
                 if (!shouldContinue) {
@@ -174,11 +160,10 @@ export async function executePublish(
                 } catch (error: unknown) {
                     pullSpinner.fail("拉取失败，请手动解决冲突");
                     const errorMessage = error instanceof Error ? error.message : String(error);
-                    logger.error("拉取失败，请手动解决冲突");
                     throw new Error(`拉取失败，请手动解决冲突: ${errorMessage}`);
                 }
             } else {
-                logger.warn("跳过拉取，继续使用本地版本");
+                ora().warn("跳过拉取，继续使用本地版本");
             }
         }
     }
@@ -219,7 +204,7 @@ export async function executePublish(
                 validPackages.push(pkg);
                 // 显示警告（如果有）
                 if (validation.warnings.length > 0) {
-                    logger.warn(chalk.yellow(`⚠️  ${pkg.name}: ${validation.warnings.join("; ")}`));
+                    ora().warn(`${pkg.name}: ${validation.warnings.join("; ")}`);
                 }
             } else {
                 invalidPackages.push({
@@ -232,17 +217,17 @@ export async function executePublish(
 
         // 如果有无效的包，显示错误信息
         if (invalidPackages.length > 0) {
-            logger.error("\n❌ 以下包无法发布:\n");
+            ora().fail("\n❌ 以下包无法发布:\n");
             invalidPackages.forEach(({ pkg, errors, warnings }) => {
-                logger.error(chalk.red(`  ${pkg.name} (${pkg.path}):`));
+                ora().fail(`${pkg.name} (${pkg.path}):`);
                 errors.forEach((error) => {
-                    logger.error(chalk.red(`    - ${error}`));
+                    ora().fail(`    - ${error}`);
                 });
                 warnings.forEach((warning) => {
-                    logger.warn(chalk.yellow(`    ⚠️  ${warning}`));
+                    ora().warn(`    ⚠️  ${warning}`);
                 });
             });
-            logger.error("");
+            ora().fail("");
         }
 
         packages = validPackages;
@@ -326,10 +311,8 @@ export async function executePublish(
                         versionUpdateMethod = "semver";
                     } else if (strategy === "changeset") {
                         // 配置要求 changeset 但没有检测到，降级到 semver
-                        logger.warn(
-                            chalk.yellow(
-                                "⚠️  配置要求使用 changeset，但未检测到 .changeset 目录，将使用 semver 自动检测",
-                            ),
+                        ora().warn(
+                            "配置要求使用 changeset，但未检测到 .changeset 目录，将使用 semver 自动检测",
                         );
                         versionUpdateMethod = "semver";
                     } else {
@@ -446,8 +429,8 @@ export async function executePublish(
                     pushSpinner.succeed();
                 }
 
-                // 使用 console.log 显示版本更新完成消息，保持 CLI 设计一致性
-                console.log(chalk.green(`✅ 版本更新完成! 新版本: v${newVersion}`));
+                // 使用 ora 显示版本更新完成消息，保持 CLI 设计一致性
+                ora(`版本更新完成! 新版本: v${newVersion}`).succeed();
             }
 
             // 版本更新后，重新发现包以获取更新后的版本信息
@@ -529,7 +512,7 @@ export async function executePublish(
                 } catch (error: unknown) {
                     const errorMessage = error instanceof Error ? error.message : String(error);
                     // 某些包可能没有 build 脚本，记录警告但继续
-                    logger.warn(`构建 ${pkgName} 失败: ${errorMessage}`);
+                    ora().warn(`构建 ${pkgName} 失败: ${errorMessage}`);
                 }
             }
         }
@@ -607,7 +590,7 @@ export async function executePublish(
         const publicPackages = packages.filter((pkg) => !pkg.private);
 
         if (publicPackages.length === 0) {
-            logger.warn("没有可发布的公共包（所有包都是私有的）");
+            ora().warn("没有可发布的公共包（所有包都是私有的）");
             return;
         }
 
@@ -618,21 +601,21 @@ export async function executePublish(
             verifySpinner.succeed();
         }
         // 显示将要发布的包列表
-        console.log("📦 将要发布的包:");
+        ora().info("📦 将要发布的包:");
         const existingPackages: Array<{ name: string; version: string }> = [];
         for (const pkg of publicPackages) {
             const exists = checkPackageExists(pkg.name, pkg.version);
             const status = exists ? `(已存在 v${pkg.version})` : `(新版本 v${pkg.version})`;
-            console.log(`  • ${pkg.name} ${status}`);
+            ora().info(`  • ${pkg.name} ${status}`);
             if (exists) {
                 existingPackages.push({ name: pkg.name, version: pkg.version });
             }
         }
 
         if (existingPackages.length > 0) {
-            logger.warn("以下包版本已存在于 NPM:");
+            ora().warn("以下包版本已存在于 NPM:");
             existingPackages.forEach((pkg) => {
-                logger.warn(`  • ${pkg.name}@${pkg.version}`);
+                ora().warn(`  • ${pkg.name}@${pkg.version}`);
             });
             if (!options.yes) {
                 const shouldContinue = await confirm("是否继续? (将跳过已存在的包)", false);
@@ -680,10 +663,10 @@ export async function executePublish(
 
         // 发布前提示（OTP）
         const packageManager = config.project?.packageManager || "npm";
-        console.log("📱 准备发布到 NPM");
-        console.log(`📦 使用包管理器: ${chalk.cyan(packageManager)}`);
-        console.log("如果启用了 NPM 2FA，发布时会提示输入 OTP（一次性密码）");
-        console.log("请准备好您的认证器应用以获取 OTP");
+        ora().info("📱 准备发布到 NPM");
+        ora().info(`📦 使用包管理器: ${packageManager}`);
+        ora().info("如果启用了 NPM 2FA，发布时会提示输入 OTP（一次性密码）");
+        ora().info("请准备好您的认证器应用以获取 OTP");
 
         if (!options.yes) {
             const ready = await confirm("准备好发布到 NPM?（如果启用 2FA，请准备好 OTP）", true);
@@ -702,7 +685,7 @@ export async function executePublish(
 
         try {
             await publishPackages(config, context);
-            console.log(chalk.green("✅ 所有包已发布到 NPM"));
+            ora("所有包已发布到 NPM").succeed();
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             if (
@@ -711,25 +694,25 @@ export async function executePublish(
                 errorMessage.includes("Enter one-time password") ||
                 errorMessage.includes("one-time pass")
             ) {
-                console.log(chalk.yellow("💡 提示: 发布需要 OTP 验证"));
-                console.log("   请重新运行发布命令");
-                console.log("   或者在发布时准备好 OTP 并输入");
+                ora().warn("💡 提示: 发布需要 OTP 验证");
+                ora().info("   请重新运行发布命令");
+                ora().info("   或者在发布时准备好 OTP 并输入");
             } else {
-                console.error(chalk.red(`错误: ${errorMessage}`));
+                ora(`错误: ${errorMessage}`).fail();
             }
             throw error;
         }
     }
 
     // 完成
-    console.log(chalk.green("✅ 发布流程成功完成!"));
+    ora("发布流程成功完成!").succeed();
     if (newVersion) {
-        console.log(chalk.green(`📦 所有包已发布到 NPM (v${newVersion})`));
+        ora(`📦 所有包已发布到 NPM (v${newVersion})`).succeed();
         if (config.git?.enabled !== false) {
-            console.log(chalk.green(`🏷️  Git 标签已创建 (v${newVersion})`));
-            console.log(chalk.green("📝 版本更新已提交并推送"));
+            ora(`🏷️  Git 标签已创建 (v${newVersion})`).succeed();
+            ora("📝 版本更新已提交并推送").succeed();
         }
     } else {
-        console.log(chalk.green("📦 所有包已发布到 NPM"));
+        ora("📦 所有包已发布到 NPM").succeed();
     }
 }
