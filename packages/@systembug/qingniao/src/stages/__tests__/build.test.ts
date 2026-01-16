@@ -13,7 +13,10 @@ describe("checkBuildArtifact", () => {
 
     beforeEach(() => {
         // 创建临时测试目录
-        testDir = join(tmpdir(), `qingniao-test-${Date.now()}-${Math.random().toString(36).substring(7)}`);
+        testDir = join(
+            tmpdir(),
+            `qingniao-test-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+        );
         mkdirSync(testDir, { recursive: true });
     });
 
