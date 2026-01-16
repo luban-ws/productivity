@@ -2,7 +2,7 @@
  * 构建验证
  */
 
-import { existsSync, readdirSync } from "fs";
+import { existsSync, readdirSync, statSync } from "fs";
 import { join } from "path";
 import { exec } from "../utils/exec";
 import { readPackageJson } from "../utils/package";
@@ -68,11 +68,26 @@ export function checkBuildArtifact(
     }
 
     try {
-        const stats = readdirSync(fullPath);
-        if (stats.length === 0) {
+        // 检查路径是文件还是目录
+        const stats = statSync(fullPath);
+        if (stats.isFile()) {
+            // 如果是文件，直接验证通过（文件已存在）
+            return { success: true };
+        } else if (stats.isDirectory()) {
+            // 如果是目录，检查目录是否为空
+            const files = readdirSync(fullPath);
+            if (files.length === 0) {
+                return {
+                    success: false,
+                    message: `构建产物为空: ${distPath}`,
+                };
+            }
+            return { success: true };
+        } else {
+            // 既不是文件也不是目录（可能是符号链接等）
             return {
                 success: false,
-                message: `构建产物为空: ${distPath}`,
+                message: `构建产物路径无效: ${distPath} (不是文件或目录)`,
             };
         }
     } catch (error: unknown) {
@@ -82,8 +97,6 @@ export function checkBuildArtifact(
             message: `无法读取构建产物: ${distPath} - ${errorMessage}`,
         };
     }
-
-    return { success: true };
 }
 
 /**
