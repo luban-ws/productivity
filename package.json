@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
-    "@systembug/qingniao": "workspace:*",
     "@systembug/pangu": "workspace:*",
+    "@systembug/qingniao": "workspace:*",
     "eslint": "^8.57.0",
     "husky": "^9.1.7",
     "mermaid": "^11.12.2",
@@ -28,5 +28,8 @@
   "volta": {
     "node": "22.10.0",
     "pnpm": "9.0.0"
+  },
+  "dependencies": {
+    "changeset": "^0.2.6"
   }
 }

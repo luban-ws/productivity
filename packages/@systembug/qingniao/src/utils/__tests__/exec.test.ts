@@ -29,34 +29,46 @@ describe("exec", () => {
         (execSync as vi.Mock).mockReturnValue("success");
         const result = exec("echo test");
         expect(result).toBe("success");
-        expect(execSync).toHaveBeenCalledWith("echo test", expect.objectContaining({
-            stdio: "inherit",
-            encoding: "utf-8",
-        }));
+        expect(execSync).toHaveBeenCalledWith(
+            "echo test",
+            expect.objectContaining({
+                stdio: "inherit",
+                encoding: "utf-8",
+            }),
+        );
     });
 
     test("应该支持 silent 选项", () => {
         (execSync as vi.Mock).mockReturnValue("output");
         exec("echo test", { silent: true });
-        expect(execSync).toHaveBeenCalledWith("echo test", expect.objectContaining({
-            stdio: "pipe",
-        }));
+        expect(execSync).toHaveBeenCalledWith(
+            "echo test",
+            expect.objectContaining({
+                stdio: "pipe",
+            }),
+        );
     });
 
     test("应该支持自定义工作目录", () => {
         (execSync as vi.Mock).mockReturnValue("output");
         exec("echo test", { cwd: "/custom/path" });
-        expect(execSync).toHaveBeenCalledWith("echo test", expect.objectContaining({
-            cwd: "/custom/path",
-        }));
+        expect(execSync).toHaveBeenCalledWith(
+            "echo test",
+            expect.objectContaining({
+                cwd: "/custom/path",
+            }),
+        );
     });
 
     test("应该支持超时选项", () => {
         (execSync as vi.Mock).mockReturnValue("output");
         exec("echo test", { timeout: 5000 });
-        expect(execSync).toHaveBeenCalledWith("echo test", expect.objectContaining({
-            timeout: 5000,
-        }));
+        expect(execSync).toHaveBeenCalledWith(
+            "echo test",
+            expect.objectContaining({
+                timeout: 5000,
+            }),
+        );
     });
 
     test("应该支持 description 选项", () => {
@@ -101,9 +113,12 @@ describe("exec", () => {
     test("应该使用默认超时（30分钟）", () => {
         (execSync as vi.Mock).mockReturnValue("output");
         exec("echo test");
-        expect(execSync).toHaveBeenCalledWith("echo test", expect.objectContaining({
-            timeout: 30 * 60 * 1000,
-        }));
+        expect(execSync).toHaveBeenCalledWith(
+            "echo test",
+            expect.objectContaining({
+                timeout: 30 * 60 * 1000,
+            }),
+        );
     });
 
     test("应该支持 timeout 为 0（无超时）", () => {
@@ -143,9 +158,12 @@ describe("execSilent", () => {
         (execSync as vi.Mock).mockReturnValue(Buffer.from("  output  "));
         const result = execSilent("echo test");
         expect(result).toBe("output");
-        expect(execSync).toHaveBeenCalledWith("echo test", expect.objectContaining({
-            stdio: "pipe",
-        }));
+        expect(execSync).toHaveBeenCalledWith(
+            "echo test",
+            expect.objectContaining({
+                stdio: "pipe",
+            }),
+        );
     });
 
     test("应该在命令失败时返回 null", () => {
@@ -159,16 +177,22 @@ describe("execSilent", () => {
     test("应该支持自定义工作目录", () => {
         (execSync as vi.Mock).mockReturnValue(Buffer.from("output"));
         execSilent("echo test", { cwd: "/custom/path" });
-        expect(execSync).toHaveBeenCalledWith("echo test", expect.objectContaining({
-            cwd: "/custom/path",
-        }));
+        expect(execSync).toHaveBeenCalledWith(
+            "echo test",
+            expect.objectContaining({
+                cwd: "/custom/path",
+            }),
+        );
     });
 
     test("应该支持自定义编码", () => {
         (execSync as vi.Mock).mockReturnValue(Buffer.from("output"));
         execSilent("echo test", { encoding: "utf-8" });
-        expect(execSync).toHaveBeenCalledWith("echo test", expect.objectContaining({
-            encoding: "utf-8",
-        }));
+        expect(execSync).toHaveBeenCalledWith(
+            "echo test",
+            expect.objectContaining({
+                encoding: "utf-8",
+            }),
+        );
     });
 });
