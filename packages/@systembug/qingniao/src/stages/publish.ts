@@ -44,7 +44,11 @@ export async function publishPackagesDryRun(
         const command =
             config.changeset.publishCommand?.replace("publish", "publish --dry-run") ||
             `${pmCommand} changeset publish --dry-run`;
-        exec(command, { cwd: context.rootDir });
+        exec(command, {
+            cwd: context.rootDir,
+            timeout: 5 * 60 * 1000, // 5 分钟
+            description: "发布预览 (changeset dry-run)",
+        });
     } else {
         // 对每个包执行发布命令的 dry-run
         for (const pkg of context.packages) {
@@ -52,7 +56,11 @@ export async function publishPackagesDryRun(
                 // Scoped packages 需要 --access public 才能发布为公共包
                 const isScoped = pkg.name.startsWith("@");
                 const accessFlag = isScoped ? " --access public" : "";
-                exec(`${publishCommand} --dry-run${accessFlag}`, { cwd: pkg.path });
+                exec(`${publishCommand} --dry-run${accessFlag}`, {
+                    cwd: pkg.path,
+                    timeout: 5 * 60 * 1000, // 5 分钟
+                    description: `发布预览 ${pkg.name}@${pkg.version} (dry-run)`,
+                });
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 throw new Error(`包 ${pkg.name} dry-run 失败: ${errorMessage}`);
@@ -101,9 +109,12 @@ export async function publishPackages(config: PublishConfig, context: Context): 
         const command = config.changeset.publishCommand || `${pmCommand} changeset publish`;
 
         // 非静默模式，允许交互式输入 OTP
+        // 发布可能需要较长时间（网络上传），设置 10 分钟超时
         exec(command, {
             cwd: context.rootDir,
             silent: false, // 显示输出，允许交互式输入
+            timeout: 10 * 60 * 1000, // 10 分钟
+            description: "发布包到 NPM (changeset)",
         });
     } else {
         // 逐个发布包
@@ -126,6 +137,8 @@ export async function publishPackages(config: PublishConfig, context: Context): 
                 exec(`${publishCommand}${accessFlag}`, {
                     cwd: pkg.path,
                     silent: false, // 允许交互式输入 OTP
+                    timeout: 10 * 60 * 1000, // 10 分钟
+                    description: `发布包 ${pkg.name}@${pkg.version}`,
                 });
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);

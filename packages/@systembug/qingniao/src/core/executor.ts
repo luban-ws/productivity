@@ -367,7 +367,11 @@ export async function executePublish(
                                     : config.project?.packageManager === "yarn"
                                       ? "yarn"
                                       : "npx";
-                            exec(`${pmCommand} changeset`, { cwd: rootDir });
+                            exec(`${pmCommand} changeset`, {
+                                cwd: rootDir,
+                                timeout: 5 * 60 * 1000, // 5 分钟
+                                description: "创建 changeset",
+                            });
                         } else {
                             throw new Error("已跳过创建 changeset");
                         }
@@ -393,7 +397,12 @@ export async function executePublish(
                               ? "yarn"
                               : "npm";
                     const formatSpinner = ora("格式化代码（版本更新后）").start();
-                    exec(`${pmCommand} format`, { cwd: rootDir, silent: true });
+                    exec(`${pmCommand} format`, {
+                        cwd: rootDir,
+                        silent: true,
+                        timeout: 5 * 60 * 1000, // 5 分钟
+                        description: "格式化代码",
+                    });
                     formatSpinner.succeed();
                 } catch {
                     // 可能没有 format 脚本
@@ -481,7 +490,12 @@ export async function executePublish(
 
         // 安装依赖
         const spinner = ora("安装依赖").start();
-        exec(`${pmCommand} install --frozen-lockfile`, { cwd: rootDir, silent: true });
+        exec(`${pmCommand} install --frozen-lockfile`, {
+            cwd: rootDir,
+            silent: true,
+            timeout: 15 * 60 * 1000, // 15 分钟（安装依赖可能需要较长时间）
+            description: "安装依赖",
+        });
         spinner.succeed();
 
         // 在 lint 之前构建特定包（如 eslint-plugin）
@@ -490,9 +504,19 @@ export async function executePublish(
                 try {
                     const buildSpinner = ora(`构建 ${pkgName}（lint 依赖）`).start();
                     if (pmCommand === "pnpm") {
-                        exec(`pnpm --filter ${pkgName} build`, { cwd: rootDir, silent: true });
+                        exec(`pnpm --filter ${pkgName} build`, {
+                            cwd: rootDir,
+                            silent: true,
+                            timeout: 30 * 60 * 1000, // 30 分钟
+                            description: `构建 ${pkgName}`,
+                        });
                     } else if (pmCommand === "yarn") {
-                        exec(`yarn workspace ${pkgName} build`, { cwd: rootDir, silent: true });
+                        exec(`yarn workspace ${pkgName} build`, {
+                            cwd: rootDir,
+                            silent: true,
+                            timeout: 30 * 60 * 1000, // 30 分钟
+                            description: `构建 ${pkgName}`,
+                        });
                     } else {
                         // npm 不支持 workspace filter，需要进入包目录构建
                         // 尝试从已发现的包中查找，如果找不到则尝试从 packages 目录查找
@@ -503,7 +527,12 @@ export async function executePublish(
                             pkg = allPackages.find((p) => p.name === pkgName);
                         }
                         if (pkg) {
-                            exec("npm run build", { cwd: pkg.path, silent: true });
+                            exec("npm run build", {
+                                cwd: pkg.path,
+                                silent: true,
+                                timeout: 30 * 60 * 1000, // 30 分钟
+                                description: `构建 ${pkgName}`,
+                            });
                         } else {
                             throw new Error(`未找到包 ${pkgName}`);
                         }
@@ -521,7 +550,12 @@ export async function executePublish(
         if (config.checks?.lint !== false) {
             try {
                 const spinner = ora("运行 lint").start();
-                exec(`${pmCommand} lint`, { cwd: rootDir, silent: true });
+                exec(`${pmCommand} lint`, {
+                    cwd: rootDir,
+                    silent: true,
+                    timeout: 10 * 60 * 1000, // 10 分钟
+                    description: "代码检查 (lint)",
+                });
                 spinner.succeed();
             } catch {
                 // 可能没有 lint 脚本
@@ -533,7 +567,12 @@ export async function executePublish(
                 const spinner = ora("代码格式检查 (Prettier)").start();
                 // 尝试使用 format:check（只检查不修改）
                 try {
-                    exec(`${pmCommand} format:check`, { cwd: rootDir, silent: true });
+                    exec(`${pmCommand} format:check`, {
+                        cwd: rootDir,
+                        silent: true,
+                        timeout: 5 * 60 * 1000, // 5 分钟
+                        description: "代码格式检查",
+                    });
                     spinner.succeed();
                 } catch {
                     // 如果没有 format:check，尝试使用 prettier --check
@@ -541,6 +580,8 @@ export async function executePublish(
                         exec(`npx prettier --check "**/*.{ts,tsx,md}"`, {
                             cwd: rootDir,
                             silent: true,
+                            timeout: 5 * 60 * 1000, // 5 分钟
+                            description: "代码格式检查 (Prettier)",
                         });
                         spinner.succeed();
                     } catch {
@@ -566,7 +607,12 @@ export async function executePublish(
         if (config.checks?.tests !== false) {
             try {
                 const spinner = ora("运行测试").start();
-                exec(`${pmCommand} test`, { cwd: rootDir, silent: true });
+                exec(`${pmCommand} test`, {
+                    cwd: rootDir,
+                    silent: true,
+                    timeout: 15 * 60 * 1000, // 15 分钟（测试可能需要较长时间）
+                    description: "运行测试",
+                });
                 spinner.succeed();
             } catch {
                 // 可能没有 test 脚本

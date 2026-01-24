@@ -178,7 +178,11 @@ export async function bumpVersionWithChangeset(
 
     const command = config.changeset?.versionCommand || `${pmCommand} changeset version`;
 
-    exec(command, { cwd: rootDir });
+    exec(command, {
+        cwd: rootDir,
+        timeout: 5 * 60 * 1000, // 5 分钟
+        description: "更新版本号 (changeset version)",
+    });
 
     // changeset 更新后，获取所有已更新包的版本号
     // 通常所有包应该使用相同的版本号，我们取第一个已更新包的版本

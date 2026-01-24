@@ -117,6 +117,8 @@ export async function executeBuildSteps(config: PublishConfig, context: Context)
                 exec(step.command, {
                     cwd: step.cwd || rootDir,
                     silent: step.silent,
+                    timeout: 30 * 60 * 1000, // 30 分钟（构建可能需要较长时间）
+                    description: step.name || `构建步骤: ${step.command}`,
                 });
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
@@ -137,11 +139,19 @@ export async function executeBuildSteps(config: PublishConfig, context: Context)
                   : "npm";
         const nxTargets = config.build.nxTargets || ["build"];
         for (const target of nxTargets) {
-            exec(`${pmCommand} nx run-many --target=${target} --all`, { cwd: rootDir });
+            exec(`${pmCommand} nx run-many --target=${target} --all`, {
+                cwd: rootDir,
+                timeout: 30 * 60 * 1000, // 30 分钟
+                description: `Nx 构建: ${target}`,
+            });
         }
     } else if (config.build?.useTurbo) {
         const turboTasks = config.build.turboTasks || ["build"];
-        exec(`turbo build ${turboTasks.join(" ")}`, { cwd: rootDir });
+        exec(`turbo build ${turboTasks.join(" ")}`, {
+            cwd: rootDir,
+            timeout: 30 * 60 * 1000, // 30 分钟
+            description: `Turbo 构建: ${turboTasks.join(", ")}`,
+        });
     } else {
         const pmCommand =
             config.project?.packageManager === "pnpm"
@@ -149,7 +159,11 @@ export async function executeBuildSteps(config: PublishConfig, context: Context)
                 : config.project?.packageManager === "yarn"
                   ? "yarn"
                   : "npm";
-        exec(`${pmCommand} run build`, { cwd: rootDir });
+        exec(`${pmCommand} run build`, {
+            cwd: rootDir,
+            timeout: 30 * 60 * 1000, // 30 分钟
+            description: "构建项目",
+        });
     }
 }
 
