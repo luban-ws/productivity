@@ -1,6 +1,6 @@
 {
   "name": "@systembug/pangu",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "盘古 - 交互式开发服务器启动工具，从配置文件读取 demo 列表",
   "type": "module",
   "main": "./dist/index.js",
