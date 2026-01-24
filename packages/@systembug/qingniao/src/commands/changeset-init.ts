@@ -11,7 +11,10 @@ import { detectPackageManager } from "../utils/auto-detect";
 /**
  * 初始化 Changeset
  */
-export async function initChangeset(rootDir: string, options: { force?: boolean } = {}): Promise<void> {
+export async function initChangeset(
+    rootDir: string,
+    options: { force?: boolean } = {},
+): Promise<void> {
     const changesetDir = join(rootDir, ".changeset");
 
     // 检查是否已存在
@@ -29,11 +32,7 @@ export async function initChangeset(rootDir: string, options: { force?: boolean 
 
     // 检查是否安装了 @changesets/cli
     const pmCommand =
-        packageManager === "pnpm"
-            ? "pnpm exec"
-            : packageManager === "yarn"
-              ? "yarn"
-              : "npx";
+        packageManager === "pnpm" ? "pnpm exec" : packageManager === "yarn" ? "yarn" : "npx";
 
     const spinner = ora("正在初始化 Changeset").start();
 
