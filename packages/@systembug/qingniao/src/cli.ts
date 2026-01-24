@@ -14,6 +14,7 @@ import { Command } from "commander";
 import { writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import { generateConfigTemplate } from "./commands/init";
+import { initChangeset } from "./commands/changeset-init";
 import ora from "ora";
 
 const program = new Command();
@@ -52,6 +53,24 @@ program
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             ora(`生成配置文件失败: ${errorMessage}`).fail();
+            process.exit(1);
+        }
+    });
+
+// changeset-init 命令：初始化 Changeset
+program
+    .command("changeset-init")
+    .alias("ci")
+    .description("初始化 Changeset（创建 .changeset 目录和配置文件）")
+    .option("-f, --force", "强制重新初始化（覆盖已存在的 .changeset 目录）")
+    .action(async (options: { force?: boolean }) => {
+        const rootDir = process.cwd();
+
+        try {
+            await initChangeset(rootDir, { force: options.force });
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            ora(errorMessage).fail();
             process.exit(1);
         }
     });

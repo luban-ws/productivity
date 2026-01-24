@@ -77,6 +77,22 @@ npm install --save-dev @changesets/cli
 yarn add -D @changesets/cli
 ```
 
+#### 初始化 Changeset
+
+安装 `@changesets/cli` 后，使用以下命令初始化 changeset：
+
+```bash
+# 使用 qingniao 命令初始化
+qingniao changeset-init
+# 或使用简短别名
+qn ci
+
+# 如果 .changeset 目录已存在，使用 --force 强制重新初始化
+qingniao changeset-init --force
+```
+
+这将创建 `.changeset` 目录和配置文件，之后 qingniao 会自动检测并使用 changeset 策略。
+
 ### 零配置使用
 
 ```bash
