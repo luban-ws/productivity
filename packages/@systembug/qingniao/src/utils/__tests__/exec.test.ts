@@ -147,6 +147,90 @@ describe("exec", () => {
             expect(errorMessage).toContain("测试描述");
         }
     });
+
+    test("失败时应附上子进程 stderr（Buffer）到错误消息", () => {
+        const err = new Error("Command failed") as Error & { stderr?: Buffer; stdout?: Buffer };
+        err.stderr = Buffer.from("tsc error: type mismatch", "utf-8");
+        (execSync as vi.Mock).mockImplementation(() => {
+            throw err;
+        });
+
+        try {
+            exec("pnpm typecheck", { silent: true });
+            expect.fail("应该抛出错误");
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            expect(msg).toContain("命令执行失败");
+            expect(msg).toContain("命令输出:");
+            expect(msg).toContain("tsc error: type mismatch");
+        }
+    });
+
+    test("失败时应附上子进程 stderr（string）到错误消息", () => {
+        const err = new Error("Command failed") as Error & { stderr?: string };
+        err.stderr = "  eslint error: unused variable  ";
+        (execSync as vi.Mock).mockImplementation(() => {
+            throw err;
+        });
+
+        try {
+            exec("pnpm lint", { silent: true });
+            expect.fail("应该抛出错误");
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            expect(msg).toContain("命令输出:");
+            expect(msg).toContain("eslint error: unused variable");
+        }
+    });
+
+    test("失败时若有 stdout（string）也应附到错误消息", () => {
+        const err = new Error("Command failed") as Error & { stdout?: string };
+        err.stdout = "stdout message";
+        (execSync as vi.Mock).mockImplementation(() => {
+            throw err;
+        });
+
+        try {
+            exec("some-command", { silent: true });
+            expect.fail("应该抛出错误");
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            expect(msg).toContain("命令输出:");
+            expect(msg).toContain("stdout message");
+        }
+    });
+
+    test("失败时若有 stdout（Buffer）也应附到错误消息", () => {
+        const err = new Error("Command failed") as Error & { stdout?: Buffer };
+        err.stdout = Buffer.from("stdout buffer message", "utf-8");
+        (execSync as vi.Mock).mockImplementation(() => {
+            throw err;
+        });
+
+        try {
+            exec("some-command", { silent: true });
+            expect.fail("应该抛出错误");
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            expect(msg).toContain("命令输出:");
+            expect(msg).toContain("stdout buffer message");
+        }
+    });
+
+    test("失败且无 stderr/stdout 时错误消息不包含「命令输出」", () => {
+        (execSync as vi.Mock).mockImplementation(() => {
+            throw new Error("Command failed");
+        });
+
+        try {
+            exec("no-output-command");
+            expect.fail("应该抛出错误");
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            expect(msg).toContain("命令执行失败");
+            expect(msg).not.toContain("命令输出:");
+        }
+    });
 });
 
 describe("execSilent", () => {

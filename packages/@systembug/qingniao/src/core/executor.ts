@@ -27,19 +27,24 @@ import { discoverAllWorkspacePackages } from "../stages/version";
 import { confirm, select } from "../utils/prompts";
 import { readPackageJson, validatePackageForPublish } from "../utils/package";
 
+/** 判断是否为「缺少 npm 脚本」类错误（需报告并中止发布） */
+function isMissingNpmScript(errorMessage: string): boolean {
+    return /Missing script|Unknown script|does not provide a script named/i.test(errorMessage);
+}
+
 /**
- * 显示包列表
+ * 显示包列表（TUI：单行摘要，不逐条打 log）
  */
 function showPackageList(
     packages: Array<{ name: string; version: string; path: string; private?: boolean }>,
 ) {
-    ora().info("\n📦 将被更新版本的包:\n");
-    packages.forEach((pkg) => {
-        const icon = pkg.private ? "🔒" : "📦";
-        const status = pkg.private ? " (私有)" : "";
-        ora().info(`${icon} ${pkg.name} @ ${pkg.version}${status}`);
-    });
-    ora().info(`\n共 ${packages.length} 个包将被更新版本号\n`);
+    const privateCount = packages.filter((p) => p.private).length;
+    const publicCount = packages.length - privateCount;
+    const summary =
+        privateCount === 0
+            ? `共 ${packages.length} 个包将被更新版本号`
+            : `共 ${packages.length} 个包将被更新版本号（${publicCount} 个公共，${privateCount} 个私有）`;
+    ora().succeed(`📦 ${summary}`);
 }
 
 /**
@@ -389,14 +394,14 @@ export async function executePublish(
             // 版本更新后的 Git 操作
             if (newVersion && config.git?.enabled !== false) {
                 // 格式化代码
+                const pmCommand =
+                    config.project?.packageManager === "pnpm"
+                        ? "pnpm"
+                        : config.project?.packageManager === "yarn"
+                          ? "yarn"
+                          : "npm";
+                const formatSpinner = ora("格式化代码（版本更新后）").start();
                 try {
-                    const pmCommand =
-                        config.project?.packageManager === "pnpm"
-                            ? "pnpm"
-                            : config.project?.packageManager === "yarn"
-                              ? "yarn"
-                              : "npm";
-                    const formatSpinner = ora("格式化代码（版本更新后）").start();
                     exec(`${pmCommand} format`, {
                         cwd: rootDir,
                         silent: true,
@@ -404,8 +409,15 @@ export async function executePublish(
                         description: "格式化代码",
                     });
                     formatSpinner.succeed();
-                } catch {
-                    // 可能没有 format 脚本
+                } catch (error: unknown) {
+                    const errorMessage = error instanceof Error ? error.message : String(error);
+                    formatSpinner.fail(
+                        isMissingNpmScript(errorMessage)
+                            ? "缺少 format 脚本，发布中止"
+                            : "格式化代码失败",
+                    );
+                    console.error("\n", errorMessage);
+                    throw error;
                 }
 
                 // 提交版本更新（包括格式化后的所有更改）
@@ -501,8 +513,8 @@ export async function executePublish(
         // 在 lint 之前构建特定包（如 eslint-plugin）
         if (config.build?.preLintBuild && config.build.preLintBuild.length > 0) {
             for (const pkgName of config.build.preLintBuild) {
+                const buildSpinner = ora(`构建 ${pkgName}（lint 依赖）`).start();
                 try {
-                    const buildSpinner = ora(`构建 ${pkgName}（lint 依赖）`).start();
                     if (pmCommand === "pnpm") {
                         exec(`pnpm --filter ${pkgName} build`, {
                             cwd: rootDir,
@@ -540,42 +552,52 @@ export async function executePublish(
                     buildSpinner.succeed();
                 } catch (error: unknown) {
                     const errorMessage = error instanceof Error ? error.message : String(error);
-                    // 某些包可能没有 build 脚本，记录警告但继续
-                    ora().warn(`构建 ${pkgName} 失败: ${errorMessage}`);
+                    buildSpinner.fail(
+                        isMissingNpmScript(errorMessage)
+                            ? `缺少 ${pkgName} 的 build 脚本，发布中止`
+                            : `构建 ${pkgName}（lint 依赖）失败`,
+                    );
+                    console.error("\n", errorMessage);
+                    throw error;
                 }
             }
         }
 
         // 代码质量检查
         if (config.checks?.lint !== false) {
+            const lintSpinner = ora("运行 lint").start();
             try {
-                const spinner = ora("运行 lint").start();
                 exec(`${pmCommand} lint`, {
                     cwd: rootDir,
                     silent: true,
                     timeout: 10 * 60 * 1000, // 10 分钟
                     description: "代码检查 (lint)",
                 });
-                spinner.succeed();
-            } catch {
-                // 可能没有 lint 脚本
+                lintSpinner.succeed();
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                lintSpinner.fail(
+                    isMissingNpmScript(errorMessage) ? "缺少 lint 脚本，发布中止" : "lint 失败",
+                );
+                console.error("\n", errorMessage);
+                throw error;
             }
         }
 
         if (config.checks?.format !== false) {
+            const formatCheckSpinner = ora("代码格式检查 (Prettier)").start();
             try {
-                const spinner = ora("代码格式检查 (Prettier)").start();
-                // 尝试使用 format:check（只检查不修改）
-                try {
-                    exec(`${pmCommand} format:check`, {
-                        cwd: rootDir,
-                        silent: true,
-                        timeout: 5 * 60 * 1000, // 5 分钟
-                        description: "代码格式检查",
-                    });
-                    spinner.succeed();
-                } catch {
-                    // 如果没有 format:check，尝试使用 prettier --check
+                exec(`${pmCommand} format:check`, {
+                    cwd: rootDir,
+                    silent: true,
+                    timeout: 5 * 60 * 1000, // 5 分钟
+                    description: "代码格式检查",
+                });
+                formatCheckSpinner.succeed();
+            } catch (firstError: unknown) {
+                const firstMsg =
+                    firstError instanceof Error ? firstError.message : String(firstError);
+                if (isMissingNpmScript(firstMsg)) {
                     try {
                         exec(`npx prettier --check "**/*.{ts,tsx,md}"`, {
                             cwd: rootDir,
@@ -583,39 +605,70 @@ export async function executePublish(
                             timeout: 5 * 60 * 1000, // 5 分钟
                             description: "代码格式检查 (Prettier)",
                         });
-                        spinner.succeed();
-                    } catch {
-                        // 如果都失败，跳过格式检查
-                        spinner.warn("跳过格式检查（未找到 format:check 脚本）");
+                        formatCheckSpinner.succeed();
+                    } catch (secondError: unknown) {
+                        const secondMsg =
+                            secondError instanceof Error
+                                ? secondError.message
+                                : String(secondError);
+                        const missingPrettier =
+                            isMissingNpmScript(secondMsg) ||
+                            /Cannot find module|ENOENT/i.test(secondMsg);
+                        formatCheckSpinner.fail(
+                            missingPrettier
+                                ? "缺少 format:check 或 prettier，发布中止"
+                                : "代码格式检查失败",
+                        );
+                        console.error("\n", secondMsg);
+                        throw secondError;
                     }
+                } else {
+                    formatCheckSpinner.fail("代码格式检查失败");
+                    console.error("\n", firstMsg);
+                    throw firstError;
                 }
-            } catch {
-                // 格式检查失败，但不影响发布流程
             }
         }
 
         if (config.checks?.typecheck !== false) {
+            const typecheckSpinner = ora("TypeScript 类型检查").start();
             try {
-                const spinner = ora("TypeScript 类型检查").start();
-                exec(`${pmCommand} typecheck`, { cwd: rootDir, silent: true });
-                spinner.succeed();
-            } catch {
-                // 可能没有 typecheck 脚本
+                exec(`${pmCommand} typecheck`, {
+                    cwd: rootDir,
+                    silent: true,
+                    timeout: 5 * 60 * 1000, // 5 分钟
+                    description: "TypeScript 类型检查",
+                });
+                typecheckSpinner.succeed();
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                typecheckSpinner.fail(
+                    isMissingNpmScript(errorMessage)
+                        ? "缺少 typecheck 脚本，发布中止"
+                        : "TypeScript 类型检查失败",
+                );
+                console.error("\n", errorMessage);
+                throw error;
             }
         }
 
         if (config.checks?.tests !== false) {
+            const testSpinner = ora("运行测试").start();
             try {
-                const spinner = ora("运行测试").start();
                 exec(`${pmCommand} test`, {
                     cwd: rootDir,
                     silent: true,
                     timeout: 15 * 60 * 1000, // 15 分钟（测试可能需要较长时间）
                     description: "运行测试",
                 });
-                spinner.succeed();
-            } catch {
-                // 可能没有 test 脚本
+                testSpinner.succeed();
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                testSpinner.fail(
+                    isMissingNpmScript(errorMessage) ? "缺少 test 脚本，发布中止" : "测试失败",
+                );
+                console.error("\n", errorMessage);
+                throw error;
             }
         }
 
@@ -646,28 +699,30 @@ export async function executePublish(
             await verifyArtifacts(config, context);
             verifySpinner.succeed();
         }
-        // 显示将要发布的包列表
-        ora().info("📦 将要发布的包:");
+        // TUI：单次检查 NPM 版本，完成后一行摘要（不逐条打 log）
+        const checkSpinner = ora("检查 NPM 版本").start();
         const existingPackages: Array<{ name: string; version: string }> = [];
         for (const pkg of publicPackages) {
             const exists = checkPackageExists(pkg.name, pkg.version);
-            const status = exists ? `(已存在 v${pkg.version})` : `(新版本 v${pkg.version})`;
-            ora().info(`  • ${pkg.name} ${status}`);
             if (exists) {
                 existingPackages.push({ name: pkg.name, version: pkg.version });
             }
         }
+        const newCount = publicPackages.length - existingPackages.length;
+        if (existingPackages.length === 0) {
+            checkSpinner.succeed(`共 ${publicPackages.length} 个包待发布`);
+        } else if (newCount === 0) {
+            checkSpinner.succeed(`共 ${publicPackages.length} 个包，均已存在将跳过`);
+        } else {
+            checkSpinner.succeed(
+                `共 ${publicPackages.length} 个包，其中 ${existingPackages.length} 个已存在将跳过，${newCount} 个将发布`,
+            );
+        }
 
-        if (existingPackages.length > 0) {
-            ora().warn("以下包版本已存在于 NPM:");
-            existingPackages.forEach((pkg) => {
-                ora().warn(`  • ${pkg.name}@${pkg.version}`);
-            });
-            if (!options.yes) {
-                const shouldContinue = await confirm("是否继续? (将跳过已存在的包)", false);
-                if (!shouldContinue) {
-                    throw new Error("已取消发布");
-                }
+        if (existingPackages.length > 0 && !options.yes) {
+            const shouldContinue = await confirm("是否继续? (将跳过已存在的包)", false);
+            if (!shouldContinue) {
+                throw new Error("已取消发布");
             }
         }
 

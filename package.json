@@ -10,8 +10,14 @@
     "typecheck": "nx run-many --target=typecheck --all",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prepare": "husky",
-    "dev": "pangu",
-    "release": "qingniao"
+    "dev": "NODE_OPTIONS='--disable-warning=DEP0040 --disable-warning=DEP0169' pangu",
+    "release": "NODE_OPTIONS='--disable-warning=DEP0040 --disable-warning=DEP0169' qingniao",
+    "release:trace": "node --trace-deprecation $(pnpm bin qingniao)"
+  },
+  "pnpm": {
+    "overrides": {
+      "punycode": "2.3.1"
+    }
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",

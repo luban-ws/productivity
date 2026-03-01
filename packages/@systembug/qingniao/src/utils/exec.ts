@@ -50,6 +50,21 @@ export function exec(command: string, options: ExecOptions = {}): string {
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         const context = buildErrorContext(command, cwd, description, timeout);
+        // 保留子进程 stderr/stdout（如 tsc、lint 等），便于诊断
+        const execErr = error as { stderr?: Buffer | string; stdout?: Buffer | string };
+        const stderrStr =
+            execErr.stderr != null
+                ? typeof execErr.stderr === "string"
+                    ? execErr.stderr.trim()
+                    : execErr.stderr.toString("utf-8").trim()
+                : "";
+        const stdoutStr =
+            execErr.stdout != null
+                ? typeof execErr.stdout === "string"
+                    ? execErr.stdout.trim()
+                    : execErr.stdout.toString("utf-8").trim()
+                : "";
+        const childOutput = [stderrStr, stdoutStr].filter(Boolean).join("\n");
 
         // 检查是否是超时错误
         if (errorMessage.includes("ETIMEDOUT") || errorMessage.includes("timeout")) {
@@ -79,8 +94,9 @@ export function exec(command: string, options: ExecOptions = {}): string {
             );
         }
 
-        // 其他错误
-        throw new Error(`命令执行失败: ${context}\n错误: ${errorMessage}`);
+        // 其他错误：附上子进程输出以便诊断（如 tsc 类型错误）
+        const withOutput = childOutput ? `\n\n命令输出:\n${childOutput}` : "";
+        throw new Error(`命令执行失败: ${context}\n错误: ${errorMessage}${withOutput}`);
     }
 }
 

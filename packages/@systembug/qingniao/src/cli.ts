@@ -21,6 +21,13 @@ const program = new Command();
 
 program.name("qingniao").description("青鸟 - 零配置优先的通用发布工具").version("0.1.0");
 
+// 未捕获的 Promise 拒绝时报告错误并退出，确保失败时必有错误输出与非零退出码
+process.on("unhandledRejection", (reason: unknown) => {
+    const message = reason instanceof Error ? reason.message : String(reason);
+    console.error(`\nRelease failed: ${message}`);
+    process.exit(1);
+});
+
 // init 命令：生成配置文件
 program
     .command("init")
@@ -37,6 +44,7 @@ program
         if (existsSync(configPath) && !options.force) {
             ora().warn(`配置文件已存在: ${configFileName}`);
             ora().info("使用 --force 选项可覆盖现有文件");
+            console.error(`\nError: 配置文件已存在，使用 --force 可覆盖`);
             process.exit(1);
         }
 
@@ -53,6 +61,7 @@ program
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             ora(`生成配置文件失败: ${errorMessage}`).fail();
+            console.error(`\nError: ${errorMessage}`);
             process.exit(1);
         }
     });
@@ -71,6 +80,7 @@ program
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
             ora(errorMessage).fail();
+            console.error(`\nError: ${errorMessage}`);
             process.exit(1);
         }
     });
@@ -120,6 +130,7 @@ program
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 ora(errorMessage).fail();
+                console.error(`\nRelease failed: ${errorMessage}`);
                 process.exit(1);
             }
         },

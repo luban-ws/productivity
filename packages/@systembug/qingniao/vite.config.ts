@@ -3,6 +3,15 @@ import { resolve } from "path";
 import dts from "vite-plugin-dts";
 
 export default defineConfig({
+    test: {
+        include: ["src/**/*.test.ts", "src/**/__tests__/**/*.ts"],
+        coverage: {
+            provider: "v8",
+            reporter: ["text", "text-summary", "html"],
+            include: ["src/**/*.ts"],
+            exclude: ["src/**/*.test.ts", "src/**/__tests__/**", "**/*.d.ts", "src/cli.ts"],
+        },
+    },
     resolve: {
         alias: {
             "@": resolve(__dirname, "src"),
