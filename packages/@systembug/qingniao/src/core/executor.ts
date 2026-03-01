@@ -29,7 +29,10 @@ import { readPackageJson, validatePackageForPublish } from "../utils/package";
 
 /** 判断是否为「缺少 npm 脚本」类错误（需报告并中止发布） */
 function isMissingNpmScript(errorMessage: string): boolean {
-    return /Missing script|Unknown script|does not provide a script named/i.test(errorMessage);
+    return (
+        /Missing script|Unknown script|does not provide a script named/i.test(errorMessage) ||
+        /ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL/i.test(errorMessage)
+    );
 }
 
 /**

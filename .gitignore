@@ -40,13 +40,13 @@ docs/.vitepress/.temp
 docs/.vitepress/cache
 docs/.vitepress/dist
 
-# TurboRepo cache
+# Turbo cache and local
 .turbo
 **/generated/*
+
+# Nx (replaced by Turbo; keep ignored if present)
+.nx
 
 # WSX-Press generated files
 .wsx-press
 **/.wsx-press
-
-.nx/cache
-.nx/workspace-data
