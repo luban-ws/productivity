@@ -1,10 +1,12 @@
 {
-    "extends": "../tsconfig.json",
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "outDir": "./dist",
         "jsx": "react-jsx",
         "jsxImportSource": "@wsxjs/wsx-core",
-        "types": ["@wsxjs/wsx-core", "@testing-library/jest-dom"]
+        "types": ["@wsxjs/wsx-core", "@testing-library/jest-dom"],
+        "baseUrl": ".",
+        "paths": {}
     },
     "include": ["src/**/*", "src/global.d.ts", "src/**/*.wsx", "src/types/**/*.d.ts"],
     "exclude": ["dist", "**/__tests__/**", "**/*.test.ts"]
