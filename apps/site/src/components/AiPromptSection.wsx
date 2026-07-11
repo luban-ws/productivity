@@ -1,0 +1,84 @@
+/** @jsxImportSource @wsxjs/wsx-core */
+/**
+ * AiPromptSection — 首页 AI 一行提示词（盘古 + 青鸟）
+ */
+import { WebComponent, autoRegister, state } from "@wsxjs/wsx-core";
+import { i18n } from "@wsxjs/wsx-i18next";
+import "@wsxjs/wsx-base-components";
+import "@wsxjs/wsx-router";
+import styles from "./AiPromptSection.css?inline";
+import { AI_PROMPT_DOC_PATH, AI_PROMPT_ONE_LINER } from "../data/ai-prompt";
+import { copyToClipboard } from "../utils/copy-to-clipboard";
+
+const COPY_FEEDBACK_MS = 2000;
+
+@autoRegister({ tagName: "ai-prompt-section" })
+@i18n("home")
+export default class AiPromptSection extends WebComponent {
+    @state private copied = false;
+    private copyResetTimer: ReturnType<typeof setTimeout> | null = null;
+
+    constructor() {
+        super({ styles, styleName: "ai-prompt-section" });
+    }
+
+    render() {
+        const copyLabel = this.copied ? this.t("ai.copyDone") : this.t("ai.copy");
+
+        return (
+            <section class="ai-prompt-section" id="ai-prompt">
+                <div class="container">
+                    <div class="ai-prompt-header">
+                        <span class="ai-prompt-badge">{this.t("ai.badge")}</span>
+                        <h2 class="ai-prompt-title">{this.t("ai.title")}</h2>
+                        <p class="ai-prompt-description">{this.t("ai.description")}</p>
+                    </div>
+                    <div class="ai-prompt-card">
+                        <pre class="ai-prompt-oneliner">
+                            <code>{AI_PROMPT_ONE_LINER}</code>
+                        </pre>
+                        <div class="ai-prompt-actions">
+                            <button
+                                type="button"
+                                class={`ai-prompt-copy-btn${this.copied ? " is-copied" : ""}`}
+                                onClick={this.handleCopy}
+                                aria-live="polite"
+                            >
+                                {copyLabel}
+                            </button>
+                            <wsx-link to={AI_PROMPT_DOC_PATH} class="ai-prompt-full-link">
+                                {this.t("ai.viewFull")}
+                            </wsx-link>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    private handleCopy = async (): Promise<void> => {
+        const ok = await copyToClipboard(AI_PROMPT_ONE_LINER);
+        if (!ok) {
+            return;
+        }
+
+        this.copied = true;
+
+        if (this.copyResetTimer !== null) {
+            clearTimeout(this.copyResetTimer);
+        }
+
+        this.copyResetTimer = setTimeout(() => {
+            this.copied = false;
+            this.copyResetTimer = null;
+        }, COPY_FEEDBACK_MS);
+    };
+
+    protected onDisconnected(): void {
+        super.onDisconnected?.();
+        if (this.copyResetTimer !== null) {
+            clearTimeout(this.copyResetTimer);
+            this.copyResetTimer = null;
+        }
+    }
+}

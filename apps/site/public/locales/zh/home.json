@@ -16,5 +16,13 @@
     "quickStart": {
         "title": "快速开始",
         "description": "立即体验鲁班工坊的强大工具，只需几步即可集成到您的项目中。"
+    },
+    "ai": {
+        "badge": "给 AI 助手",
+        "title": "盘古 + 青鸟 一行提示词",
+        "description": "复制到 Cursor、Claude 或 ChatGPT，在任意 monorepo 中配置 dev（盘古）与 release（青鸟）。",
+        "copy": "复制提示词",
+        "copyDone": "已复制",
+        "viewFull": "完整版与 AGENTS.md 模板 →"
     }
 }

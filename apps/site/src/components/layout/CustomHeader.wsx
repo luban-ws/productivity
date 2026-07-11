@@ -44,6 +44,13 @@ export default class CustomHeader extends LightComponent {
                         >
                             {this.t("nav.docs")}
                         </wsx-link>
+                        <wsx-link
+                            to="/docs/tools/ai-prompt"
+                            class="nav-link"
+                            active-class="nav-link-active"
+                        >
+                            {this.t("nav.ai")}
+                        </wsx-link>
                         <language-switcher />
                     </nav>
                 </div>

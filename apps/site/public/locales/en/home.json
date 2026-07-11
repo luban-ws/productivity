@@ -16,5 +16,13 @@
     "quickStart": {
         "title": "Quick Start",
         "description": "Experience the power of Luban Workshop's tools now. Integrate them into your project in just a few steps."
+    },
+    "ai": {
+        "badge": "For AI assistants",
+        "title": "One-liner for Pangu + Qingniao",
+        "description": "Paste this into Cursor, Claude, or ChatGPT to set up dev (pangu) and release (qingniao) in any monorepo.",
+        "copy": "Copy prompt",
+        "copyDone": "Copied!",
+        "viewFull": "Full prompt & AGENTS.md version →"
     }
 }

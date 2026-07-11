@@ -16,5 +16,13 @@
     "quickStart": {
         "title": "빠른 시작",
         "description": "노반공방의 강력한 도구를 지금 바로 경험해보세요. 몇 단계만으로 프로젝트에 통합할 수 있습니다."
+    },
+    "ai": {
+        "badge": "AI 어시스턴트용",
+        "title": "반고(Pangu) + 청냐오(Qingniao) 한 줄 프롬프트",
+        "description": "Cursor, Claude, ChatGPT에 붙여 넣어 monorepo에서 dev(반고)와 release(청냐오)를 설정하세요.",
+        "copy": "프롬프트 복사",
+        "copyDone": "복사됨",
+        "viewFull": "전체 버전 및 AGENTS.md 템플릿 →"
     }
 }

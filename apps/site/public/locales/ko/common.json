@@ -14,7 +14,8 @@
     "nav": {
         "home": "홈",
         "tools": "도구",
-        "docs": "문서"
+        "docs": "문서",
+        "ai": "AI"
     },
     "brand": {
         "name": "노반공방"

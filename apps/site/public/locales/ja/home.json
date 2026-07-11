@@ -16,5 +16,13 @@
     "quickStart": {
         "title": "クイックスタート",
         "description": "魯班工房の強力なツールを今すぐ体験してください。わずか数ステップでプロジェクトに統合できます。"
+    },
+    "ai": {
+        "badge": "AI アシスタント向け",
+        "title": "盤古 + 青鳥 一行プロンプト",
+        "description": "Cursor、Claude、ChatGPT に貼り付けて、任意の monorepo で dev（盤古）と release（青鳥）を設定します。",
+        "copy": "プロンプトをコピー",
+        "copyDone": "コピーしました",
+        "viewFull": "完全版と AGENTS.md テンプレート →"
     }
 }

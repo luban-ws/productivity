@@ -9,6 +9,7 @@ import styles from "./HomeSection.css?inline";
 import "@wsxjs/wsx-base-components";
 import "@wsxjs/wsx-router";
 import "./ToolsSection.wsx"; // 导入工具介绍区域
+import "./AiPromptSection.wsx"; // AI 一行提示词
 
 @autoRegister({ tagName: "home-section" })
 @i18n("home")
@@ -22,6 +23,8 @@ export default class HomeSection extends WebComponent {
             <div class="home-container">
                 {/* 工具展示区域 - 主要焦点 */}
                 <tools-section></tools-section>
+
+                <ai-prompt-section></ai-prompt-section>
 
                 {/* 快速开始区域 */}
                 <section class="quick-start-section">

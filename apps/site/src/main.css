@@ -928,37 +928,8 @@ wsx-responsive-nav::before {
     z-index: 1;
 }
 
-/* 使用深度选择器样式化 shadow DOM 内的元素 */
-wsx-responsive-nav /deep/ .responsive-nav,
-wsx-responsive-nav::shadow .responsive-nav {
-    background: transparent !important;
-    border-bottom: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-}
-
-wsx-responsive-nav /deep/ .nav-brand,
-wsx-responsive-nav::shadow .nav-brand {
-    font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
-    font-weight: 900 !important;
-    font-size: 2.2rem !important;
-    color: var(--text-primary) !important;
-    text-shadow:
-        4px 4px 0 var(--color-gray),
-        2px 2px 0 var(--color-black) !important;
-    -webkit-text-stroke: 2px var(--color-black) !important;
-    text-stroke: 2px var(--color-black) !important;
-    transform: rotate(-3deg) !important;
-    letter-spacing: 0.1em !important;
-    position: relative !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 0.5rem !important;
-}
-
-/* 品牌图标样式 */
-wsx-responsive-nav /deep/ slot[name="brand-icon"],
-wsx-responsive-nav::shadow slot[name="brand-icon"] {
+/* Shadow DOM 内部样式需由 wsx-responsive-nav 组件自身或 ::part 暴露；/deep/ 与 ::shadow 已废弃 */
+wsx-responsive-nav slot[name="brand-icon"] {
     filter: drop-shadow(4px 4px 0 var(--color-black)) !important;
     text-shadow:
         3px 3px 0 var(--color-black),
@@ -967,63 +938,6 @@ wsx-responsive-nav::shadow slot[name="brand-icon"] {
     display: inline-block !important;
     transform: rotate(-5deg) !important;
     animation: bounce 2s ease-in-out infinite !important;
-}
-
-wsx-responsive-nav /deep/ .nav-brand-text,
-wsx-responsive-nav::shadow .nav-brand-text {
-    font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
-    font-weight: 900 !important;
-    font-size: 2.2rem !important;
-    color: var(--text-primary) !important;
-    text-shadow:
-        4px 4px 0 var(--color-gray),
-        2px 2px 0 var(--color-black) !important;
-    -webkit-text-stroke: 2px var(--color-black) !important;
-    text-stroke: 2px var(--color-black) !important;
-    transform: rotate(-3deg) !important;
-    letter-spacing: 0.1em !important;
-}
-
-/* 导航链接样式 */
-wsx-responsive-nav /deep/ .nav-link,
-wsx-responsive-nav::shadow .nav-link {
-    font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
-    font-weight: 900 !important;
-    font-size: 1.3rem !important;
-    color: var(--text-primary) !important;
-    text-shadow:
-        3px 3px 0 var(--color-gray),
-        1px 1px 0 var(--color-black) !important;
-    transform: rotate(1deg) !important;
-    position: relative !important;
-    padding: 0.5rem 1rem !important;
-    border: 3px solid transparent !important;
-    border-radius: 12px !important;
-    transition: all 0.3s var(--transition-bounce) !important;
-}
-
-wsx-responsive-nav /deep/ .nav-link:hover,
-wsx-responsive-nav::shadow .nav-link:hover {
-    transform: rotate(0deg) translateY(-3px) !important;
-    text-shadow:
-        4px 4px 0 var(--color-gray),
-        2px 2px 0 var(--color-black) !important;
-    border-color: var(--color-black) !important;
-    background: var(--color-gray-light) !important;
-    box-shadow: 3px 3px 0 0 var(--color-black) !important;
-}
-
-wsx-responsive-nav /deep/ .nav-link-active,
-wsx-responsive-nav::shadow .nav-link-active {
-    font-weight: 900 !important;
-    text-shadow:
-        4px 4px 0 var(--color-gray),
-        2px 2px 0 var(--color-black) !important;
-    border-bottom: 4px dashed var(--color-black) !important;
-    border-top: 2px dashed var(--color-black) !important;
-    background: var(--color-gray-light) !important;
-    transform: rotate(0deg) !important;
-    box-shadow: 2px 2px 0 0 var(--color-black) !important;
 }
 
 @keyframes bounce {
@@ -1314,8 +1228,8 @@ wsx-doc-sidebar {
 
 /* 侧边栏导航链接 */
 wsx-doc-sidebar a,
-wsx-doc-sidebar ::part(link),
-wsx-doc-sidebar ::part(nav-link) {
+wsx-doc-sidebar::part(link),
+wsx-doc-sidebar::part(nav-link) {
     color: var(--text-primary) !important;
     font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
     font-weight: 700 !important;
@@ -1326,8 +1240,8 @@ wsx-doc-sidebar ::part(nav-link) {
 
 /* 侧边栏导航链接悬停 */
 wsx-doc-sidebar a:hover,
-wsx-doc-sidebar ::part(link):hover,
-wsx-doc-sidebar ::part(nav-link):hover {
+wsx-doc-sidebar::part(link):hover,
+wsx-doc-sidebar::part(nav-link):hover {
     color: var(--text-primary) !important;
     transform: translateY(-2px) !important;
     text-shadow: 3px 3px 0 var(--color-gray) !important;
@@ -1336,9 +1250,7 @@ wsx-doc-sidebar ::part(nav-link):hover {
 
 /* 侧边栏导航链接激活状态 */
 wsx-doc-sidebar a[active],
-wsx-doc-sidebar a.active,
-wsx-doc-sidebar ::part(link)[active],
-wsx-doc-sidebar ::part(link).active {
+wsx-doc-sidebar a.active {
     color: var(--text-primary) !important;
     font-weight: 900 !important;
     border-bottom: 2px dashed var(--border-color) !important;

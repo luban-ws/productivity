@@ -89,70 +89,11 @@ doc-section wsx-doc-layout::part(nav) {
     font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
 }
 
-/* Sidebar links */
-doc-section wsx-doc-layout::part(sidebar) a,
-doc-section wsx-doc-layout::part(nav) a {
-    color: var(--text-primary) !important;
-    text-shadow: 1px 1px 0 var(--color-gray) !important;
-    font-weight: 700 !important;
-}
-
-doc-section wsx-doc-layout::part(sidebar) a:hover,
-doc-section wsx-doc-layout::part(nav) a:hover {
-    color: var(--text-primary) !important;
-    text-shadow: 2px 2px 0 var(--color-gray) !important;
-}
-
-doc-section wsx-doc-layout::part(sidebar) a.active,
-doc-section wsx-doc-layout::part(nav) a.active,
-doc-section wsx-doc-layout::part(sidebar) a[aria-current="page"],
-doc-section wsx-doc-layout::part(nav) a[aria-current="page"] {
-    color: var(--text-primary) !important;
-    font-weight: 900 !important;
-    border-left: 3px solid var(--border-color) !important;
-    background-color: var(--color-gray-light) !important;
-    background: var(--color-gray-light) !important;
-    /* 强制移除任何红色背景 */
-    background-image: none !important;
-}
-
 /* Main content area */
 doc-section wsx-doc-layout::part(main) {
     background-color: var(--bg-primary) !important;
     color: var(--text-primary) !important;
     font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
-}
-
-/* Headings in main content */
-doc-section wsx-doc-layout::part(main) h1,
-doc-section wsx-doc-layout::part(main) h2,
-doc-section wsx-doc-layout::part(main) h3,
-doc-section wsx-doc-layout::part(main) h4,
-doc-section wsx-doc-layout::part(main) h5,
-doc-section wsx-doc-layout::part(main) h6 {
-    color: var(--text-primary) !important;
-    text-shadow: 2px 2px 0 var(--color-gray) !important;
-    font-weight: 900 !important;
-}
-
-/* Code blocks */
-doc-section wsx-doc-layout::part(main) code,
-doc-section wsx-doc-layout::part(main) pre {
-    background-color: var(--bg-secondary) !important;
-    color: var(--text-primary) !important;
-    border: 2px solid var(--border-color) !important;
-    border-radius: var(--border-radius-small) !important;
-    font-family: "Courier New", Courier, monospace !important;
-    font-weight: 700 !important;
-}
-
-/* Use deep selectors for shadow DOM elements */
-doc-section /deep/ wsx-doc-layout,
-doc-section ::shadow wsx-doc-layout {
-    --sidebar-bg: var(--bg-secondary) !important;
-    --sidebar-text: var(--text-primary) !important;
-    --main-bg: var(--bg-primary) !important;
-    --main-text: var(--text-primary) !important;
 }
 
 /* WSX-Press 组件主题样式覆盖 - 黑白卡通风格 */
@@ -162,8 +103,7 @@ doc-section wsx-doc-layout {
 }
 
 /* 侧边栏导航样式 - 使用白色背景匹配主题 */
-doc-section wsx-doc-sidebar,
-doc-section ::part(sidebar) {
+doc-section wsx-doc-sidebar {
     background-color: var(--bg-primary) !important;
     background: var(--bg-primary) !important;
     border-right: var(--border-width) solid var(--border-color) !important;
@@ -175,8 +115,8 @@ doc-section ::part(sidebar) {
 
 /* 侧边栏导航链接样式 */
 doc-section wsx-doc-sidebar a,
-doc-section wsx-doc-sidebar ::part(link),
-doc-section wsx-doc-sidebar ::part(nav-link) {
+doc-section wsx-doc-sidebar::part(link),
+doc-section wsx-doc-sidebar::part(nav-link) {
     color: var(--text-primary) !important;
     font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
     font-weight: 700 !important;
@@ -190,8 +130,8 @@ doc-section wsx-doc-sidebar ::part(nav-link) {
 
 /* 侧边栏导航链接悬停状态 */
 doc-section wsx-doc-sidebar a:hover,
-doc-section wsx-doc-sidebar ::part(link):hover,
-doc-section wsx-doc-sidebar ::part(nav-link):hover {
+doc-section wsx-doc-sidebar::part(link):hover,
+doc-section wsx-doc-sidebar::part(nav-link):hover {
     color: var(--text-primary) !important;
     transform: translateY(-2px) !important;
     text-shadow: 3px 3px 0 var(--color-gray) !important;
@@ -200,10 +140,7 @@ doc-section wsx-doc-sidebar ::part(nav-link):hover {
 
 /* 侧边栏导航链接激活状态 */
 doc-section wsx-doc-sidebar a[active],
-doc-section wsx-doc-sidebar ::part(link)[active],
-doc-section wsx-doc-sidebar ::part(nav-link)[active],
 doc-section wsx-doc-sidebar a.active,
-doc-section wsx-doc-sidebar ::part(link).active,
 doc-section wsx-doc-sidebar a[aria-current="page"],
 doc-section wsx-doc-sidebar li[aria-current="page"] a {
     color: var(--text-primary) !important;
@@ -220,7 +157,7 @@ doc-section wsx-doc-sidebar li[aria-current="page"] a {
 doc-section wsx-doc-sidebar h1,
 doc-section wsx-doc-sidebar h2,
 doc-section wsx-doc-sidebar h3,
-doc-section wsx-doc-sidebar ::part(heading) {
+doc-section wsx-doc-sidebar::part(heading) {
     color: var(--text-primary) !important;
     font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
     font-weight: 900 !important;
@@ -229,8 +166,7 @@ doc-section wsx-doc-sidebar ::part(heading) {
 
 /* 主内容区域样式 */
 doc-section wsx-doc-page,
-doc-section ::part(page),
-doc-section ::part(main) {
+doc-section wsx-doc-layout::part(main) {
     background-color: var(--bg-primary) !important;
     color: var(--text-primary) !important;
 }
@@ -241,8 +177,7 @@ doc-section wsx-doc-page h2,
 doc-section wsx-doc-page h3,
 doc-section wsx-doc-page h4,
 doc-section wsx-doc-page h5,
-doc-section wsx-doc-page h6,
-doc-section ::part(page-heading) {
+doc-section wsx-doc-page h6 {
     color: var(--text-primary) !important;
     font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
     font-weight: 900 !important;
@@ -250,8 +185,7 @@ doc-section ::part(page-heading) {
 }
 
 /* 文档内容段落样式 */
-doc-section wsx-doc-page p,
-doc-section ::part(page-paragraph) {
+doc-section wsx-doc-page p {
     color: var(--text-primary) !important;
     font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
     font-weight: 600 !important;
@@ -259,8 +193,7 @@ doc-section ::part(page-paragraph) {
 }
 
 /* 文档内容链接样式 */
-doc-section wsx-doc-page a,
-doc-section ::part(page-link) {
+doc-section wsx-doc-page a {
     color: var(--text-primary) !important;
     font-weight: 700 !important;
     text-decoration: underline !important;
@@ -268,8 +201,7 @@ doc-section ::part(page-link) {
     transition: all 0.3s var(--transition-bounce) !important;
 }
 
-doc-section wsx-doc-page a:hover,
-doc-section ::part(page-link):hover {
+doc-section wsx-doc-page a:hover {
     color: var(--text-primary) !important;
     transform: translateY(-2px) !important;
     text-shadow: 2px 2px 0 var(--color-gray) !important;
@@ -277,9 +209,7 @@ doc-section ::part(page-link):hover {
 
 /* 代码块样式 */
 doc-section wsx-doc-page code,
-doc-section wsx-doc-page pre,
-doc-section ::part(code),
-doc-section ::part(pre) {
+doc-section wsx-doc-page pre {
     background-color: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
     border: 2px solid var(--border-color) !important;
@@ -290,15 +220,14 @@ doc-section ::part(pre) {
 }
 
 /* 目录样式 */
-doc-section wsx-doc-toc,
-doc-section ::part(toc) {
+doc-section wsx-doc-toc {
     background-color: var(--bg-primary) !important;
     border-left: var(--border-width) solid var(--border-color) !important;
     color: var(--text-primary) !important;
 }
 
 doc-section wsx-doc-toc a,
-doc-section wsx-doc-toc ::part(toc-link) {
+doc-section wsx-doc-toc::part(toc-link) {
     color: var(--text-primary) !important;
     font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
     font-weight: 600 !important;
@@ -306,7 +235,7 @@ doc-section wsx-doc-toc ::part(toc-link) {
 }
 
 doc-section wsx-doc-toc a:hover,
-doc-section wsx-doc-toc ::part(toc-link):hover {
+doc-section wsx-doc-toc::part(toc-link):hover {
     color: var(--text-primary) !important;
     transform: translateX(2px) !important;
     text-shadow: 2px 2px 0 var(--color-gray) !important;

@@ -20,6 +20,13 @@ export const routeMeta: Record<string, RouteMeta> = {
         keywords: "鲁班工坊文档, 生产力工具文档, 工具使用指南",
         image: "/og-image.png",
     },
+    "/docs/tools/ai-prompt": {
+        title: "AI 提示词 - 盘古与青鸟 | 鲁班工坊",
+        description:
+            "复制一行提示词到 Cursor / Claude / ChatGPT，在任意 monorepo 中配置盘古（dev）与青鸟（release）。",
+        keywords: "AI 提示词, 盘古, 青鸟, pangu, qingniao, monorepo, Cursor, AGENTS.md",
+        image: "/og-image.png",
+    },
     // 404 页面（通配符路由）
     "*": {
         title: "404 - 页面未找到 | 鲁班工坊",
