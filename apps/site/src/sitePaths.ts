@@ -72,7 +72,7 @@ export function getDocsRelativePath(appPath: string): string | null {
     }
 
     const docPath = appPath.slice(prefix.length);
-    return docPath || null;
+    return docPath;
 }
 
 /** 当前页面 canonical URL（含 base，不含 hash） */

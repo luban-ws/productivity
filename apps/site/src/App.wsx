@@ -265,13 +265,8 @@ export default class App extends LightComponent {
         const appPath = stripSiteBase(pathname);
 
         const docPath = getDocsRelativePath(appPath);
-        if (docPath) {
+        if (docPath !== null) {
             this.updateDocRouteMeta(appPath, docPath);
-            return;
-        }
-
-        if (isDocsAppPath(appPath)) {
-            this.updateDocRouteMeta(appPath, "");
             return;
         }
 
