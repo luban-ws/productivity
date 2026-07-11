@@ -43,12 +43,11 @@ jobs:
               run: pnpm install --frozen-lockfile
 
             - name: Build Site for GitHub Pages
-              working-directory: site
+              working-directory: apps/site
               run: pnpm build:pages
               env:
                   NODE_ENV: production
                   GITHUB_PAGES: true
-                  CUSTOM_DOMAIN: true
 
             - name: Setup Pages
               uses: actions/configure-pages@v5
