@@ -24,6 +24,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@systembug/tongyu": "workspace:*",
     "inquirer": "^9.2.15",
     "ora": "^8.0.1",
     "js-yaml": "^4.1.0"
@@ -34,9 +35,10 @@
     "@types/node": "^20.10.0",
     "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.49.0",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9.39.2",
     "typescript": "^5.3.3",
-    "vitest": "^1.6.0"
+    "vitest": "^4.1.10"
   },
   "license": "MIT",
   "publishConfig": {

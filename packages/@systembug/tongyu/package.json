@@ -1,0 +1,70 @@
+{
+  "name": "@systembug/tongyu",
+  "version": "0.0.1",
+  "description": "通语 - CLI 共享 OS locale 解析（基于 os-locale）",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vitest",
+    "lint": "eslint src tests --ext .ts",
+    "lint:fix": "eslint src tests --ext .ts --fix",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build"
+  },
+  "dependencies": {
+    "os-locale": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.49.0",
+    "@typescript-eslint/parser": "^8.49.0",
+    "@vitest/coverage-v8": "^4.1.10",
+    "eslint": "^9.39.2",
+    "typescript": "^5.3.3",
+    "vite": "^8.1.4",
+    "vite-plugin-dts": "^5.0.3",
+    "vitest": "^4.1.10"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quizerjs/quizerjs.git",
+    "directory": "packages/@systembug/tongyu"
+  },
+  "keywords": [
+    "cli",
+    "locale",
+    "os-locale",
+    "i18n"
+  ],
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -6,6 +6,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { join } from "path";
 import { writeFileSync, unlinkSync, mkdirSync, rmdirSync, existsSync } from "fs";
+import * as fs from "fs";
 
 // 测试用临时目录
 const TEST_DIR = join(process.cwd(), ".test-temp");
@@ -232,21 +233,111 @@ demos:
         it("应该验证每个 demo 的必需字段", async () => {
             const { loadConfig } = await import("../src/config.js");
 
-            // 模拟 console 输出
             vi.spyOn(console, "error").mockImplementation(() => {});
             vi.spyOn(console, "warn").mockImplementation(() => {});
 
-            // 创建缺少必需字段的 demo
             writeFileSync(
                 join(TEST_DIR, "dev.config.json"),
                 JSON.stringify({
-                    demos: [{ name: "Test" }], // 缺少 value 和 package
+                    demos: [{ name: "Test" }],
                 }),
             );
 
             const config = loadConfig(TEST_DIR);
 
-            // 验证返回默认配置
+            expect(config.demos).toEqual([]);
+        });
+
+        it("应该接受带 args 数组的有效 demo", async () => {
+            const { loadConfig } = await import("../src/config.js");
+
+            writeFileSync(
+                join(TEST_DIR, "dev.config.json"),
+                JSON.stringify({
+                    demos: [
+                        {
+                            name: "Test",
+                            value: "test",
+                            package: "@test/pkg",
+                            args: ["run", "dev"],
+                        },
+                    ],
+                }),
+            );
+
+            const config = loadConfig(TEST_DIR);
+
+            expect(config.demos[0].args).toEqual(["run", "dev"]);
+        });
+
+        it("demos 非数组时应返回默认配置", async () => {
+            const { loadConfig } = await import("../src/config.js");
+
+            vi.spyOn(console, "error").mockImplementation(() => {});
+            vi.spyOn(console, "warn").mockImplementation(() => {});
+
+            writeFileSync(
+                join(TEST_DIR, "dev.config.json"),
+                JSON.stringify({ demos: "not-array" }),
+            );
+
+            const config = loadConfig(TEST_DIR);
+
+            expect(config.demos).toEqual([]);
+        });
+
+        it("应该验证 demo 的 args 必须是数组", async () => {
+            const { loadConfig } = await import("../src/config.js");
+
+            vi.spyOn(console, "error").mockImplementation(() => {});
+            vi.spyOn(console, "warn").mockImplementation(() => {});
+
+            writeFileSync(
+                join(TEST_DIR, "dev.config.json"),
+                JSON.stringify({
+                    demos: [{ name: "Test", value: "test", package: "@test/pkg", args: "bad" }],
+                }),
+            );
+
+            const config = loadConfig(TEST_DIR);
+
+            expect(config.demos).toEqual([]);
+        });
+
+        it("应该读取 pangu.config.yml", async () => {
+            const { loadConfig } = await import("../src/config.js");
+
+            const yamlContent = `
+projectName: yml-project
+demos:
+  - name: YML Demo
+    value: yml
+    description: yml demo
+    package: "@test/yml"
+`;
+
+            writeFileSync(join(TEST_DIR, "pangu.config.yml"), yamlContent);
+
+            const config = loadConfig(TEST_DIR);
+
+            expect(config.projectName).toBe("yml-project");
+            expect(config.demos[0].value).toBe("yml");
+        });
+
+        it("非 Error 异常时应使用 String 转换", async () => {
+            const { loadConfig } = await import("../src/config.js");
+
+            vi.spyOn(console, "error").mockImplementation(() => {});
+            vi.spyOn(console, "warn").mockImplementation(() => {});
+
+            writeFileSync(join(TEST_DIR, "dev.config.json"), "{}");
+
+            vi.spyOn(fs, "readFileSync").mockImplementation(() => {
+                throw "plain-error";
+            });
+
+            const config = loadConfig(TEST_DIR);
+
             expect(config.demos).toEqual([]);
         });
     });

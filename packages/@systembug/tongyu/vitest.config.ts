@@ -1,8 +1,3 @@
-/**
- * Vitest 配置文件
- * @description 为 @systembug/pangu 包配置测试环境
- */
-
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -14,7 +9,7 @@ export default defineConfig({
             provider: "v8",
             reportsDirectory: "./coverage",
             include: ["src/**/*.ts"],
-            exclude: ["src/cli.ts", "tests/**/*"],
+            exclude: ["tests/**/*", "src/index.ts"],
             thresholds: {
                 lines: 100,
                 functions: 100,
