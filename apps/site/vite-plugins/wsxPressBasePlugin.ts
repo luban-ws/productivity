@@ -21,7 +21,7 @@ export function transformWsxPressClient(code: string, base: string): string | nu
     let out = code;
 
     out = out.replaceAll('"/.wsx-press/', `"${prefix}/.wsx-press/`);
-    out = out.replaceAll("fetch(\"/.wsx-press/", `fetch("${prefix}/.wsx-press/`);
+    out = out.replaceAll('fetch("/.wsx-press/', `fetch("${prefix}/.wsx-press/`);
 
     out = out.replace(
         /`\/docs\/\$\{([^}]+)\}\.md`/g,

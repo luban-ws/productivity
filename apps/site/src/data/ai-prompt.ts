@@ -1,9 +1,10 @@
 /**
  * AI 提示词 — 供站点展示与消费者仓库复制给 Cursor / Claude / ChatGPT
  */
+import { DOCS_ROUTE_PREFIX } from "../sitePaths";
 
-/** 文档路由 */
-export const AI_PROMPT_DOC_PATH = "/docs/tools/ai-prompt";
+/** 应用内文档路由（不含 GitHub Pages base；链接处需 `sitePath()`） */
+export const AI_PROMPT_DOC_PATH = `${DOCS_ROUTE_PREFIX}/tools/ai-prompt`;
 
 /** 各语言一行版（盘古 dev + 青鸟 release） */
 export const AI_PROMPT_ONE_LINERS = {

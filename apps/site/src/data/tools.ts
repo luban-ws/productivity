@@ -1,6 +1,7 @@
 /**
  * 鲁班工坊生产力工具数据
  */
+import { DOCS_ROUTE_PREFIX } from "../sitePaths";
 
 export interface Tool {
     id: string;
@@ -19,9 +20,9 @@ export interface Tool {
     npmUrl: string;
 }
 
-/** 工具文档快速开始路径（应用内路由，不含 GitHub Pages base） */
+/** 应用内工具文档路径（链接处需 `sitePath()`） */
 export function getToolDocPath(toolId: string): string {
-    return `/docs/tools/${toolId}/quick-start`;
+    return `${DOCS_ROUTE_PREFIX}/tools/${toolId}/quick-start`;
 }
 
 export const tools: Tool[] = [

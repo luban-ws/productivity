@@ -20,7 +20,7 @@ import { RouterUtils } from "@wsxjs/wsx-router";
 // Import SEO utilities
 import { MetaManager, type RouteMeta } from "./utils/meta-manager";
 import { getRouteMeta, routeMeta } from "./config/route-meta";
-import { siteAsset, sitePath } from "./sitePaths";
+import { siteAsset, sitePath, stripSiteBase, getDocsRelativePath, isDocsAppPath, getCanonicalUrl } from "./sitePaths";
 // Import route-based section components
 import "./components/HomeSection.wsx";
 // Import LanguageSwitcher component
@@ -149,7 +149,7 @@ export default class App extends LightComponent {
     };
 
     private openDocs = (): void => {
-        RouterUtils.navigate("/docs/productivity");
+        RouterUtils.navigate(sitePath("/docs/productivity"));
     };
 
     private openDiscord = (): void => {
@@ -167,7 +167,7 @@ export default class App extends LightComponent {
     private openBlog = (): void => {
         // TODO: 当博客系统准备好后，使用路由导航
         // 目前暂时导航到首页，避免使用阻塞性的 alert
-        RouterUtils.navigate("/");
+        RouterUtils.navigate(sitePath("/"));
     };
 
     private openLicense = (): void => {
@@ -180,11 +180,11 @@ export default class App extends LightComponent {
 
     // Privacy 和 Terms 现在使用 wsx-link，这些函数保留用于向后兼容
     private openPrivacy = (): void => {
-        RouterUtils.navigate("/privacy");
+        RouterUtils.navigate(sitePath("/privacy"));
     };
 
     private openTerms = (): void => {
-        RouterUtils.navigate("/terms");
+        RouterUtils.navigate(sitePath("/terms"));
     };
 
     /**
@@ -258,22 +258,24 @@ export default class App extends LightComponent {
     /**
      * 更新当前路由的 meta 标签和结构化数据
      */
-    private updateRouteMeta(path: string): void {
+    private updateRouteMeta(pathname: string): void {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const t = ((this as any).t as (key: string, options?: object) => string).bind(this);
         const brandName = t("brand.name");
+        const appPath = stripSiteBase(pathname);
 
-        // 如果是文档路由，异步加载文档元数据以获取实际标题
-        if (path.startsWith("/docs/")) {
-            // 支持多级路径：/docs/guide/essentials/getting-started
-            const docPath = path.slice(6); // 移除 "/docs/" 前缀
-            if (docPath) {
-                this.updateDocRouteMeta(path, docPath);
-                return;
-            }
+        const docPath = getDocsRelativePath(appPath);
+        if (docPath) {
+            this.updateDocRouteMeta(appPath, docPath);
+            return;
         }
 
-        let meta = getRouteMeta(path);
+        if (isDocsAppPath(appPath)) {
+            this.updateDocRouteMeta(appPath, "");
+            return;
+        }
+
+        let meta = getRouteMeta(appPath);
 
         // 根据当前语言动态更新 meta 中的品牌名称
         if (meta.title.includes("鲁班工坊")) {
@@ -288,14 +290,14 @@ export default class App extends LightComponent {
         MetaManager.update(meta);
 
         // 根据路由类型添加不同的结构化数据
-        const structuredData = this.getStructuredDataForRoute(path, meta);
+        const structuredData = this.getStructuredDataForRoute(appPath, meta);
         MetaManager.setStructuredData(structuredData);
     }
 
     /**
      * 更新文档路由的 meta 标签（从文档元数据获取实际标题）
      */
-    private async updateDocRouteMeta(path: string, docPath: string): Promise<void> {
+    private async updateDocRouteMeta(appPath: string, docPath: string): Promise<void> {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const t = ((this as any).t as (key: string, options?: object) => string).bind(this);
 
@@ -317,10 +319,10 @@ export default class App extends LightComponent {
                         title: `${docMeta.title} - ${t("nav.docs")} | ${brandName}`,
                         description: docMeta.description || `${brandName} ${t("nav.docs")}`,
                         keywords: `${brandName} ${t("nav.docs")}, 生产力工具文档, 工具使用指南`,
-                        image: "/og-image.png",
+                        image: "og-image.png",
                     };
                     MetaManager.update(meta);
-                    const structuredData = this.getStructuredDataForRoute(path, meta);
+                    const structuredData = this.getStructuredDataForRoute(appPath, meta);
                     MetaManager.setStructuredData(structuredData);
                     return;
                 }
@@ -331,40 +333,39 @@ export default class App extends LightComponent {
         }
 
         // 回退到默认的文档 meta
-        const meta = getRouteMeta(path);
+        const meta = getRouteMeta(appPath);
         MetaManager.update(meta);
-        const structuredData = this.getStructuredDataForRoute(path, meta);
+        const structuredData = this.getStructuredDataForRoute(appPath, meta);
         MetaManager.setStructuredData(structuredData);
     }
 
     /**
      * 根据路由类型获取相应的结构化数据
      */
-    private getStructuredDataForRoute(path: string, meta: RouteMeta): Record<string, unknown> {
+    private getStructuredDataForRoute(appPath: string, meta: RouteMeta): Record<string, unknown> {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const t = ((this as any).t as (key: string, options?: object) => string).bind(this);
         const brandName = t("brand.name");
+        const pageUrl = meta.url || getCanonicalUrl();
 
-        // 404 页面（使用通配符 meta）使用 WebPage schema
-        const is404Page = path !== "/" && !routeMeta[path] && meta.title.includes("404");
+        const is404Page = appPath !== "/" && !routeMeta[appPath] && meta.title.includes("404");
         if (is404Page) {
             return {
                 "@context": "https://schema.org",
                 "@type": "WebPage",
                 name: meta.title,
                 description: meta.description,
-                url: meta.url || `https://conouch.io/productivity${path}`,
+                url: pageUrl,
             };
         }
 
-        // 文档相关路由使用 Article schema
-        if (path.startsWith("/docs") || path.startsWith("/guide")) {
+        if (isDocsAppPath(appPath) || appPath.startsWith("/guide")) {
             return {
                 "@context": "https://schema.org",
                 "@type": "Article",
                 headline: meta.title,
                 description: meta.description,
-                url: meta.url || `https://conouch.io/productivity${path}`,
+                url: pageUrl,
                 author: {
                     "@type": "Organization",
                     name: `${brandName} Team`,
@@ -386,7 +387,7 @@ export default class App extends LightComponent {
             applicationCategory: "Developer Tools",
             operatingSystem: "Web",
             description: meta.description,
-            url: meta.url || `https://conouch.io/productivity${path}`,
+            url: pageUrl,
             offers: {
                 "@type": "Offer",
                 price: "0",

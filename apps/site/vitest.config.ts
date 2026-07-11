@@ -13,7 +13,12 @@ export default defineConfig({
         globals: true,
         environment: "happy-dom",
         setupFiles: ["./test/setup.ts"],
-        include: ["src/**/*.test.ts", "src/**/*.test.tsx", "test/**/*.test.ts", "vite-plugins/**/*.test.ts"],
+        include: [
+            "src/**/*.test.ts",
+            "src/**/*.test.tsx",
+            "test/**/*.test.ts",
+            "vite-plugins/**/*.test.ts",
+        ],
         typecheck: {
             include: ["src/**/*.{ts,tsx,wsx}", "src/types.d.ts"],
         },
