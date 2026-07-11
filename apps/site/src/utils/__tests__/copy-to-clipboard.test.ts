@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { AI_PROMPT_DOC_PATH, AI_PROMPT_ONE_LINER, getAiPromptFull, getAiPromptOneLiner } from "../../data/ai-prompt";
+import {
+    AI_PROMPT_DOC_PATH,
+    AI_PROMPT_ONE_LINER,
+    getAiPromptFull,
+    getAiPromptOneLiner,
+} from "../../data/ai-prompt";
 import { copyToClipboard } from "../../utils/copy-to-clipboard";
 
 describe("ai-prompt data", () => {
