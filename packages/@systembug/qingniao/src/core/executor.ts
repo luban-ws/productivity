@@ -26,13 +26,26 @@ import { hasChangesetFiles as checkHasChangesetFiles, detectChangeset } from "..
 import { discoverAllWorkspacePackages } from "../stages/version";
 import { confirm, select } from "../utils/prompts";
 import { readPackageJson, validatePackageForPublish } from "../utils/package";
+import { isMissingScriptError, toPublishErrorMessage } from "../utils/script-errors";
+import {
+    resolveNonInteractiveVersionMethod,
+    type VersionUpdateMethod,
+} from "./version-strategy";
+import { t } from "../messages.js";
 
-/** 判断是否为「缺少 npm 脚本」类错误（需报告并中止发布） */
-function isMissingNpmScript(errorMessage: string): boolean {
-    return (
-        /Missing script|Unknown script|does not provide a script named/i.test(errorMessage) ||
-        /ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL/i.test(errorMessage)
-    );
+/** 中止发布步骤并抛出可读错误（避免 pnpm ELIFECYCLE 噪音） */
+function abortPublishStep(
+    spinner: ReturnType<typeof ora>,
+    error: unknown,
+    scriptFallback: string,
+    genericMessage: string,
+): never {
+    const raw = error instanceof Error ? error.message : String(error);
+    const message = isMissingScriptError(raw)
+        ? toPublishErrorMessage(error, scriptFallback)
+        : genericMessage;
+    spinner.fail(message);
+    throw new Error(message);
 }
 
 /**
@@ -285,7 +298,7 @@ export async function executePublish(
             const hasChangesetFiles = hasChangeset && checkHasChangesetFiles(rootDir);
 
             // 选择版本更新方式
-            let versionUpdateMethod: "changeset" | "manual" | "semver" = "changeset";
+            let versionUpdateMethod: VersionUpdateMethod = "changeset";
             if (!options.yes) {
                 // 如果有 changeset，优先推荐使用 changeset
                 const defaultMethod = hasChangeset ? "changeset" : "semver";
@@ -310,26 +323,20 @@ export async function executePublish(
 
                 versionUpdateMethod = await select("如何更新版本号?", options, defaultMethod);
             } else {
-                // 非交互模式：优先检查 changeset，如果有就使用，否则根据配置选择
-                if (hasChangeset) {
-                    versionUpdateMethod = "changeset";
-                } else {
-                    const strategy = config.version?.strategy || "semver";
-                    if (strategy === "semver") {
-                        versionUpdateMethod = "semver";
-                    } else if (strategy === "changeset") {
-                        // 配置要求 changeset 但没有检测到，降级到 semver
-                        ora().warn(
-                            "配置要求使用 changeset，但未检测到 .changeset 目录，将使用 semver 自动检测",
-                        );
-                        versionUpdateMethod = "semver";
-                    } else {
-                        versionUpdateMethod = "manual";
-                    }
+                const strategy = config.version?.strategy || "semver";
+                versionUpdateMethod = resolveNonInteractiveVersionMethod(
+                    Boolean(hasChangesetFiles),
+                    strategy,
+                    hasChangeset,
+                );
+                if (versionUpdateMethod === "skip") {
+                    ora().warn(t("noChangesetFilesSkip"));
                 }
             }
 
-            if (versionUpdateMethod === "manual") {
+            if (versionUpdateMethod === "skip") {
+                // 跳过版本更新，继续构建与发布
+            } else if (versionUpdateMethod === "manual") {
                 // 手动版本更新
                 let versionType: "major" | "minor" | "patch" | undefined;
                 if (!options.yes) {
@@ -384,14 +391,15 @@ export async function executePublish(
                             throw new Error("已跳过创建 changeset");
                         }
                     } else {
-                        throw new Error("未找到 changeset 文件，且非交互模式");
+                        ora().warn(t("noChangesetFilesSkip"));
                     }
                 }
 
-                // 应用 changeset 版本更新
-                const spinner = ora("应用 changeset 版本更新").start();
-                newVersion = await applyVersionUpdate(config, context);
-                spinner.succeed(`版本已更新到 ${newVersion}`);
+                if (checkHasChangesetFiles(rootDir)) {
+                    const spinner = ora("应用 changeset 版本更新").start();
+                    newVersion = await applyVersionUpdate(config, context);
+                    spinner.succeed(`版本已更新到 ${newVersion}`);
+                }
             }
 
             // 版本更新后的 Git 操作
@@ -413,14 +421,12 @@ export async function executePublish(
                     });
                     formatSpinner.succeed();
                 } catch (error: unknown) {
-                    const errorMessage = error instanceof Error ? error.message : String(error);
-                    formatSpinner.fail(
-                        isMissingNpmScript(errorMessage)
-                            ? "缺少 format 脚本，发布中止"
-                            : "格式化代码失败",
+                    abortPublishStep(
+                        formatSpinner,
+                        error,
+                        "format",
+                        t("formatFailed"),
                     );
-                    console.error("\n", errorMessage);
-                    throw error;
                 }
 
                 // 提交版本更新（包括格式化后的所有更改）
@@ -554,14 +560,12 @@ export async function executePublish(
                     }
                     buildSpinner.succeed();
                 } catch (error: unknown) {
-                    const errorMessage = error instanceof Error ? error.message : String(error);
-                    buildSpinner.fail(
-                        isMissingNpmScript(errorMessage)
-                            ? `缺少 ${pkgName} 的 build 脚本，发布中止`
-                            : `构建 ${pkgName}（lint 依赖）失败`,
+                    abortPublishStep(
+                        buildSpinner,
+                        error,
+                        "build",
+                        t("buildPreLintFailed", { package: pkgName }),
                     );
-                    console.error("\n", errorMessage);
-                    throw error;
                 }
             }
         }
@@ -578,12 +582,7 @@ export async function executePublish(
                 });
                 lintSpinner.succeed();
             } catch (error: unknown) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                lintSpinner.fail(
-                    isMissingNpmScript(errorMessage) ? "缺少 lint 脚本，发布中止" : "lint 失败",
-                );
-                console.error("\n", errorMessage);
-                throw error;
+                abortPublishStep(lintSpinner, error, "lint", t("lintFailed"));
             }
         }
 
@@ -600,7 +599,7 @@ export async function executePublish(
             } catch (firstError: unknown) {
                 const firstMsg =
                     firstError instanceof Error ? firstError.message : String(firstError);
-                if (isMissingNpmScript(firstMsg)) {
+                if (isMissingScriptError(firstMsg)) {
                     try {
                         exec(`npx prettier --check "**/*.{ts,tsx,md}"`, {
                             cwd: rootDir,
@@ -615,20 +614,17 @@ export async function executePublish(
                                 ? secondError.message
                                 : String(secondError);
                         const missingPrettier =
-                            isMissingNpmScript(secondMsg) ||
+                            isMissingScriptError(secondMsg) ||
                             /Cannot find module|ENOENT/i.test(secondMsg);
-                        formatCheckSpinner.fail(
-                            missingPrettier
-                                ? "缺少 format:check 或 prettier，发布中止"
-                                : "代码格式检查失败",
-                        );
-                        console.error("\n", secondMsg);
-                        throw secondError;
+                        const message = missingPrettier
+                            ? t("formatCheckMissingScript")
+                            : t("formatCheckFailed");
+                        formatCheckSpinner.fail(message);
+                        throw new Error(message);
                     }
                 } else {
-                    formatCheckSpinner.fail("代码格式检查失败");
-                    console.error("\n", firstMsg);
-                    throw firstError;
+                    formatCheckSpinner.fail(t("formatCheckFailed"));
+                    throw firstError instanceof Error ? firstError : new Error(firstMsg);
                 }
             }
         }
@@ -644,14 +640,7 @@ export async function executePublish(
                 });
                 typecheckSpinner.succeed();
             } catch (error: unknown) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                typecheckSpinner.fail(
-                    isMissingNpmScript(errorMessage)
-                        ? "缺少 typecheck 脚本，发布中止"
-                        : "TypeScript 类型检查失败",
-                );
-                console.error("\n", errorMessage);
-                throw error;
+                abortPublishStep(typecheckSpinner, error, "typecheck", t("typecheckFailed"));
             }
         }
 
@@ -666,12 +655,7 @@ export async function executePublish(
                 });
                 testSpinner.succeed();
             } catch (error: unknown) {
-                const errorMessage = error instanceof Error ? error.message : String(error);
-                testSpinner.fail(
-                    isMissingNpmScript(errorMessage) ? "缺少 test 脚本，发布中止" : "测试失败",
-                );
-                console.error("\n", errorMessage);
-                throw error;
+                abortPublishStep(testSpinner, error, "test", t("testFailed"));
             }
         }
 

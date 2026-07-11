@@ -1,6 +1,6 @@
 {
   "name": "@systembug/qingniao",
-  "version": "0.0.13",
+  "version": "0.1.0",
   "description": "青鸟 - 零配置优先的通用发布工具，专为 monorepo 项目设计",
   "keywords": [
     "publish",
@@ -50,16 +50,20 @@
   },
   "dependencies": {
     "@systembug/diting": "workspace:*",
+    "@systembug/tongyu": "workspace:*",
+    "@inkjs/ui": "^2.0.0",
     "chalk": "^4.1.2",
     "commander": "^9.5.0",
+    "ink": "^7.1.0",
     "inquirer": "^13.1.0",
     "listr2": "^8.0.1",
-    "ora": "^9.0.0"
+    "ora": "^9.0.0",
+    "react": "^19.2.0"
   },
   "devDependencies": {
     "@types/inquirer": "^9.0.9",
     "@types/node": "^18.0.0",
-    "@types/react": "^19.0.0",
+    "@types/react": "^19.2.0",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitejs/plugin-react": "^5.1.2",

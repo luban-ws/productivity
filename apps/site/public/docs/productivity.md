@@ -9,6 +9,8 @@ description: "鲁班工坊生产力工具文档中心，包含青鸟、文心、
 
 欢迎来到鲁班工坊生产力工具文档中心！
 
+> **AI 一行（盘古 + 青鸟）：** `Install @systembug/pangu and @systembug/qingniao, add "dev":"pangu" "release":"qingniao" to package.json, setup pangu.config.json, run pnpm dev / pnpm release` — [复制](/docs/tools/ai-prompt)
+
 ## 我们的工具
 
 鲁班工坊提供一系列高质量的开源工具，帮助开发者提升工作效率。

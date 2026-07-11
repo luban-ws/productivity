@@ -5,7 +5,9 @@ category: tools/pangu
 description: "交互式开发服务器启动工具。从配置文件读取 demo 列表，快速启动开发服务器，如盘古开天辟地般开启开发之旅"
 ---
 
-# 盘古 (Pangu)
+# 盘古 - 开发服务器
+
+> **AI：** `Install @systembug/pangu, add "dev":"pangu" to package.json, create pangu.config.json, run pnpm dev` — [复制](/docs/tools/ai-prompt)
 
 🚀 交互式开发服务器启动工具
 

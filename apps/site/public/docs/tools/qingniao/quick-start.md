@@ -5,7 +5,9 @@ category: tools/qingniao
 description: "零配置优先的通用发布工具，专为 monorepo 项目设计。自动检测包管理器、workspace 类型、构建工具，让发布流程如青鸟飞行般优雅流畅"
 ---
 
-# 青鸟 (Qingniao)
+# 青鸟 - 发布工具
+
+> **AI：** `Install @systembug/qingniao @changesets/cli, add "release":"qingniao" to package.json, run pnpm release` — [复制](/docs/tools/ai-prompt)
 
 🌌 零配置优先的通用发布工具，专为 monorepo 项目设计
 
@@ -57,6 +59,20 @@ npx qingniao
 # 或使用短命令
 npx qn
 ```
+
+### 发布前诊断（doctor）
+
+发布失败若出现 `Command "format" not found` 等 pnpm 噪音，先运行诊断：
+
+```bash
+# 检查缺失 scripts、npm 登录、changeset 等
+npx qingniao doctor
+
+# 自动补全根 package.json scripts、创建 qingniao.config.json
+npx qingniao doctor --fix
+```
+
+TTY 下 doctor 使用 Ink 界面展示结果；非交互环境输出纯文本报告。
 
 ### 发布流程
 

@@ -15,6 +15,8 @@ import { writeFileSync, existsSync } from "fs";
 import { join } from "path";
 import { generateConfigTemplate } from "./commands/init";
 import { initChangeset } from "./commands/changeset-init";
+import { runDoctor } from "./commands/doctor";
+import { t } from "./messages.js";
 import ora from "ora";
 
 const program = new Command();
@@ -24,7 +26,7 @@ program.name("qingniao").description("青鸟 - 零配置优先的通用发布工
 // 未捕获的 Promise 拒绝时报告错误并退出，确保失败时必有错误输出与非零退出码
 process.on("unhandledRejection", (reason: unknown) => {
     const message = reason instanceof Error ? reason.message : String(reason);
-    console.error(`\nRelease failed: ${message}`);
+    console.error(`\n${t("releaseFailed", { message })}`);
     process.exit(1);
 });
 
@@ -85,6 +87,28 @@ program
         }
     });
 
+// doctor 命令：发布前诊断
+program
+    .command("doctor")
+    .description("检查发布前缺失项（scripts、changeset、npm 登录等）")
+    .option("-c, --config <path>", "指定配置文件路径")
+    .option("--fix", "自动修复可修复项（根 package.json scripts 等）")
+    .option("--strict", "将 warning 视为失败")
+    .action(async (options: { config?: string; fix?: boolean; strict?: boolean }) => {
+        try {
+            const exitCode = await runDoctor(process.cwd(), {
+                configPath: options.config,
+                fix: options.fix,
+                strict: options.strict,
+            });
+            process.exit(exitCode);
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            console.error(`\n${t("doctorFailed", { message: errorMessage })}`);
+            process.exit(1);
+        }
+    });
+
 // 主命令：发布流程
 program
     .option("-c, --config <path>", "指定配置文件路径")
@@ -129,8 +153,8 @@ program
                 // 成功消息已在 executor 中显示，这里不需要重复
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
-                ora(errorMessage).fail();
-                console.error(`\nRelease failed: ${errorMessage}`);
+                ora().fail(errorMessage);
+                console.error(`\n${t("releaseFailed", { message: errorMessage })}`);
                 process.exit(1);
             }
         },
