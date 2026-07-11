@@ -6,10 +6,7 @@ import { resolveLocale, type SupportedLocale } from "@systembug/tongyu";
 
 export type MessageParams = Record<string, string | number>;
 
-export type MessageCatalog<TKey extends string> = Record<
-    SupportedLocale,
-    Record<TKey, string>
->;
+export type MessageCatalog<TKey extends string> = Record<SupportedLocale, Record<TKey, string>>;
 
 export interface CreateTranslatorOptions {
     /** 进程环境变量 */

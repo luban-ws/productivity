@@ -6,7 +6,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { join } from "path";
 import { writeFileSync, unlinkSync, mkdirSync, rmdirSync, existsSync } from "fs";
-import * as fs from "fs";
 
 // 测试用临时目录
 const TEST_DIR = join(process.cwd(), ".test-temp");
@@ -330,11 +329,7 @@ demos:
             vi.spyOn(console, "error").mockImplementation(() => {});
             vi.spyOn(console, "warn").mockImplementation(() => {});
 
-            writeFileSync(join(TEST_DIR, "dev.config.json"), "{}");
-
-            vi.spyOn(fs, "readFileSync").mockImplementation(() => {
-                throw "plain-error";
-            });
+            writeFileSync(join(TEST_DIR, "dev.config.json"), "not-json");
 
             const config = loadConfig(TEST_DIR);
 

@@ -17,7 +17,7 @@ import { resolveLocale } from "@systembug/tongyu";
 
 const locale = resolveLocale(); // "zh" | "en"
 const localeWithOverride = resolveLocale({
-  overrideEnvKeys: ["PANGU_LANG"],
+    overrideEnvKeys: ["PANGU_LANG"],
 });
 ```
 

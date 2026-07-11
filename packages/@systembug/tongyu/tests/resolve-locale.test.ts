@@ -10,11 +10,7 @@ vi.mock("os-locale", () => ({
     default: osLocaleMock,
 }));
 
-import {
-    getOsLocaleTag,
-    readLocaleOverride,
-    resolveLocale,
-} from "../src/resolve-locale.js";
+import { getOsLocaleTag, readLocaleOverride, resolveLocale } from "../src/resolve-locale.js";
 import { LOCALE_OVERRIDE_ENV } from "../src/constants.js";
 
 describe("resolve-locale", () => {
@@ -34,9 +30,7 @@ describe("resolve-locale", () => {
         });
 
         it("应读取工具专属 override key", () => {
-            expect(
-                readLocaleOverride({ PANGU_LANG: "zh-TW" }, ["PANGU_LANG"]),
-            ).toBe("zh-TW");
+            expect(readLocaleOverride({ PANGU_LANG: "zh-TW" }, ["PANGU_LANG"])).toBe("zh-TW");
         });
 
         it("无覆盖时应返回 undefined", () => {

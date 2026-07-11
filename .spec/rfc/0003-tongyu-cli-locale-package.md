@@ -59,10 +59,10 @@
 
 **通语** — 共通之语：让各 CLI **听懂 OS 在说什么**，而非替它们 **说什么**。
 
-| 包 | 职责 |
-|----|------|
-| **通语 tongyu** | OS / env → `SupportedLocale` |
-| **盘古 pangu** | pangu 专属 catalog + `t()` |
+| 包                | 职责                                  |
+| ----------------- | ------------------------------------- |
+| **通语 tongyu**   | OS / env → `SupportedLocale`          |
+| **盘古 pangu**    | pangu 专属 catalog + `t()`            |
 | **青鸟 qingniao** | qingniao 专属 catalog + `t()`（后续） |
 
 ## 技术设计
@@ -112,8 +112,8 @@ import { resolveLocale, type SupportedLocale } from "@systembug/tongyu";
 
 // pangu/src/i18n/translator.ts — 仅 pangu 内部使用
 export function createTranslator<TKey extends string>(
-  catalog: Record<SupportedLocale, Record<TKey, string>>,
-  options?: { overrideEnvKeys?: string[]; locale?: SupportedLocale },
+    catalog: Record<SupportedLocale, Record<TKey, string>>,
+    options?: { overrideEnvKeys?: string[]; locale?: SupportedLocale },
 ): (key: TKey, params?: Record<string, string | number>) => string;
 ```
 
@@ -137,12 +137,12 @@ packages/@systembug/tongyu/
 
 ```json
 {
-  "exports": {
-    ".": {
-      "import": { "types": "./dist/index.d.ts", "default": "./dist/index.mjs" },
-      "require": { "types": "./dist/index.d.ts", "default": "./dist/index.cjs" }
+    "exports": {
+        ".": {
+            "import": { "types": "./dist/index.d.ts", "default": "./dist/index.mjs" },
+            "require": { "types": "./dist/index.d.ts", "default": "./dist/index.cjs" }
+        }
     }
-  }
 }
 ```
 
@@ -150,12 +150,12 @@ packages/@systembug/tongyu/
 
 ### 5. pangu 行为变更摘要
 
-| 项 | 变更 |
-|----|------|
-| 启动 | `pnpm --filter` → 解析包目录后在包内 `pnpm dev` |
-| Ctrl+C | `attachGracefulShutdown`；130/143 → exit 0 |
-| 文案 | OS locale 驱动；`messages.ts` 自持 catalog |
-| 依赖 | `@systembug/tongyu: workspace:*` |
+| 项     | 变更                                            |
+| ------ | ----------------------------------------------- |
+| 启动   | `pnpm --filter` → 解析包目录后在包内 `pnpm dev` |
+| Ctrl+C | `attachGracefulShutdown`；130/143 → exit 0      |
+| 文案   | OS locale 驱动；`messages.ts` 自持 catalog      |
+| 依赖   | `@systembug/tongyu: workspace:*`                |
 
 ## 成功标准
 
@@ -167,11 +167,11 @@ packages/@systembug/tongyu/
 
 ## 风险
 
-| 风险 | 缓解 |
-|------|------|
-| os-locale 在 CI 无 LANG | 测试 mock；支持 `SYSTEMBUG_LOCALE` |
-| 仅 zh/en 不够 | 后续 RFC 扩展 `SupportedLocale` |
-| pangu 仍用 tsc 构建 | 本 RFC 不强制改 pangu build；仅 tongyu 必须 Vite |
+| 风险                    | 缓解                                             |
+| ----------------------- | ------------------------------------------------ |
+| os-locale 在 CI 无 LANG | 测试 mock；支持 `SYSTEMBUG_LOCALE`               |
+| 仅 zh/en 不够           | 后续 RFC 扩展 `SupportedLocale`                  |
+| pangu 仍用 tsc 构建     | 本 RFC 不强制改 pangu build；仅 tongyu 必须 Vite |
 
 ## 实施计划
 
@@ -201,9 +201,9 @@ packages/@systembug/tongyu/
 
 ## 替代方案
 
-| 方案 | 弃用原因 |
-|------|----------|
-| 各 CLI 手写 LANG 解析 | 重复、macOS 上不准 |
-| tongyu 共享 catalog | 工具文案差异大，违反单一职责 |
-| i18next | CLI 字符串少，过重 |
-| tongyu 用 tsc build | 违反 monorepo Vite 库构建黄金法则 |
+| 方案                  | 弃用原因                          |
+| --------------------- | --------------------------------- |
+| 各 CLI 手写 LANG 解析 | 重复、macOS 上不准                |
+| tongyu 共享 catalog   | 工具文案差异大，违反单一职责      |
+| i18next               | CLI 字符串少，过重                |
+| tongyu 用 tsc build   | 违反 monorepo Vite 库构建黄金法则 |

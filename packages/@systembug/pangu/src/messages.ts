@@ -44,8 +44,7 @@ const PANGU_CATALOG: MessageCatalog<MessageKey> = {
         demoNotFound: "❌ Demo not found: {demo}",
         resolvePackageDirFailed: "❌ Unable to locate package directory for {name}",
         resolvePackageDirError: "Unable to resolve package directory: {package}",
-        resolvePackageDirErrorWithStderr:
-            "Unable to resolve package directory {package}: {stderr}",
+        resolvePackageDirErrorWithStderr: "Unable to resolve package directory {package}: {stderr}",
         locatePackageFailed: "❌ Unable to locate {name} package directory",
         startingServer: "Starting {name} dev server...",
         startingServerSuccess: "✅ Starting {name} dev server",

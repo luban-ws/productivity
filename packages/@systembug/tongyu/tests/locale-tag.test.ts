@@ -3,11 +3,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import {
-    isChineseLocale,
-    localeTagToSupported,
-    normalizeLocaleTag,
-} from "../src/locale-tag.js";
+import { isChineseLocale, localeTagToSupported, normalizeLocaleTag } from "../src/locale-tag.js";
 
 describe("locale-tag", () => {
     describe("normalizeLocaleTag", () => {

@@ -85,11 +85,7 @@ function startDevServer(
 
     let packageDirectory: string;
     try {
-        packageDirectory = resolvePackageDirectory(
-            option.package,
-            packageManager,
-            process.cwd(),
-        );
+        packageDirectory = resolvePackageDirectory(option.package, packageManager, process.cwd());
     } catch (error) {
         spinner.fail(t("locatePackageFailed", { name: option.name }));
         console.error(error instanceof Error ? error.message : error);

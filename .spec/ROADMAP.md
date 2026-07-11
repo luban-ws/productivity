@@ -2,11 +2,11 @@
 
 ## Phase: CLI foundations
 
-| Item | Status | Notes |
-| ---- | ------ | ----- |
-| RFC 0001 Universal Publish (qingniao) | Draft | |
-| RFC 0002 Wenxin API docs | Implemented | |
-| RFC 0003 Tongyu CLI locale | Implemented | Vite 8, locale-only; catalogs stay per-package |
+| Item                                  | Status      | Notes                                          |
+| ------------------------------------- | ----------- | ---------------------------------------------- |
+| RFC 0001 Universal Publish (qingniao) | Draft       |                                                |
+| RFC 0002 Wenxin API docs              | Implemented |                                                |
+| RFC 0003 Tongyu CLI locale            | Implemented | Vite 8, locale-only; catalogs stay per-package |
 
 ## Next
 
