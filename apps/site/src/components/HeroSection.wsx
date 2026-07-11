@@ -8,6 +8,7 @@ import "@wsxjs/wsx-base-components";
 import "@wsxjs/wsx-router";
 import styles from "./HeroSection.css?inline";
 import { AI_PROMPT_DOC_PATH } from "../data/ai-prompt";
+import { sitePath } from "../sitePaths";
 
 @autoRegister({ tagName: "hero-section" })
 @i18n("home")
@@ -27,10 +28,10 @@ export default class HeroSection extends WebComponent {
                     <p class="hero-subtitle">{this.t("hero.subtitle")}</p>
                     <p class="hero-description">{this.t("hero.description")}</p>
                     <div class="hero-actions">
-                        <wsx-link to="/docs/productivity" class="hero-btn hero-btn-primary">
+                        <wsx-link to={sitePath("/docs/productivity")} class="hero-btn hero-btn-primary">
                             {this.t("hero.getStarted")}
                         </wsx-link>
-                        <wsx-link to={AI_PROMPT_DOC_PATH} class="hero-btn hero-btn-accent">
+                        <wsx-link to={sitePath(AI_PROMPT_DOC_PATH)} class="hero-btn hero-btn-accent">
                             {this.t("hero.viewAi")}
                         </wsx-link>
                         <a href="#tools" class="hero-btn hero-btn-secondary">

@@ -2,6 +2,7 @@
 import { WebComponent, autoRegister } from "@wsxjs/wsx-core";
 import { i18n } from "@wsxjs/wsx-i18next";
 import styles from "./ExamplesSection.css?inline";
+import { sitePath } from "../sitePaths";
 import "@wsxjs/wsx-base-components";
 import "@wsxjs/wsx-router";
 // Import example components from local examples directory
@@ -37,7 +38,7 @@ export default class ExamplesSection extends WebComponent {
                         </p>
                         <div class="core-features-grid">
                             <wsx-link
-                                to="/webcomponent-examples"
+                                to={sitePath("/webcomponent-examples")}
                                 class="core-feature-card web-component-card"
                             >
                                 <div class="core-feature-icon">🔷</div>
@@ -60,7 +61,7 @@ export default class ExamplesSection extends WebComponent {
                             </wsx-link>
 
                             <wsx-link
-                                to="/lightcomponent-examples"
+                                to={sitePath("/lightcomponent-examples")}
                                 class="core-feature-card light-component-card"
                             >
                                 <div class="core-feature-icon">🔶</div>
@@ -82,7 +83,7 @@ export default class ExamplesSection extends WebComponent {
                                 </div>
                             </wsx-link>
 
-                            <wsx-link to="/slot-examples" class="core-feature-card slot-card">
+                            <wsx-link to={sitePath("/slot-examples")} class="core-feature-card slot-card">
                                 <div class="core-feature-icon">🔸</div>
                                 <div class="core-feature-content">
                                     <h3 class="core-feature-title">
@@ -133,13 +134,13 @@ export default class ExamplesSection extends WebComponent {
                                 <p>{this.t("examplesSection.examples.router.description")}</p>
                                 <div class="example-demo">
                                     <div class="router-demo">
-                                        <wsx-link to="/" class="demo-nav-btn">
+                                        <wsx-link to={sitePath("/")} class="demo-nav-btn">
                                             {this.t("examplesSection.examples.router.home")}
                                         </wsx-link>
-                                        <wsx-link to="/features" class="demo-nav-btn">
+                                        <wsx-link to={sitePath("/features")} class="demo-nav-btn">
                                             {this.t("examplesSection.examples.router.features")}
                                         </wsx-link>
-                                        <wsx-link to="/ecosystem" class="demo-nav-btn">
+                                        <wsx-link to={sitePath("/ecosystem")} class="demo-nav-btn">
                                             {this.t("examplesSection.examples.router.ecosystem")}
                                         </wsx-link>
                                     </div>

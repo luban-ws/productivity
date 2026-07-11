@@ -6,6 +6,7 @@
 import { LightComponent, autoRegister } from "@wsxjs/wsx-core";
 import { i18n } from "@wsxjs/wsx-i18next";
 import styles from "./NotFoundSection.css?inline";
+import { sitePath } from "../sitePaths";
 import "@wsxjs/wsx-router";
 
 @autoRegister({ tagName: "not-found-section" })
@@ -32,7 +33,7 @@ export class NotFoundSection extends LightComponent {
                                 "The page you're looking for doesn't exist or has been moved."}
                         </p>
                         <div class="not-found-actions">
-                            <wsx-link to="/" class="btn-primary">
+                            <wsx-link to={sitePath("/")} class="btn-primary">
                                 {t("notFound.goHome") || "Go Home"}
                             </wsx-link>
                             <button class="btn-secondary" onClick={this.goBack}>

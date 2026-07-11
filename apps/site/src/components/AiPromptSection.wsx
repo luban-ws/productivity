@@ -8,6 +8,7 @@ import "@wsxjs/wsx-base-components";
 import "@wsxjs/wsx-router";
 import styles from "./AiPromptSection.css?inline";
 import { AI_PROMPT_DOC_PATH, getAiPromptOneLiner } from "../data/ai-prompt";
+import { sitePath } from "../sitePaths";
 import "./CopyCodeBlock.wsx";
 
 @autoRegister({ tagName: "ai-prompt-section" })
@@ -49,7 +50,7 @@ export default class AiPromptSection extends WebComponent {
                     <div class="ai-prompt-card">
                         <copy-code-block code={prompt}></copy-code-block>
                         <div class="ai-prompt-actions">
-                            <wsx-link to={AI_PROMPT_DOC_PATH} class="ai-prompt-full-link">
+                            <wsx-link to={sitePath(AI_PROMPT_DOC_PATH)} class="ai-prompt-full-link">
                                 {this.t("ai.viewFull")}
                             </wsx-link>
                         </div>

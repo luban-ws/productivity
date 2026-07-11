@@ -19,7 +19,7 @@ export interface Tool {
     npmUrl: string;
 }
 
-/** 工具文档快速开始路径 */
+/** 工具文档快速开始路径（应用内路由，不含 GitHub Pages base） */
 export function getToolDocPath(toolId: string): string {
     return `/docs/tools/${toolId}/quick-start`;
 }

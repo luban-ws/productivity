@@ -7,7 +7,7 @@ export const i18n = initI18n({
     fallbackLng: "en",
     debug: false,
     backend: {
-        loadPath: "/locales/{{lng}}/{{ns}}.json",
+        loadPath: import.meta.env.BASE_URL + "locales/{{lng}}/{{ns}}.json",
     },
     ns: [
         "home",

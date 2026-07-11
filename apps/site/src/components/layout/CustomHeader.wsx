@@ -8,6 +8,7 @@ import { i18n } from "@wsxjs/wsx-i18next";
 import "@wsxjs/wsx-base-components";
 import "@wsxjs/wsx-router";
 import styles from "./CustomHeader.css?inline";
+import { siteAsset, sitePath } from "../../sitePaths";
 import "../LanguageSwitcher.wsx";
 
 @autoRegister({ tagName: "custom-header" })
@@ -22,9 +23,9 @@ export default class CustomHeader extends LightComponent {
             <header class="header">
                 <div class="header-container">
                     <div class="header-brand">
-                        <wsx-link to="/" class="brand-link">
+                        <wsx-link to={sitePath("/")} class="brand-link">
                             <img
-                                src="/favicon.svg"
+                                src={siteAsset("/favicon.svg")}
                                 class="brand-icon-img"
                                 alt={this.t("brand.name")}
                             />
@@ -33,18 +34,18 @@ export default class CustomHeader extends LightComponent {
                     </div>
 
                     <nav class="header-nav">
-                        <wsx-link to="/" class="nav-link" active-class="nav-link-active" exact>
+                        <wsx-link to={sitePath("/")} class="nav-link" active-class="nav-link-active" exact>
                             {this.t("nav.home")}
                         </wsx-link>
                         <wsx-link
-                            to="/docs/productivity"
+                            to={sitePath("/docs/productivity")}
                             class="nav-link"
                             active-class="nav-link-active"
                         >
                             {this.t("nav.docs")}
                         </wsx-link>
                         <wsx-link
-                            to="/docs/tools/ai-prompt"
+                            to={sitePath("/docs/tools/ai-prompt")}
                             class="nav-link"
                             active-class="nav-link-active"
                         >

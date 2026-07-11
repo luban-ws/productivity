@@ -20,6 +20,7 @@ import { RouterUtils } from "@wsxjs/wsx-router";
 // Import SEO utilities
 import { MetaManager, type RouteMeta } from "./utils/meta-manager";
 import { getRouteMeta, routeMeta } from "./config/route-meta";
+import { siteAsset, sitePath } from "./sitePaths";
 // Import route-based section components
 import "./components/HomeSection.wsx";
 // Import LanguageSwitcher component
@@ -57,9 +58,9 @@ export default class App extends LightComponent {
                     {/* Router Container */}
                     <wsx-router>
                         {/* Home Page */}
-                        <wsx-view route="/" component="home-section"></wsx-view>
+                        <wsx-view route={sitePath("/")} component="home-section"></wsx-view>
                         {/* Documentation routes - must be before 404 */}
-                        <wsx-view route="/docs/*" component="doc-section"></wsx-view>
+                        <wsx-view route={sitePath("/docs/*")} component="doc-section"></wsx-view>
                         {/* 404 页面 - 通配符路由，必须放在最后 */}
                         <wsx-view route="*" component="not-found-section"></wsx-view>
                     </wsx-router>
@@ -90,7 +91,7 @@ export default class App extends LightComponent {
                     <div class="footer-main">
                         <div class="footer-brand">
                             <img
-                                src="/favicon.svg"
+                                src={siteAsset("/favicon.svg")}
                                 class="footer-icon"
                                 alt="Luban"
                                 style="width: 24px; height: 24px; margin-right: 8px;"
@@ -110,7 +111,7 @@ export default class App extends LightComponent {
                                 {t("footer.githubRepo")}
                             </a>
                             <span class="footer-divider">•</span>
-                            <wsx-link to="/docs/productivity">{t("nav.docs")}</wsx-link>
+                            <wsx-link to={sitePath("/docs/productivity")}>{t("nav.docs")}</wsx-link>
                             <span class="footer-divider">•</span>
                             <a
                                 href="https://github.com/luban-ws/productivity/blob/main/LICENSE"
@@ -300,7 +301,7 @@ export default class App extends LightComponent {
 
         try {
             // 加载文档元数据
-            const response = await fetch("/.wsx-press/docs-meta.json");
+            const response = await fetch(siteAsset(".wsx-press/docs-meta.json"));
             if (response.ok) {
                 const metadataMap = (await response.json()) as Record<
                     string,

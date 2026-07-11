@@ -4,6 +4,8 @@
  * 为WSX组件和模块提供TypeScript类型支持
  */
 
+/// <reference types="vite/client" />
+
 // Import core WSX types
 // Types from @wsxjs/wsx-core are available globally
 

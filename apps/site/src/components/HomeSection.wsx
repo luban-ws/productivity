@@ -12,6 +12,7 @@ import "./ToolsSection.wsx"; // 导入工具介绍区域
 import "./HeroSection.wsx";
 import "./AiPromptSection.wsx"; // AI 一行提示词
 import "./CopyCodeBlock.wsx";
+import { sitePath } from "../sitePaths";
 
 @autoRegister({ tagName: "home-section" })
 @i18n("home")
@@ -39,10 +40,10 @@ export default class HomeSection extends WebComponent {
                             <copy-code-block code={this.t("quickStart.code")}></copy-code-block>
                         </div>
                         <div class="quick-start-actions">
-                            <wsx-link to="/docs/productivity" class="btn-primary">
+                            <wsx-link to={sitePath("/docs/productivity")} class="btn-primary">
                                 {this.t("hero.viewDocs")}
                             </wsx-link>
-                            <wsx-link to="/docs/tools/ai-prompt" class="btn-secondary">
+                            <wsx-link to={sitePath("/docs/tools/ai-prompt")} class="btn-secondary">
                                 {this.t("hero.viewAi")}
                             </wsx-link>
                         </div>

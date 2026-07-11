@@ -13,12 +13,15 @@ import "@wsxjs/wsx-base-components";
 import "./i18n";
 // Initialize error handler
 import { ErrorHandler } from "./utils/error-handler";
+import { normalizeSitePathname } from "./sitePaths";
 import "./App.wsx";
 
 const logger = createLogger("Luban-Workshop-Site");
 
 // Initialize the application
 function initApp() {
+    normalizeSitePathname();
+
     // 初始化全局错误处理
     ErrorHandler.init();
 

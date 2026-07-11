@@ -7,6 +7,7 @@ import { WebComponent, autoRegister, state } from "@wsxjs/wsx-core";
 import { i18n, i18nInstance } from "@wsxjs/wsx-i18next";
 import type { Tool } from "../data/tools";
 import { getToolDocPath } from "../data/tools";
+import { sitePath } from "../sitePaths";
 import styles from "./ToolCard.css?inline";
 import "@wsxjs/wsx-base-components";
 import "@wsxjs/wsx-router";
@@ -127,7 +128,7 @@ export default class ToolCard extends WebComponent {
                         ))}
                 </div>
                 <div class="tool-footer">
-                    <wsx-link to={getToolDocPath(this.tool.id)} class="tool-link tool-link-docs">
+                    <wsx-link to={sitePath(getToolDocPath(this.tool.id))} class="tool-link tool-link-docs">
                         {this.t("toolCard.docs")} →
                     </wsx-link>
                     <a
