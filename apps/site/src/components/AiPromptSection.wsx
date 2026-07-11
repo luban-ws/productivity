@@ -3,27 +3,40 @@
  * AiPromptSection — 首页 AI 一行提示词（盘古 + 青鸟）
  */
 import { WebComponent, autoRegister, state } from "@wsxjs/wsx-core";
-import { i18n } from "@wsxjs/wsx-i18next";
+import { i18n, i18nInstance } from "@wsxjs/wsx-i18next";
 import "@wsxjs/wsx-base-components";
 import "@wsxjs/wsx-router";
 import styles from "./AiPromptSection.css?inline";
-import { AI_PROMPT_DOC_PATH, AI_PROMPT_ONE_LINER } from "../data/ai-prompt";
-import { copyToClipboard } from "../utils/copy-to-clipboard";
-
-const COPY_FEEDBACK_MS = 2000;
+import { AI_PROMPT_DOC_PATH, getAiPromptOneLiner } from "../data/ai-prompt";
+import "./CopyCodeBlock.wsx";
 
 @autoRegister({ tagName: "ai-prompt-section" })
 @i18n("home")
 export default class AiPromptSection extends WebComponent {
-    @state private copied = false;
-    private copyResetTimer: ReturnType<typeof setTimeout> | null = null;
+    @state private currentLanguage = "en";
 
     constructor() {
         super({ styles, styleName: "ai-prompt-section" });
     }
 
+    protected onConnected(): void {
+        super.onConnected?.();
+        this.currentLanguage = i18nInstance.language || "en";
+        i18nInstance.on("languageChanged", this.handleLanguageChanged);
+    }
+
+    protected onDisconnected(): void {
+        super.onDisconnected?.();
+        i18nInstance.off("languageChanged", this.handleLanguageChanged);
+    }
+
+    private handleLanguageChanged = (lang: string): void => {
+        this.currentLanguage = lang;
+        this.rerender();
+    };
+
     render() {
-        const copyLabel = this.copied ? this.t("ai.copyDone") : this.t("ai.copy");
+        const prompt = getAiPromptOneLiner(this.currentLanguage);
 
         return (
             <section class="ai-prompt-section" id="ai-prompt">
@@ -34,18 +47,8 @@ export default class AiPromptSection extends WebComponent {
                         <p class="ai-prompt-description">{this.t("ai.description")}</p>
                     </div>
                     <div class="ai-prompt-card">
-                        <pre class="ai-prompt-oneliner">
-                            <code>{AI_PROMPT_ONE_LINER}</code>
-                        </pre>
+                        <copy-code-block code={prompt}></copy-code-block>
                         <div class="ai-prompt-actions">
-                            <button
-                                type="button"
-                                class={`ai-prompt-copy-btn${this.copied ? " is-copied" : ""}`}
-                                onClick={this.handleCopy}
-                                aria-live="polite"
-                            >
-                                {copyLabel}
-                            </button>
                             <wsx-link to={AI_PROMPT_DOC_PATH} class="ai-prompt-full-link">
                                 {this.t("ai.viewFull")}
                             </wsx-link>
@@ -54,31 +57,5 @@ export default class AiPromptSection extends WebComponent {
                 </div>
             </section>
         );
-    }
-
-    private handleCopy = async (): Promise<void> => {
-        const ok = await copyToClipboard(AI_PROMPT_ONE_LINER);
-        if (!ok) {
-            return;
-        }
-
-        this.copied = true;
-
-        if (this.copyResetTimer !== null) {
-            clearTimeout(this.copyResetTimer);
-        }
-
-        this.copyResetTimer = setTimeout(() => {
-            this.copied = false;
-            this.copyResetTimer = null;
-        }, COPY_FEEDBACK_MS);
-    };
-
-    protected onDisconnected(): void {
-        super.onDisconnected?.();
-        if (this.copyResetTimer !== null) {
-            clearTimeout(this.copyResetTimer);
-            this.copyResetTimer = null;
-        }
     }
 }

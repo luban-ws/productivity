@@ -1,7 +1,8 @@
 /* 黑白卡通风格工具区域 */
 
 .tools-section {
-    padding: 1.5rem 2rem 3rem;
+    padding: 1.5rem var(--site-gutter) 3rem;
+    scroll-margin-top: calc(var(--nav-height) + 1rem);
     background: var(--bg-primary);
     position: relative;
     /* 漫画书分隔线 */

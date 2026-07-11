@@ -7,6 +7,7 @@
         "getStarted": "始める",
         "viewTools": "ツールを見る",
         "viewDocs": "ドキュメントを見る",
+        "viewAi": "AI プロンプト",
         "viewGitHub": "GitHubで見る"
     },
     "tools": {
@@ -15,14 +16,21 @@
     },
     "quickStart": {
         "title": "クイックスタート",
-        "description": "魯班工房の強力なツールを今すぐ体験してください。わずか数ステップでプロジェクトに統合できます。"
+        "description": "魯班工房の強力なツールを今すぐ体験してください。わずか数ステップでプロジェクトに統合できます。",
+        "code": "# 青鳥（リリースツール）をインストール\npnpm add -D @systembug/qingniao\n\n# リリースを実行\npnpm qingniao\n\n# 諦聴（ログ）をインストール\npnpm add @systembug/diting\n\n# 諦聴を使用\nimport { createLogger } from '@systembug/diting';\nconst logger = createLogger('MyService');\nlogger.info('諦聴ログの例');"
     },
     "ai": {
         "badge": "AI アシスタント向け",
         "title": "盤古 + 青鳥 一行プロンプト",
-        "description": "Cursor、Claude、ChatGPT に貼り付けて、任意の monorepo で dev（盤古）と release（青鳥）を設定します。",
+        "description": "Cursor、Claude、ChatGPT に貼り付けて、開発（盤古）とリリース（青鳥）を設定します。",
         "copy": "プロンプトをコピー",
         "copyDone": "コピーしました",
-        "viewFull": "完全版と AGENTS.md テンプレート →"
+        "viewFull": "完全版プロンプトを見る →"
+    },
+    "toolCard": {
+        "loading": "読み込み中…",
+        "docs": "ドキュメント",
+        "github": "GitHub",
+        "npm": "NPM"
     }
 }

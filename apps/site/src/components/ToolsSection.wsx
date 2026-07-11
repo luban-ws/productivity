@@ -18,7 +18,7 @@ export default class ToolsSection extends WebComponent {
 
     render() {
         return (
-            <section class="tools-section">
+            <section class="tools-section" id="tools">
                 <div class="container">
                     <div class="section-header">
                         <h2 class="section-title">{this.t("tools.title")}</h2>
@@ -26,7 +26,7 @@ export default class ToolsSection extends WebComponent {
                     </div>
                     <div class="tools-grid">
                         {tools.map((tool) => (
-                            <tool-card key={tool.id} tool={tool}></tool-card>
+                            <tool-card key={tool.id} toolData={tool}></tool-card>
                         ))}
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 /* 鲁班工坊生产力工具网站 - 黑白卡通风格 */
 
 /* 手写风格字体 - 必须放在最前面 */
-@import url("https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Gloria+Hallelujah&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=JetBrains+Mono:wght@400;600;700&family=Kalam:wght@300;400;700&display=swap");
 
 /* CSS变量 - 黑白卡通主题 */
 :root {
@@ -71,6 +71,28 @@
     --doc-layout-main-padding-x: 2rem;
     --doc-page-padding-y: 1rem;
     --doc-page-padding-x: 2rem;
+
+    /* 站点布局 */
+    --site-gutter: clamp(1.25rem, 4vw, 2rem);
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-height) + 1rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
 
 body {
@@ -607,6 +629,10 @@ code {
     max-width: 900px;
     position: relative;
     transform: rotate(-0.5deg);
+}
+
+.code-example copy-code-block {
+    display: block;
 }
 
 .code-example::before {

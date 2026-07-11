@@ -2,11 +2,12 @@
     "hero": {
         "badge": "鲁班工坊",
         "title": "生产力工具集",
-        "subtitle": "Luban Workshop Productivity Tools",
+        "subtitle": "Monorepo 零配置优先生产力工具",
         "description": "专为 monorepo 项目设计的零配置优先工具集，让开发流程如行云流水般优雅。",
         "getStarted": "开始使用",
         "viewTools": "查看工具",
         "viewDocs": "查看文档",
+        "viewAi": "AI 提示",
         "viewGitHub": "查看 GitHub"
     },
     "tools": {
@@ -15,14 +16,21 @@
     },
     "quickStart": {
         "title": "快速开始",
-        "description": "立即体验鲁班工坊的强大工具，只需几步即可集成到您的项目中。"
+        "description": "立即体验鲁班工坊的强大工具，只需几步即可集成到您的项目中。",
+        "code": "# 安装青鸟发布工具\npnpm add -D @systembug/qingniao\n\n# 运行发布流程\npnpm qingniao\n\n# 安装谛听日志库\npnpm add @systembug/diting\n\n# 使用谛听\nimport { createLogger } from '@systembug/diting';\nconst logger = createLogger('MyService');\nlogger.info('谛听日志示例');"
     },
     "ai": {
         "badge": "给 AI 助手",
         "title": "盘古 + 青鸟 一行提示词",
-        "description": "复制到 Cursor、Claude 或 ChatGPT，在任意 monorepo 中配置 dev（盘古）与 release（青鸟）。",
+        "description": "复制到 Cursor、Claude 或 ChatGPT，配置开发（盘古）与发布（青鸟）。",
         "copy": "复制提示词",
         "copyDone": "已复制",
-        "viewFull": "完整版与 AGENTS.md 模板 →"
+        "viewFull": "查看完整提示词 →"
+    },
+    "toolCard": {
+        "loading": "加载中…",
+        "docs": "文档",
+        "github": "GitHub",
+        "npm": "NPM"
     }
 }

@@ -1205,7 +1205,7 @@ wsx-link[active]::part(link)::after {
 
 /* 首页容器 */
 .home-container {
-    padding-top: var(--nav-height);
+    padding-top: 0;
 }
 
 /* 简洁的页面标题区域 */
@@ -1330,6 +1330,26 @@ wsx-link[active]::part(link)::after {
     box-shadow:
         6px 6px 0 0 var(--color-gray),
         12px 12px 0 0 var(--color-black);
+}
+
+.quick-start-actions .btn-secondary {
+    font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive;
+    font-weight: 900;
+    font-size: 1rem;
+    color: var(--text-primary);
+    background: var(--color-gray-light);
+    border: 3px dashed var(--color-black);
+    padding: 0.85rem 1.75rem;
+    border-radius: 16px;
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: var(--shadow-cartoon-sm);
+    transition: all 0.25s var(--transition-bounce);
+}
+
+.quick-start-actions .btn-secondary:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-cartoon);
 }
 
 .quick-start-actions {

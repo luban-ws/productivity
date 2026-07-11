@@ -50,6 +50,7 @@ const copyWsxPressPlugin = () => {
 };
 
 export default defineConfig({
+    root: __dirname,
     // Set base path for GitHub Pages deployment
     base:
         process.env.NODE_ENV === "production" && process.env.GITHUB_PAGES === "true"

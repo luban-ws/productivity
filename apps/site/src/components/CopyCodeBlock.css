@@ -1,0 +1,47 @@
+.copy-code-block {
+    position: relative;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.copy-code-block pre {
+    margin: 0;
+    padding: 2.75rem 1.25rem 1.25rem;
+    overflow-x: auto;
+    font-family: "JetBrains Mono", "Courier New", Courier, monospace;
+    font-size: 0.85rem;
+    line-height: 1.75;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-primary);
+}
+
+.copy-code-block-btn {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    z-index: 1;
+    padding: 0.35rem 0.85rem;
+    font-weight: 800;
+    font-size: 0.8125rem;
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: transform 0.2s var(--transition-bounce), box-shadow 0.2s var(--transition-bounce);
+}
+
+.copy-code-block-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-cartoon-sm);
+}
+
+.copy-code-block-btn.is-copied {
+    background: var(--color-gray-light);
+}
+
+.copy-code-block-btn:focus-visible {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 2px;
+}

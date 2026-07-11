@@ -1,0 +1,88 @@
+/** @jsxImportSource @wsxjs/wsx-core */
+/**
+ * CopyCodeBlock — 带复制按钮的代码块
+ */
+import { WebComponent, autoRegister, state } from "@wsxjs/wsx-core";
+import { i18n } from "@wsxjs/wsx-i18next";
+import styles from "./CopyCodeBlock.css?inline";
+import { copyToClipboard } from "../utils/copy-to-clipboard";
+
+const COPY_RESET_MS = 2000;
+
+export interface CopyCodeBlockProps {
+    code: string;
+    labelCopy?: string;
+    labelCopied?: string;
+}
+
+@autoRegister({ tagName: "copy-code-block" })
+@i18n("common")
+export default class CopyCodeBlock extends WebComponent {
+    @state private copied = false;
+    @state private codeText = "";
+
+    private copyResetTimer: ReturnType<typeof setTimeout> | null = null;
+
+    constructor() {
+        super({ styles, styleName: "copy-code-block" });
+    }
+
+    set code(value: string) {
+        this.codeText = value;
+    }
+
+    get code(): string {
+        return this.codeText;
+    }
+
+    render() {
+        const copyLabel = this.copied ? this.t("copy.done") : this.t("copy.button");
+
+        return (
+            <div class="copy-code-block">
+                <button
+                    type="button"
+                    class={`copy-code-block-btn${this.copied ? " is-copied" : ""}`}
+                    onClick={this.handleCopy}
+                    aria-live="polite"
+                    aria-label={copyLabel}
+                >
+                    {copyLabel}
+                </button>
+                <pre>
+                    <code>{this.codeText}</code>
+                </pre>
+            </div>
+        );
+    }
+
+    private handleCopy = async (): Promise<void> => {
+        if (!this.codeText) {
+            return;
+        }
+
+        const ok = await copyToClipboard(this.codeText);
+        if (!ok) {
+            return;
+        }
+
+        this.copied = true;
+
+        if (this.copyResetTimer !== null) {
+            clearTimeout(this.copyResetTimer);
+        }
+
+        this.copyResetTimer = setTimeout(() => {
+            this.copied = false;
+            this.copyResetTimer = null;
+        }, COPY_RESET_MS);
+    };
+
+    protected onDisconnected(): void {
+        super.onDisconnected?.();
+        if (this.copyResetTimer !== null) {
+            clearTimeout(this.copyResetTimer);
+            this.copyResetTimer = null;
+        }
+    }
+}

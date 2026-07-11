@@ -7,6 +7,7 @@
         "getStarted": "Get Started",
         "viewTools": "View Tools",
         "viewDocs": "View Docs",
+        "viewAi": "AI Prompt",
         "viewGitHub": "View on GitHub"
     },
     "tools": {
@@ -15,7 +16,8 @@
     },
     "quickStart": {
         "title": "Quick Start",
-        "description": "Experience the power of Luban Workshop's tools now. Integrate them into your project in just a few steps."
+        "description": "Experience the power of Luban Workshop's tools now. Integrate them into your project in just a few steps.",
+        "code": "# Install Qingniao publishing tool\npnpm add -D @systembug/qingniao\n\n# Run publishing process\npnpm qingniao\n\n# Install Diting logging library\npnpm add @systembug/diting\n\n# Use Diting\nimport { createLogger } from '@systembug/diting';\nconst logger = createLogger('MyService');\nlogger.info('Hello from Diting!');"
     },
     "ai": {
         "badge": "For AI assistants",
@@ -24,5 +26,11 @@
         "copy": "Copy prompt",
         "copyDone": "Copied!",
         "viewFull": "Full prompt & AGENTS.md version →"
+    },
+    "toolCard": {
+        "loading": "Loading…",
+        "docs": "Docs",
+        "github": "GitHub",
+        "npm": "NPM"
     }
 }

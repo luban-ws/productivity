@@ -9,7 +9,9 @@ import styles from "./HomeSection.css?inline";
 import "@wsxjs/wsx-base-components";
 import "@wsxjs/wsx-router";
 import "./ToolsSection.wsx"; // 导入工具介绍区域
+import "./HeroSection.wsx";
 import "./AiPromptSection.wsx"; // AI 一行提示词
+import "./CopyCodeBlock.wsx";
 
 @autoRegister({ tagName: "home-section" })
 @i18n("home")
@@ -21,7 +23,9 @@ export default class HomeSection extends WebComponent {
     render() {
         return (
             <div class="home-container">
-                {/* 工具展示区域 - 主要焦点 */}
+                <hero-section></hero-section>
+
+                {/* 工具展示区域 */}
                 <tools-section></tools-section>
 
                 <ai-prompt-section></ai-prompt-section>
@@ -32,25 +36,14 @@ export default class HomeSection extends WebComponent {
                         <h2 class="section-title">{this.t("quickStart.title")}</h2>
                         <p class="section-description">{this.t("quickStart.description")}</p>
                         <div class="code-example">
-                            <pre class="code-block">
-                                <code>{`# Install Qingniao publishing tool
-pnpm add -D @systembug/qingniao
-
-# Run publishing process
-pnpm qingniao
-
-# Install Diting logging library
-pnpm add @systembug/diting
-
-# Use Diting
-import { createLogger } from '@systembug/diting';
-const logger = createLogger('MyService');
-logger.info('Hello from Diting!');`}</code>
-                            </pre>
+                            <copy-code-block code={this.t("quickStart.code")}></copy-code-block>
                         </div>
                         <div class="quick-start-actions">
-                            <wsx-link to="/docs" class="btn-primary">
+                            <wsx-link to="/docs/productivity" class="btn-primary">
                                 {this.t("hero.viewDocs")}
+                            </wsx-link>
+                            <wsx-link to="/docs/tools/ai-prompt" class="btn-secondary">
+                                {this.t("hero.viewAi")}
                             </wsx-link>
                         </div>
                     </div>
@@ -58,13 +51,4 @@ logger.info('Hello from Diting!');`}</code>
             </div>
         );
     }
-
-    private openGitHub = (): void => {
-        window.open("https://github.com/luban-ws/productivity", "_blank");
-    };
-
-    private openPlayground = (): void => {
-        // TODO: 链接到 Playground 页面（当实现后）
-        window.location.href = "/playground";
-    };
 }

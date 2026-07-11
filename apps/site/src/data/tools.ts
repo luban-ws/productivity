@@ -19,6 +19,11 @@ export interface Tool {
     npmUrl: string;
 }
 
+/** 工具文档快速开始路径 */
+export function getToolDocPath(toolId: string): string {
+    return `/docs/tools/${toolId}/quick-start`;
+}
+
 export const tools: Tool[] = [
     {
         id: "qingniao",

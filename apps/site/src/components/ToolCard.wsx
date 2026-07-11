@@ -4,11 +4,15 @@
  * 展示单个工具的信息，使用黑白卡通风格
  */
 import { WebComponent, autoRegister, state } from "@wsxjs/wsx-core";
-import { i18nInstance } from "@wsxjs/wsx-i18next";
+import { i18n, i18nInstance } from "@wsxjs/wsx-i18next";
 import type { Tool } from "../data/tools";
+import { getToolDocPath } from "../data/tools";
 import styles from "./ToolCard.css?inline";
+import "@wsxjs/wsx-base-components";
+import "@wsxjs/wsx-router";
 
 @autoRegister({ tagName: "tool-card" })
+@i18n("home")
 export default class ToolCard extends WebComponent {
     // @state 需要默认值，不能是 null 或 undefined
     @state private tool: Tool = {
@@ -76,13 +80,14 @@ export default class ToolCard extends WebComponent {
     render() {
         // 检查是否有有效数据（通过 id 判断）
         if (!this.tool.id) {
-            return <div class="tool-card-loading">Loading...</div>;
+            return <div class="tool-card-loading">{this.t("toolCard.loading")}</div>;
         }
 
         // 检测当前语言并选择对应的描述和特性
         const lang = this.currentLanguage.split("-")[0];
         let description: string;
         let features: string[];
+        const displayName = lang === "zh" ? this.tool.name : this.tool.nameEn;
 
         switch (lang) {
             case "zh":
@@ -108,8 +113,7 @@ export default class ToolCard extends WebComponent {
                 <div class="tool-card-header">
                     <div class="tool-icon">{this.tool.icon}</div>
                     <div class="tool-names">
-                        <h3 class="tool-name">{this.tool.name}</h3>
-                        <span class="tool-name-en">{this.tool.nameEn}</span>
+                        <h3 class="tool-name">{displayName}</h3>
                     </div>
                 </div>
                 <p class="tool-description">{description}</p>
@@ -123,13 +127,16 @@ export default class ToolCard extends WebComponent {
                         ))}
                 </div>
                 <div class="tool-footer">
+                    <wsx-link to={getToolDocPath(this.tool.id)} class="tool-link tool-link-docs">
+                        {this.t("toolCard.docs")} →
+                    </wsx-link>
                     <a
                         href={this.tool.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         class="tool-link"
                     >
-                        GitHub →
+                        {this.t("toolCard.github")} →
                     </a>
                     {this.tool.npmUrl && (
                         <a
@@ -138,7 +145,7 @@ export default class ToolCard extends WebComponent {
                             rel="noopener noreferrer"
                             class="tool-link tool-link-npm"
                         >
-                            NPM →
+                            {this.t("toolCard.npm")} →
                         </a>
                     )}
                 </div>

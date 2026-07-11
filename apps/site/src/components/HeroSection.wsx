@@ -1,0 +1,44 @@
+/** @jsxImportSource @wsxjs/wsx-core */
+/**
+ * HeroSection — 首页首屏：价值主张 + 主 CTA
+ */
+import { WebComponent, autoRegister } from "@wsxjs/wsx-core";
+import { i18n } from "@wsxjs/wsx-i18next";
+import "@wsxjs/wsx-base-components";
+import "@wsxjs/wsx-router";
+import styles from "./HeroSection.css?inline";
+import { AI_PROMPT_DOC_PATH } from "../data/ai-prompt";
+
+@autoRegister({ tagName: "hero-section" })
+@i18n("home")
+export default class HeroSection extends WebComponent {
+    constructor() {
+        super({ styles, styleName: "hero-section" });
+    }
+
+    render() {
+        return (
+            <section class="hero-section" aria-labelledby="hero-title">
+                <div class="hero-inner">
+                    <span class="hero-badge">{this.t("hero.badge")}</span>
+                    <h1 id="hero-title" class="hero-title">
+                        {this.t("hero.title")}
+                    </h1>
+                    <p class="hero-subtitle">{this.t("hero.subtitle")}</p>
+                    <p class="hero-description">{this.t("hero.description")}</p>
+                    <div class="hero-actions">
+                        <wsx-link to="/docs/productivity" class="hero-btn hero-btn-primary">
+                            {this.t("hero.getStarted")}
+                        </wsx-link>
+                        <wsx-link to={AI_PROMPT_DOC_PATH} class="hero-btn hero-btn-accent">
+                            {this.t("hero.viewAi")}
+                        </wsx-link>
+                        <a href="#tools" class="hero-btn hero-btn-secondary">
+                            {this.t("hero.viewTools")}
+                        </a>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+}

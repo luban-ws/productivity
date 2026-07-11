@@ -25,9 +25,8 @@ export default class CustomHeader extends LightComponent {
                         <wsx-link to="/" class="brand-link">
                             <img
                                 src="/favicon.svg"
-                                class="brand-icon"
-                                alt="Luban"
-                                style="width: 48px; height: 48px; margin-right: 4rem"
+                                class="brand-icon-img"
+                                alt={this.t("brand.name")}
                             />
                             <span class="brand-text">{this.t("brand.name")}</span>
                         </wsx-link>

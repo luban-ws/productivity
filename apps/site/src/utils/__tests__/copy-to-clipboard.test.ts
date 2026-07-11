@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { AI_PROMPT_DOC_PATH, AI_PROMPT_ONE_LINER } from "../../data/ai-prompt";
+import { AI_PROMPT_DOC_PATH, AI_PROMPT_ONE_LINER, getAiPromptFull, getAiPromptOneLiner } from "../../data/ai-prompt";
 import { copyToClipboard } from "../../utils/copy-to-clipboard";
 
 describe("ai-prompt data", () => {
@@ -9,6 +9,11 @@ describe("ai-prompt data", () => {
         expect(AI_PROMPT_ONE_LINER).toContain("@systembug/qingniao");
         expect(AI_PROMPT_ONE_LINER).toContain('"dev": "pangu"');
         expect(AI_PROMPT_ONE_LINER).toContain('"release": "qingniao"');
+        expect(getAiPromptOneLiner("zh")).toContain("安装");
+        expect(getAiPromptOneLiner("zh")).toContain("pangu");
+        expect(getAiPromptOneLiner("ja")).toContain("monorepo");
+        expect(getAiPromptFull("ja")).toContain("@systembug/pangu");
+        expect(getAiPromptFull("ja")).toContain("pnpm dev dev は禁止");
     });
 });
 

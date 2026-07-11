@@ -50,3 +50,9 @@ docs/.vitepress/dist
 # WSX-Press generated files
 .wsx-press
 **/.wsx-press
+
+# Python bytecode
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo

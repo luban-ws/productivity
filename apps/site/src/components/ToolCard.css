@@ -253,9 +253,19 @@
 
 .tool-footer {
     display: flex;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     padding-top: 1rem;
     border-top: 2px dashed var(--color-black);
+}
+
+.tool-link-docs {
+    background: var(--color-gray-light);
+}
+
+.tool-link-docs:hover {
+    background: var(--color-black);
+    color: var(--color-white);
 }
 
 .tool-link {
@@ -264,24 +274,20 @@
     padding: 0.6rem 1.2rem;
     background: var(--color-white);
     color: var(--color-black);
-    /* 粗边框 */
     border: 3px solid var(--color-black);
     border-radius: 12px;
     font-weight: 900;
     text-decoration: none;
-    /* 超大卡通阴影 */
     box-shadow: 4px 4px 0 0 var(--color-black);
     transition: all 0.2s var(--transition-bounce);
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    /* 手写风格字体 */
     font-family:
         "Kalam", "Gloria Hallelujah", "Comic Sans MS", "Comic Neue", "Marker Felt", cursive;
-    /* 手写倾斜 */
     transform: rotate(-1deg);
-    /* 文字阴影 */
     text-shadow: 1px 1px 0 var(--color-gray);
+    cursor: pointer;
 }
 
 .tool-link:hover {
