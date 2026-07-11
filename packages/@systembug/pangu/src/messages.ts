@@ -30,12 +30,14 @@ export type MessageKey =
     | "helpPackageManager"
     | "helpExamples"
     | "welcome"
+    | "supportedBy"
     | "selectDemo"
     | "noDemos"
     | "configHint"
     | "invalidDemo"
     | "cancelled"
-    | "errorOccurred";
+    | "errorOccurred"
+    | "uiSelectHint";
 
 const PANGU_CATALOG: MessageCatalog<MessageKey> = {
     en: {
@@ -59,7 +61,8 @@ const PANGU_CATALOG: MessageCatalog<MessageKey> = {
         helpDemos: "Available demos:",
         helpPackageManager: "\nPackage manager",
         helpExamples: "\nExamples:",
-        welcome: "\n🚀 {projectName} dev server\n",
+        welcome: "\n🚀 Pangu · Dev Server\n",
+        supportedBy: "Supported by {name}",
         selectDemo: "Select a demo to start:",
         noDemos: "❌ No demo entries found in config",
         configHint:
@@ -67,6 +70,7 @@ const PANGU_CATALOG: MessageCatalog<MessageKey> = {
         invalidDemo: "\n❌ Invalid demo name: {demo}\n",
         cancelled: "\n👋 Cancelled",
         errorOccurred: "❌ Error:",
+        uiSelectHint: "↑↓ navigate · Enter select · Esc cancel",
     },
     zh: {
         shutdown: "\n\n👋 开发服务器正在优雅关闭，感谢您的使用！",
@@ -89,7 +93,8 @@ const PANGU_CATALOG: MessageCatalog<MessageKey> = {
         helpDemos: "可用的 demo:",
         helpPackageManager: "\n包管理器",
         helpExamples: "\n示例:",
-        welcome: "\n🚀 {projectName} 开发服务器\n",
+        welcome: "\n🚀 盘古 · 开发服务器\n",
+        supportedBy: "由 {name} 提供支持",
         selectDemo: "请选择要启动的演示项目：",
         noDemos: "❌ 配置文件中没有找到任何 demo 选项",
         configHint:
@@ -97,6 +102,7 @@ const PANGU_CATALOG: MessageCatalog<MessageKey> = {
         invalidDemo: "\n❌ 无效的 demo 名称: {demo}\n",
         cancelled: "\n👋 已取消",
         errorOccurred: "❌ 发生错误:",
+        uiSelectHint: "↑↓ 移动 · Enter 确认 · Esc 取消",
     },
 };
 

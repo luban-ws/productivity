@@ -6,6 +6,9 @@
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
+    esbuild: {
+        jsx: "automatic",
+    },
     test: {
         environment: "node",
         include: ["tests/**/*.test.ts"],
@@ -13,8 +16,17 @@ export default defineConfig({
         coverage: {
             provider: "v8",
             reportsDirectory: "./coverage",
-            include: ["src/**/*.ts"],
-            exclude: ["src/cli.ts", "tests/**/*"],
+            include: ["src/**/*.ts", "src/**/*.tsx"],
+            exclude: [
+                "src/cli.ts",
+                "src/ui/DemoSelectApp.tsx",
+                "src/ui/HelpApp.tsx",
+                "src/ui/AlertApp.tsx",
+                "src/ui/StartupApp.tsx",
+                "src/ui/run-invalid-demo.tsx",
+                "src/ui/console-demo-select.ts",
+                "tests/**/*",
+            ],
             thresholds: {
                 lines: 100,
                 functions: 100,

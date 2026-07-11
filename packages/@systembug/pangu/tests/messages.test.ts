@@ -23,6 +23,19 @@ describe("messages", () => {
     it("t 应能翻译带参数文案", () => {
         expect(t("demoNotFound", { demo: "foo" })).toContain("foo");
     });
+
+    it("应包含 uiSelectHint 文案", () => {
+        expect(t("uiSelectHint")).toContain("Enter");
+    });
+
+    it("welcome 应展示盘古品牌而非 projectName", () => {
+        expect(t("welcome")).toContain("Pangu");
+        expect(t("welcome")).not.toContain("鲁班工坊");
+    });
+
+    it("supportedBy 应包含署名", () => {
+        expect(t("supportedBy", { name: "鲁班工坊" })).toContain("鲁班工坊");
+    });
 });
 
 function createTranslatorWithEnv(env: Record<string, string>): string {

@@ -61,5 +61,10 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luban-ws/productivity.git",
+    "directory": "packages/@systembug/diting"
   }
 }

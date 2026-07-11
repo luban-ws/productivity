@@ -24,7 +24,7 @@ import {
     isGracefulExitCode,
     resolvePackageDirectory,
 } from "../src/process-utils.js";
-import { getShutdownMessage, t } from "../src/messages.js";
+import { getShutdownMessage } from "../src/messages.js";
 
 /** 测试固定英文关闭文案（不依赖 OS） */
 const EN_SHUTDOWN = getShutdownMessage("en");
@@ -169,13 +169,13 @@ describe("process-utils", () => {
             expect(errorSpy).not.toHaveBeenCalled();
         });
 
-        it("子进程 exit undefined 时应以 1 结束并显示 unknown", () => {
+        it("子进程 exit undefined 时应 exit 0", () => {
             attachGracefulShutdown(childProcess);
 
             childProcess.emit("exit", undefined);
 
-            expect(errorSpy).toHaveBeenCalledWith(t("serverExit", { code: "unknown" }));
-            expect(exitSpy).toHaveBeenCalledWith(1);
+            expect(errorSpy).not.toHaveBeenCalled();
+            expect(exitSpy).toHaveBeenCalledWith(0);
         });
 
         it("解析失败无 stderr 时应走无 stderr 分支", () => {
@@ -201,13 +201,13 @@ describe("process-utils", () => {
             expect(childProcess.kill).toHaveBeenCalledTimes(1);
         });
 
-        it("非优雅退出码时应输出错误并以相同代码退出", () => {
+        it("非优雅退出码时应 exit 0 避免 pnpm ELIFECYCLE", () => {
             attachGracefulShutdown(childProcess);
 
             childProcess.emit("exit", 1);
 
-            expect(errorSpy).toHaveBeenCalledWith(t("serverExit", { code: 1 }));
-            expect(exitSpy).toHaveBeenCalledWith(1);
+            expect(errorSpy).not.toHaveBeenCalled();
+            expect(exitSpy).toHaveBeenCalledWith(0);
         });
 
         it("shuttingDown 后即使非零退出码也应以 0 结束", () => {

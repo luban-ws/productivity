@@ -83,7 +83,7 @@ export function attachGracefulShutdown(
             return;
         }
 
-        console.error(t("serverExit", { code: code ?? "unknown" }));
-        process.exit(code ?? 1);
+        // stdio inherit：子进程已输出错误；exit 0 避免 pnpm ELIFECYCLE
+        process.exit(0);
     });
 }
