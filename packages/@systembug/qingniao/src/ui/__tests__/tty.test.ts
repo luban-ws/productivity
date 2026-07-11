@@ -5,10 +5,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { isInteractiveTerminal } from "../tty";
 
-function mockTty(
-    stdin: boolean | undefined,
-    stdout: boolean | undefined,
-): () => void {
+function mockTty(stdin: boolean | undefined, stdout: boolean | undefined): () => void {
     const originalStdin = process.stdin.isTTY;
     const originalStdout = process.stdout.isTTY;
     Object.defineProperty(process.stdin, "isTTY", { value: stdin, configurable: true });

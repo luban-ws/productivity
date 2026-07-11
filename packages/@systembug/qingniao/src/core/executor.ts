@@ -27,10 +27,7 @@ import { discoverAllWorkspacePackages } from "../stages/version";
 import { confirm, select } from "../utils/prompts";
 import { readPackageJson, validatePackageForPublish } from "../utils/package";
 import { isMissingScriptError, toPublishErrorMessage } from "../utils/script-errors";
-import {
-    resolveNonInteractiveVersionMethod,
-    type VersionUpdateMethod,
-} from "./version-strategy";
+import { resolveNonInteractiveVersionMethod, type VersionUpdateMethod } from "./version-strategy";
 import { t } from "../messages.js";
 
 /** 中止发布步骤并抛出可读错误（避免 pnpm ELIFECYCLE 噪音） */
@@ -421,12 +418,7 @@ export async function executePublish(
                     });
                     formatSpinner.succeed();
                 } catch (error: unknown) {
-                    abortPublishStep(
-                        formatSpinner,
-                        error,
-                        "format",
-                        t("formatFailed"),
-                    );
+                    abortPublishStep(formatSpinner, error, "format", t("formatFailed"));
                 }
 
                 // 提交版本更新（包括格式化后的所有更改）

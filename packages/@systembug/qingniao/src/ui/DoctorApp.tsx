@@ -68,7 +68,7 @@ export function DoctorApp({ findings, fixedCount, onReady }: DoctorAppProps): Re
                             </Text>{" "}
                             {finding.category}: {finding.message}
                         </Text>
-                        {finding.hint ? <Text dimColor>  → {finding.hint}</Text> : null}
+                        {finding.hint ? <Text dimColor> → {finding.hint}</Text> : null}
                     </Box>
                 ))}
             </Box>

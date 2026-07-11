@@ -83,10 +83,7 @@ export function listMissingRootScripts(rootDir: string): RequiredRootScript[] {
 }
 
 /** 向根 package.json 合并 scripts（不覆盖已有项） */
-export function mergeRootScripts(
-    rootDir: string,
-    additions: Record<string, string>,
-): string[] {
+export function mergeRootScripts(rootDir: string, additions: Record<string, string>): string[] {
     const pkg = readPackageJson(rootDir);
     if (!pkg) {
         throw new Error(t("rootPackageJsonMissing"));

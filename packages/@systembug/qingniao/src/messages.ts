@@ -76,8 +76,7 @@ const QINGNIAO_CATALOG: MessageCatalog<MessageKey> = {
             "No pending changeset files; skipping version bump and publishing current versions",
         releaseFailed: "Release failed: {message}",
         doctorFailed: "Doctor failed: {message}",
-        formatCheckMissingScript:
-            'Missing "format:check" script. Run: qingniao doctor --fix',
+        formatCheckMissingScript: 'Missing "format:check" script. Run: qingniao doctor --fix',
         formatCheckFailed: "Format check failed",
         lintFailed: "Lint failed",
         typecheckFailed: "TypeScript type check failed",

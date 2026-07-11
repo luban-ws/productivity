@@ -51,8 +51,7 @@ export function applyDoctorFixes(rootDir: string, findings: DoctorFinding[]): st
                 : {};
         if (devDeps["@changesets/cli"]) {
             const pm = detectPackageManager(rootDir) ?? "pnpm";
-            const pmExec =
-                pm === "pnpm" ? "pnpm exec" : pm === "yarn" ? "yarn" : "npx";
+            const pmExec = pm === "pnpm" ? "pnpm exec" : pm === "yarn" ? "yarn" : "npx";
             exec(`${pmExec} changeset init`, {
                 cwd: rootDir,
                 silent: true,

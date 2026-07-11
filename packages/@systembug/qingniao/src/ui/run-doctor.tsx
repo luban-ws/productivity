@@ -13,11 +13,7 @@ export async function presentDoctorReport(report: DoctorReport): Promise<void> {
     const fixedCount = report.fixedIds.length;
     if (isInteractiveTerminal()) {
         await runInkScreen(({ done }) => (
-            <DoctorApp
-                findings={report.findings}
-                fixedCount={fixedCount}
-                onReady={done}
-            />
+            <DoctorApp findings={report.findings} fixedCount={fixedCount} onReady={done} />
         ));
         return;
     }

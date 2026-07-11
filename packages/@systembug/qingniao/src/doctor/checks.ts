@@ -6,11 +6,7 @@ import { existsSync } from "fs";
 import { join } from "path";
 import type { PublishConfig } from "../types";
 import { checkNpmAuth } from "../stages/auth";
-import {
-    getCurrentBranch,
-    hasUncommittedChanges,
-    hasUnpushedCommits,
-} from "../stages/git";
+import { getCurrentBranch, hasUncommittedChanges, hasUnpushedCommits } from "../stages/git";
 import {
     detectChangeset,
     detectPackageManager,
@@ -22,11 +18,7 @@ import {
     readPackageJson,
     validatePackageForPublish,
 } from "../utils/package";
-import {
-    hasFormatCheckScript,
-    hasRootScript,
-    RELEASE_SCRIPT_NAME,
-} from "../utils/root-scripts";
+import { hasFormatCheckScript, hasRootScript, RELEASE_SCRIPT_NAME } from "../utils/root-scripts";
 import { t } from "../messages.js";
 import type { DoctorFinding } from "./types";
 
@@ -79,13 +71,7 @@ export async function collectDoctorFindings(
             }
         } else {
             findings.push(
-                error(
-                    "npm-auth",
-                    "NPM",
-                    t("npmNotLoggedIn"),
-                    t("npmLoginHint", { pm }),
-                    false,
-                ),
+                error("npm-auth", "NPM", t("npmNotLoggedIn"), t("npmLoginHint", { pm }), false),
             );
         }
     }

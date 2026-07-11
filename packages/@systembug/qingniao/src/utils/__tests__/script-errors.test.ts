@@ -13,8 +13,7 @@ import {
 
 describe("isMissingScriptError", () => {
     it("识别 pnpm 缺失脚本错误", () => {
-        const raw =
-            'ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL\u2009 Command "format" not found';
+        const raw = 'ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL\u2009 Command "format" not found';
         expect(isMissingScriptError(raw)).toBe(true);
     });
 
