@@ -12,7 +12,8 @@ import {
 } from "../utils/package";
 import { exec } from "../utils/exec";
 import { applyVersionUpdate } from "../stages/version";
-import { executeBuildSteps, verifyArtifacts } from "../stages/build";
+import { verifyArtifacts } from "../stages/build";
+import { runPreReleaseVerification } from "../stages/verify";
 import { publishPackages, publishPackagesDryRun, checkPackageExists } from "../stages/publish";
 import ora from "ora";
 import {
@@ -262,7 +263,13 @@ export async function executePublish(
         throw new Error("未找到可发布的包");
     }
 
-    // 4. 版本管理（如果未跳过）
+    // 4. 发布前验证（lint / format:check / typecheck / test / build）— 必须在版本号更新与 Git 标签之前
+    if (!options.skipBuild && config.build?.enabled !== false) {
+        await runPreReleaseVerification(config, context, packages, rootDir);
+        context.preReleaseVerified = true;
+    }
+
+    // 5. 版本管理（如果未跳过）
     let newVersion: string | undefined;
     if (!options.skipVersion) {
         // 询问是否要更新版本
@@ -492,177 +499,7 @@ export async function executePublish(
         }
     }
 
-    // 5. 构建（如果未跳过）- 在版本更新之后，发布之前
-    if (!options.skipBuild && config.build?.enabled !== false) {
-        const pmCommand =
-            config.project?.packageManager === "pnpm"
-                ? "pnpm"
-                : config.project?.packageManager === "yarn"
-                  ? "yarn"
-                  : "npm";
-
-        // 安装依赖
-        const spinner = ora("安装依赖").start();
-        exec(`${pmCommand} install --frozen-lockfile`, {
-            cwd: rootDir,
-            silent: true,
-            timeout: 15 * 60 * 1000, // 15 分钟（安装依赖可能需要较长时间）
-            description: "安装依赖",
-        });
-        spinner.succeed();
-
-        // 在 lint 之前构建特定包（如 eslint-plugin）
-        if (config.build?.preLintBuild && config.build.preLintBuild.length > 0) {
-            for (const pkgName of config.build.preLintBuild) {
-                const buildSpinner = ora(`构建 ${pkgName}（lint 依赖）`).start();
-                try {
-                    if (pmCommand === "pnpm") {
-                        exec(`pnpm --filter ${pkgName} build`, {
-                            cwd: rootDir,
-                            silent: true,
-                            timeout: 30 * 60 * 1000, // 30 分钟
-                            description: `构建 ${pkgName}`,
-                        });
-                    } else if (pmCommand === "yarn") {
-                        exec(`yarn workspace ${pkgName} build`, {
-                            cwd: rootDir,
-                            silent: true,
-                            timeout: 30 * 60 * 1000, // 30 分钟
-                            description: `构建 ${pkgName}`,
-                        });
-                    } else {
-                        // npm 不支持 workspace filter，需要进入包目录构建
-                        // 尝试从已发现的包中查找，如果找不到则尝试从 packages 目录查找
-                        let pkg = packages.find((p) => p.name === pkgName);
-                        if (!pkg) {
-                            // 尝试从 packages 目录查找所有包（包括私有包）
-                            const allPackages = await discoverAllPackagesWithPnpm(rootDir);
-                            pkg = allPackages.find((p) => p.name === pkgName);
-                        }
-                        if (pkg) {
-                            exec("npm run build", {
-                                cwd: pkg.path,
-                                silent: true,
-                                timeout: 30 * 60 * 1000, // 30 分钟
-                                description: `构建 ${pkgName}`,
-                            });
-                        } else {
-                            throw new Error(`未找到包 ${pkgName}`);
-                        }
-                    }
-                    buildSpinner.succeed();
-                } catch (error: unknown) {
-                    abortPublishStep(
-                        buildSpinner,
-                        error,
-                        "build",
-                        t("buildPreLintFailed", { package: pkgName }),
-                    );
-                }
-            }
-        }
-
-        // 代码质量检查
-        if (config.checks?.lint !== false) {
-            const lintSpinner = ora("运行 lint").start();
-            try {
-                exec(`${pmCommand} lint`, {
-                    cwd: rootDir,
-                    silent: true,
-                    timeout: 10 * 60 * 1000, // 10 分钟
-                    description: "代码检查 (lint)",
-                });
-                lintSpinner.succeed();
-            } catch (error: unknown) {
-                abortPublishStep(lintSpinner, error, "lint", t("lintFailed"));
-            }
-        }
-
-        if (config.checks?.format !== false) {
-            const formatCheckSpinner = ora("代码格式检查 (Prettier)").start();
-            try {
-                exec(`${pmCommand} format:check`, {
-                    cwd: rootDir,
-                    silent: true,
-                    timeout: 5 * 60 * 1000, // 5 分钟
-                    description: "代码格式检查",
-                });
-                formatCheckSpinner.succeed();
-            } catch (firstError: unknown) {
-                const firstMsg =
-                    firstError instanceof Error ? firstError.message : String(firstError);
-                if (isMissingScriptError(firstMsg)) {
-                    try {
-                        exec(`npx prettier --check "**/*.{ts,tsx,md}"`, {
-                            cwd: rootDir,
-                            silent: true,
-                            timeout: 5 * 60 * 1000, // 5 分钟
-                            description: "代码格式检查 (Prettier)",
-                        });
-                        formatCheckSpinner.succeed();
-                    } catch (secondError: unknown) {
-                        const secondMsg =
-                            secondError instanceof Error
-                                ? secondError.message
-                                : String(secondError);
-                        const missingPrettier =
-                            isMissingScriptError(secondMsg) ||
-                            /Cannot find module|ENOENT/i.test(secondMsg);
-                        const message = missingPrettier
-                            ? t("formatCheckMissingScript")
-                            : t("formatCheckFailed");
-                        formatCheckSpinner.fail(message);
-                        throw new Error(message);
-                    }
-                } else {
-                    formatCheckSpinner.fail(t("formatCheckFailed"));
-                    throw firstError instanceof Error ? firstError : new Error(firstMsg);
-                }
-            }
-        }
-
-        if (config.checks?.typecheck !== false) {
-            const typecheckSpinner = ora("TypeScript 类型检查").start();
-            try {
-                exec(`${pmCommand} typecheck`, {
-                    cwd: rootDir,
-                    silent: true,
-                    timeout: 5 * 60 * 1000, // 5 分钟
-                    description: "TypeScript 类型检查",
-                });
-                typecheckSpinner.succeed();
-            } catch (error: unknown) {
-                abortPublishStep(typecheckSpinner, error, "typecheck", t("typecheckFailed"));
-            }
-        }
-
-        if (config.checks?.tests !== false) {
-            const testSpinner = ora("运行测试").start();
-            try {
-                exec(`${pmCommand} test`, {
-                    cwd: rootDir,
-                    silent: true,
-                    timeout: 15 * 60 * 1000, // 15 分钟（测试可能需要较长时间）
-                    description: "运行测试",
-                });
-                testSpinner.succeed();
-            } catch (error: unknown) {
-                abortPublishStep(testSpinner, error, "test", t("testFailed"));
-            }
-        }
-
-        // 执行构建步骤
-        const buildSpinner = ora("构建所有包").start();
-        await executeBuildSteps(config, context);
-        buildSpinner.succeed();
-
-        // 验证构建产物
-        const verifySpinner = ora("验证构建产物").start();
-        await verifyArtifacts(config, context);
-        verifySpinner.succeed();
-    }
-
-    // 6. 发布（如果未跳过）- 只验证构建产物存在，不执行构建
+    // 6. 发布（如果未跳过）- 发布前验证已在版本更新之前完成
     if (!options.skipPublish && config.publish?.enabled !== false) {
         // 再次过滤私有包，确保不会发布私有包
         const publicPackages = packages.filter((pkg) => !pkg.private);
@@ -672,7 +509,7 @@ export async function executePublish(
             return;
         }
 
-        // 发布前验证构建产物存在（不执行构建）
+        // 发布前再次确认构建产物（已在版本更新前构建）
         if (!options.skipBuild && config.build?.enabled !== false) {
             const verifySpinner = ora("验证构建产物").start();
             await verifyArtifacts(config, context);

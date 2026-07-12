@@ -55,20 +55,20 @@ importers:
         specifier: ^0.0.25
         version: 0.0.25(typescript@5.9.3)
       '@wsxjs/wsx-core':
-        specifier: ^0.0.25
-        version: 0.0.25(typescript@5.9.3)
+        specifier: ^0.2.0
+        version: 0.2.0(typescript@5.9.3)
       '@wsxjs/wsx-i18next':
-        specifier: ^0.0.25
-        version: 0.0.25(i18next@23.16.8)(typescript@5.9.3)
+        specifier: ^0.2.0
+        version: 0.2.0(i18next@23.16.8)(typescript@5.9.3)
       '@wsxjs/wsx-marked-components':
-        specifier: ^0.0.25
-        version: 0.0.25(typescript@5.9.3)
+        specifier: ^0.2.0
+        version: 0.2.0(typescript@5.9.3)
       '@wsxjs/wsx-press':
-        specifier: ^0.0.25
-        version: 0.0.25(typedoc-plugin-markdown@4.12.0(typedoc@0.25.13(typescript@5.9.3)))(typedoc@0.25.13(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^0.2.0
+        version: 0.2.0(typedoc-plugin-markdown@4.12.0(typedoc@0.25.13(typescript@5.9.3)))(typedoc@0.25.13(typescript@5.9.3))(typescript@5.9.3)
       '@wsxjs/wsx-router':
-        specifier: ^0.0.25
-        version: 0.0.25(typescript@5.9.3)
+        specifier: ^0.2.0
+        version: 0.2.0(typescript@5.9.3)
       i18next:
         specifier: ^23.0.0
         version: 23.16.8
@@ -2153,25 +2153,33 @@ packages:
     peerDependencies:
       typescript: '>=4.7.0'
 
-  '@wsxjs/wsx-i18next@0.0.25':
-    resolution: {integrity: sha512-cqj7DkDm+/5eHE6AaZAHUbeJJrlUyJ+UHuJC99jf8qSs3GsrwEfQBmvNeboYFOV6hrddFSPdwk3YD8c7OLaX4w==}
+  '@wsxjs/wsx-core@0.2.0':
+    resolution: {integrity: sha512-dXpTaRGx9wN1AIeOk30yKrEsdKq2hyUXafTy5zP5DV6tBubCDrCsOkUcwnI/diUVOTAm6fJ3yUDdnpPdiBRXKw==}
+    peerDependencies:
+      typescript: '>=4.7.0'
+
+  '@wsxjs/wsx-i18next@0.2.0':
+    resolution: {integrity: sha512-UOkvYxXDL6FOUsom2Zaq515Tst/NJoPVAw4k2MrVUNraFpRTgUotr1vs9cjb8OKtVnaOfr972KemeS+O2qPZ4w==}
     peerDependencies:
       i18next: ^23.0.0
 
   '@wsxjs/wsx-logger@0.0.25':
     resolution: {integrity: sha512-nk/dCX+xgFuofsKmHSrzy5lcRNTxtlN3tny3LTa2URDB5etHiUXIK78IF+3VwrS4ZCIpOXhhP3txrvT/IF2xBg==}
 
-  '@wsxjs/wsx-marked-components@0.0.25':
-    resolution: {integrity: sha512-oYSZmAw2LaQ5UPVo80QMrlvFKwk2C7mxZi6bzHeS4KKX7Xte07mfFOGC3D/HWTeZF9CRmd9YmPUlcp7FXUnMpQ==}
+  '@wsxjs/wsx-logger@0.2.0':
+    resolution: {integrity: sha512-umlTI3n6ngwYaMwV7Zf3r4WTpPFqJ8ySIW0ZpmiJl5DtziKapwmiL/uKJeFGcdmPBPU1/QTxb0cGhjcYAidDWA==}
 
-  '@wsxjs/wsx-press@0.0.25':
-    resolution: {integrity: sha512-+tsuZoRPeOH9f6EGQHbLsDIT7UdmXBfGWoVsgpvt9pjGEaA0w/vvK6lZExw4rIpBMlf7j0/ZusIPerC7OS5fJw==}
+  '@wsxjs/wsx-marked-components@0.2.0':
+    resolution: {integrity: sha512-IiDMeS3lQx6DdqbTOdDALLh43Kg2U1TEoszXYB5/+63setvPYfh80zK99489woilV1jMOXznMH9BFXmUAwV9WA==}
+
+  '@wsxjs/wsx-press@0.2.0':
+    resolution: {integrity: sha512-NCJY4oUJYSvMjrhJ2eQ2uYXBA/t+qjst+g479zrKPZKbd4jnmiqctF1YPoEOyZH1WQJFFS8Y/+zNkxDbBhuPPg==}
     peerDependencies:
       typedoc: ^0.26.0
       typedoc-plugin-markdown: ^4.0.0
 
-  '@wsxjs/wsx-router@0.0.25':
-    resolution: {integrity: sha512-aZyzOfwi0RAoZu5QdNYVLvtutbY8eWSW76vtVfkdM1YKEIMpIMtZkh7IVKKT3nAJ38NLlc4TIPLBETBnxPcCUQ==}
+  '@wsxjs/wsx-router@0.2.0':
+    resolution: {integrity: sha512-84Qjq2QrJ1L/XIC+Ioh5PMo8fuBAS6Gh+Of1DvsJHxJN0csKbaxcwF4RYjtFrgJWXvpHnQsBHEcZ+VWmhEF3gQ==}
 
   '@wsxjs/wsx-vite-plugin@0.0.25':
     resolution: {integrity: sha512-5AEimcbkZOsFeWXJtBb/2dad2ITKjavq7FY6q3zSBt/OmD0YCtpDODKn35y0ea1n79FKTA0eCbLBFfCjeraU7Q==}
@@ -7030,9 +7038,14 @@ snapshots:
       '@wsxjs/wsx-logger': 0.0.25
       typescript: 5.9.3
 
-  '@wsxjs/wsx-i18next@0.0.25(i18next@23.16.8)(typescript@5.9.3)':
+  '@wsxjs/wsx-core@0.2.0(typescript@5.9.3)':
     dependencies:
-      '@wsxjs/wsx-core': 0.0.25(typescript@5.9.3)
+      '@wsxjs/wsx-logger': 0.2.0
+      typescript: 5.9.3
+
+  '@wsxjs/wsx-i18next@0.2.0(i18next@23.16.8)(typescript@5.9.3)':
+    dependencies:
+      '@wsxjs/wsx-core': 0.2.0(typescript@5.9.3)
       i18next: 23.16.8
       i18next-browser-languagedetector: 7.2.2
       i18next-http-backend: 2.7.3
@@ -7042,21 +7055,23 @@ snapshots:
 
   '@wsxjs/wsx-logger@0.0.25': {}
 
-  '@wsxjs/wsx-marked-components@0.0.25(typescript@5.9.3)':
+  '@wsxjs/wsx-logger@0.2.0': {}
+
+  '@wsxjs/wsx-marked-components@0.2.0(typescript@5.9.3)':
     dependencies:
-      '@wsxjs/wsx-core': 0.0.25(typescript@5.9.3)
-      '@wsxjs/wsx-logger': 0.0.25
+      '@wsxjs/wsx-core': 0.2.0(typescript@5.9.3)
+      '@wsxjs/wsx-logger': 0.2.0
       marked: 12.0.2
       prismjs: 1.30.0
     transitivePeerDependencies:
       - typescript
 
-  '@wsxjs/wsx-press@0.0.25(typedoc-plugin-markdown@4.12.0(typedoc@0.25.13(typescript@5.9.3)))(typedoc@0.25.13(typescript@5.9.3))(typescript@5.9.3)':
+  '@wsxjs/wsx-press@0.2.0(typedoc-plugin-markdown@4.12.0(typedoc@0.25.13(typescript@5.9.3)))(typedoc@0.25.13(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@wsxjs/wsx-core': 0.0.25(typescript@5.9.3)
-      '@wsxjs/wsx-logger': 0.0.25
-      '@wsxjs/wsx-marked-components': 0.0.25(typescript@5.9.3)
-      '@wsxjs/wsx-router': 0.0.25(typescript@5.9.3)
+      '@wsxjs/wsx-core': 0.2.0(typescript@5.9.3)
+      '@wsxjs/wsx-logger': 0.2.0
+      '@wsxjs/wsx-marked-components': 0.2.0(typescript@5.9.3)
+      '@wsxjs/wsx-router': 0.2.0(typescript@5.9.3)
       fuse.js: 7.4.2
       marked: 12.0.2
       typedoc: 0.25.13(typescript@5.9.3)
@@ -7064,10 +7079,10 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@wsxjs/wsx-router@0.0.25(typescript@5.9.3)':
+  '@wsxjs/wsx-router@0.2.0(typescript@5.9.3)':
     dependencies:
-      '@wsxjs/wsx-core': 0.0.25(typescript@5.9.3)
-      '@wsxjs/wsx-logger': 0.0.25
+      '@wsxjs/wsx-core': 0.2.0(typescript@5.9.3)
+      '@wsxjs/wsx-logger': 0.2.0
     transitivePeerDependencies:
       - typescript
 
