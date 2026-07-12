@@ -7,7 +7,9 @@ import {
     removeOrphanMarkedShells,
 } from "../enhance-doc-code-blocks";
 
-function createMarkedCodeBlock(options: { codeAttr?: string; codeText?: string } = {}): HTMLElement {
+function createMarkedCodeBlock(
+    options: { codeAttr?: string; codeText?: string } = {},
+): HTMLElement {
     const block = document.createElement("wsx-marked-code");
 
     if (options.codeAttr) {
