@@ -8,12 +8,17 @@
     margin: 0;
     padding: 2.75rem 1.25rem 1.25rem;
     overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
     font-family: "JetBrains Mono", "Courier New", Courier, monospace;
     font-size: 0.85rem;
     line-height: 1.75;
     font-weight: 600;
     color: var(--text-primary);
     background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    box-shadow: var(--shadow-cartoon-sm);
 }
 
 .copy-code-block-btn {

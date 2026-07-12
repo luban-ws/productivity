@@ -8,6 +8,8 @@
 
 import { LightComponent, autoRegister } from "@wsxjs/wsx-core";
 import styles from "./DocSection.css?inline";
+import { scheduleEnhanceDocMarkedCodeBlocks } from "../utils/enhance-doc-code-blocks";
+import "./CopyCodeBlock.wsx";
 
 /**
  * DocSection Component
@@ -17,13 +19,25 @@ import styles from "./DocSection.css?inline";
  */
 @autoRegister({ tagName: "doc-section" })
 export default class DocSection extends LightComponent {
-    private docPageInstance: HTMLElement | null = null;
+    private docObserver: MutationObserver | null = null;
 
     constructor() {
         super({
             styles,
             styleName: "doc-section",
         });
+    }
+
+    protected onConnected(): void {
+        super.onConnected?.();
+        this.upgradeDocCodeBlocks();
+        this.observeDocContent();
+    }
+
+    protected onDisconnected(): void {
+        super.onDisconnected?.();
+        this.docObserver?.disconnect();
+        this.docObserver = null;
     }
 
     render() {
@@ -34,5 +48,36 @@ export default class DocSection extends LightComponent {
                 </div>
             </div>
         );
+    }
+
+    private observeDocContent(): void {
+        const root = this.getDocRoot();
+        if (!root) {
+            requestAnimationFrame(() => this.observeDocContent());
+            return;
+        }
+
+        this.docObserver = new MutationObserver(() => {
+            this.upgradeDocCodeBlocks();
+        });
+
+        this.docObserver.observe(root, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+        });
+    }
+
+    private getDocRoot(): ParentNode | null {
+        return this.querySelector("wsx-doc-layout") ?? document.querySelector("wsx-doc-layout");
+    }
+
+    private upgradeDocCodeBlocks(): void {
+        const root = this.getDocRoot();
+        if (!root) {
+            return;
+        }
+
+        scheduleEnhanceDocMarkedCodeBlocks(root);
     }
 }

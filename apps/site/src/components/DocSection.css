@@ -207,16 +207,22 @@ doc-section wsx-doc-page a:hover {
     text-shadow: 2px 2px 0 var(--color-gray) !important;
 }
 
-/* 代码块样式 */
-doc-section wsx-doc-page code,
-doc-section wsx-doc-page pre {
+/* 行内 code */
+doc-section wsx-doc-page wsx-marked-paragraph code {
     background-color: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
     border: 2px solid var(--border-color) !important;
     border-radius: var(--border-radius-small) !important;
-    font-family: "Courier New", Courier, monospace !important;
+    font-family: "JetBrains Mono", "Courier New", Courier, monospace !important;
     font-weight: 600 !important;
     box-shadow: var(--shadow-cartoon-sm) !important;
+}
+
+/* 文档代码块 */
+doc-section wsx-doc-page copy-code-block.doc-copy-code-block {
+    display: block;
+    margin: 1rem 0;
+    max-width: 100%;
 }
 
 /* 目录样式 */

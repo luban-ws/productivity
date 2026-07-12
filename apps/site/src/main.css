@@ -1164,17 +1164,38 @@ wsx-doc-layout .doc-main h6 {
     font-family: "Kalam", "Gloria Hallelujah", "Comic Sans MS", cursive !important;
 }
 
-/* 代码块样式 */
-wsx-doc-layout main code,
-wsx-doc-layout main pre,
-wsx-doc-layout .doc-main code,
-wsx-doc-layout .doc-main pre {
+/* 代码块样式（行内 code） */
+wsx-doc-layout main copy-code-block.doc-copy-code-block,
+wsx-doc-layout .doc-main copy-code-block.doc-copy-code-block {
+    display: block;
+    margin: 1rem 0;
+}
+
+wsx-doc-layout main wsx-marked-paragraph code,
+wsx-doc-layout .doc-main wsx-marked-paragraph code {
     background-color: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
     border: 2px solid var(--border-color) !important;
     border-radius: var(--border-radius-small) !important;
-    font-family: "Courier New", Courier, monospace !important;
+    font-family: "JetBrains Mono", "Courier New", Courier, monospace !important;
     font-weight: 700 !important;
+}
+
+wsx-doc-layout main wsx-marked-code pre,
+wsx-doc-layout main wsx-marked-code code,
+wsx-doc-layout .doc-main wsx-marked-code pre,
+wsx-doc-layout .doc-main wsx-marked-code code {
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    font-weight: inherit !important;
+    background: transparent !important;
+}
+
+wsx-doc-layout main wsx-marked-code pre,
+wsx-doc-layout .doc-main wsx-marked-code pre {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
 }
 
 /* 强制移除所有红色/粉红色背景 - 覆盖 wsx-press 默认样式 */
@@ -1340,16 +1361,29 @@ wsx-doc-page a:hover {
     text-shadow: 2px 2px 0 var(--color-gray) !important;
 }
 
-/* 代码块 */
-wsx-doc-page code,
-wsx-doc-page pre {
+/* 行内 code */
+wsx-doc-page wsx-marked-paragraph code {
     background-color: var(--bg-secondary) !important;
     color: var(--text-primary) !important;
     border: 2px solid var(--border-color) !important;
     border-radius: var(--border-radius-small) !important;
-    font-family: "Courier New", Courier, monospace !important;
+    font-family: "JetBrains Mono", "Courier New", Courier, monospace !important;
     font-weight: 600 !important;
     box-shadow: var(--shadow-cartoon-sm) !important;
+}
+
+wsx-doc-page wsx-marked-code pre,
+wsx-doc-page wsx-marked-code code {
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    font-weight: inherit !important;
+    background: transparent !important;
+}
+
+wsx-doc-page wsx-marked-code pre {
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
 }
 
 /* 目录 */
