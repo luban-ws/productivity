@@ -13,6 +13,7 @@ import "@wsxjs/wsx-base-components";
 import "./i18n";
 // Initialize error handler
 import { ErrorHandler } from "./utils/error-handler";
+import "./press-base";
 import { normalizeSitePathname } from "./sitePaths";
 import "./App.wsx";
 

@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 import { copyFileSync, cpSync } from "fs";
 import { wsxPress } from "@wsxjs/wsx-press/node";
 import { REPO_SLUG, resolveSiteBase } from "./vite-plugins/resolveSiteBase";
-import { wsxPressBasePlugin } from "./vite-plugins/wsxPressBasePlugin";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteBase = resolveSiteBase(REPO_SLUG);
@@ -61,7 +60,6 @@ export default defineConfig({
             docsRoot: path.resolve(__dirname, "public/docs"),
             outputDir: path.resolve(__dirname, ".wsx-press"),
         }),
-        wsxPressBasePlugin(siteBase),
         copy404Plugin(),
         copyWsxPressPlugin(),
     ],
