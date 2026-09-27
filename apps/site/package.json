@@ -1,6 +1,6 @@
 {
   "name": "@luban-ws/productivity",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Luban WS Productivity Site",
   "type": "module",
   "private": true,
