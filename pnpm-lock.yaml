@@ -226,7 +226,7 @@ importers:
   packages/@systembug/qingniao:
     dependencies:
       '@changesets/cli':
-        specifier: ^2.0.0
+        specifier: ^2.0.0 || ^3.0.0
         version: 2.29.8(@types/node@18.19.130)
       '@inkjs/ui':
         specifier: ^2.0.0
