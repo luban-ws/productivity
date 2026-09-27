@@ -8,6 +8,8 @@ description: "零配置优先的通用发布工具，专为 monorepo 项目设�
 # 青鸟 - 发布工具
 
 > **AI：** `Install @systembug/qingniao @changesets/cli, add "release":"qingniao" to package.json, run pnpm release` — [复制](/docs/tools/ai-prompt)
+>
+> **Agent 升版本：** 把 [青鸟 Agent 提示词](/docs/tools/ai-prompt) 里「青鸟（给其他 Agent 升版本）」整段交给代理。命令是 `qingniao --json --yes --skip-publish --skip-build`。
 
 🌌 零配置优先的通用发布工具，专为 monorepo 项目设计
 

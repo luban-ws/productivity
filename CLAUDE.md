@@ -499,8 +499,6 @@ Ma-Liang（马良神笔）引擎是统一的图像处理架构，采用**神笔�
 - **类型安全** - 完整TypeScript类型定义，严格类型检查
 - **测试覆盖** - Jest单元测试 + 端到端集成测试
 
-**文档参考** - 详见 `docs/rfc/0031-maliang-image-processing-engine.md`
-
 ## Service-Engine架构设计原则 (2025-09-29)
 
 ### 从适配器注册架构重构中学到的核心设计原则
@@ -1846,9 +1844,9 @@ describe("ModuleName", () => {
 
 ### RFC 文件命名与编号
 
-- **格式**: `docs/rfc/NNNN-<short-name>.md`
+- **格式**: `.spec/rfc/NNNN-<short-name>.md`
 - **编号**: 4 位数字，从 `0001` 开始递增
-- **示例**: `0001-state-machine-dsl.md`, `0002-dsl-ide-integration.md`
+- **示例**: `0001-universal-publish-tool.md`, `0007-qingniao-publish-gaps.md`
 
 ### RFC 必须包含的章节
 

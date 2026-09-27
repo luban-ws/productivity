@@ -56,3 +56,6 @@ __pycache__/
 **/__pycache__/
 *.py[cod]
 *.pyo
+
+# ReasonGraph local state (per-machine)
+.reasongraph/state/

@@ -67,7 +67,9 @@ npm install --save-dev @systembug/qingniao
 
 #### 可选依赖
 
-如果使用 changeset 进行版本管理，需要单独安装 `@changesets/cli`：
+如果使用 changeset 进行版本管理，需要单独安装 `@changesets/cli`（2 或 3）：
+
+Changesets 3 需要 Node.js `^22.11 || ^24 || >=26`。没有待发布 changeset 时，`changeset version` 的退出码 1 视为跳过版本更新。私有包默认不再升版本；要保持 v2 行为，在 `.changeset/config.json` 里设置 `"privatePackages": { "version": true, "tag": false }`。
 
 ```bash
 pnpm add -D @changesets/cli
@@ -249,7 +251,7 @@ export default config;
 
 ## 📖 相关文档
 
-- [RFC 0005: 青鸟通用发布工具设计规范](../../../docs/rfc/0005-universal-publish-tool.md)
+- [RFC 0001: 青鸟通用发布工具设计规范](../../../.spec/rfc/0001-universal-publish-tool.md)
 - [零配置指南](./docs/zero-config.md)
 - [配置参考](./docs/configuration.md)
 - [API 文档](./docs/api.md)

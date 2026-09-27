@@ -1,0 +1,73 @@
+{
+  "revision": "7ce390cc3318d2db98f6b822192d68edf47a5433",
+  "architectureBinding": {
+    "mapId": "productivity-tools",
+    "mapRevision": 1,
+    "sourceRevision": "7ce390cc3318d2db98f6b822192d68edf47a5433"
+  },
+  "scope": "部分审阅：根目录通用协作、测试声明、RFC 状态规则，以及 UI 技能的适用条件。RFC 正文作为参考资料，不纳入约束图；其余目录级规则与引用缺口未完成语义审阅。",
+  "groups": [
+    {
+      "sourcePath": "AGENTS.md",
+      "category": "delivery",
+      "topic": { "id": "collaboration", "name": "协作与交付" },
+      "rules": [
+        {
+          "id": "preserve-staged-work",
+          "name": "保护用户暂存工作",
+          "anchor": "2. **用户的staged changes是神圣的，绝对不能删除**",
+          "condition": "执行可能改变 Git 工作区或暂存区的操作前",
+          "explanation": "先确认工作区状态；任何操作都不得丢弃用户暂存内容。若操作会改动这些内容，先取得明确授权并保留可恢复状态。",
+          "verification": "检查操作前后的 git status 与 diff，确认用户暂存和未提交改动仍在。"
+        },
+        {
+          "id": "honest-rfc-status",
+          "name": "RFC 状态反映实际进度",
+          "anchor": "RFC状态必须诚实反映实际完成情况",
+          "condition": "更新 RFC 状态或归档 RFC 时",
+          "explanation": "只有所有对应任务真实完成后才能标记完成；明确区分已完成和未完成工作。",
+          "verification": "对照 RFC 验收项、任务追踪和实现证据核对状态。"
+        },
+        {
+          "id": "evidence-for-test-claims",
+          "name": "测试结论必须附证据",
+          "anchor": "绝不无证据声称\"测试通过\"",
+          "condition": "报告测试结果时",
+          "explanation": "给出实际运行的命令、通过与失败数量及错误详情；没有运行测试时不得宣称通过。",
+          "verification": "核对命令输出与最终报告中的测试数量、状态和失败信息。"
+        }
+      ]
+    },
+    {
+      "sourcePath": "AGENTS.md",
+      "category": "lifecycle",
+      "topic": { "id": "debugging", "name": "问题诊断" },
+      "rules": [
+        {
+          "id": "diagnose-before-fix",
+          "name": "先查根因再修复",
+          "anchor": "花时间彻底理解根本原因",
+          "condition": "处理错误或行为异常时",
+          "explanation": "沿数据流追查实际原因后再改动，避免只消除报错表象。",
+          "verification": "记录复现证据，并确认改动针对已验证的根因。"
+        }
+      ]
+    },
+    {
+      "sourcePath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "category": "interfaces",
+      "topic": { "id": "skill-scope", "name": "条件技能适用范围" },
+      "rules": [
+        {
+          "id": "ui-skill-conditional",
+          "modules": ["site"],
+          "name": "UI 技能按任务触发",
+          "anchor": "- Designing new UI components or pages",
+          "condition": "设计新 UI、页面或进行 UX 审查时",
+          "explanation": "该技能仅在 UI/UX 相关任务触发；普通仓库分析不自动继承其设计规则。",
+          "verification": "确认任务属于技能声明的 UI/UX 范围后再应用其细则。"
+        }
+      ]
+    }
+  ]
+}

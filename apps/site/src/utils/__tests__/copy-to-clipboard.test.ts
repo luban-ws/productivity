@@ -4,6 +4,7 @@ import {
     AI_PROMPT_ONE_LINER,
     getAiPromptFull,
     getAiPromptOneLiner,
+    getAiPromptQingniao,
 } from "../../data/ai-prompt";
 import { copyToClipboard } from "../../utils/copy-to-clipboard";
 
@@ -19,6 +20,11 @@ describe("ai-prompt data", () => {
         expect(getAiPromptOneLiner("ja")).toContain("monorepo");
         expect(getAiPromptFull("ja")).toContain("@systembug/pangu");
         expect(getAiPromptFull("ja")).toContain("pnpm dev dev は禁止");
+        expect(getAiPromptQingniao("en")).toContain(
+            "qingniao --json --yes --skip-publish --skip-build",
+        );
+        expect(getAiPromptQingniao("zh")).toContain("不要 npm publish");
+        expect(getAiPromptQingniao("fr")).toContain("--skip-publish");
     });
 });
 

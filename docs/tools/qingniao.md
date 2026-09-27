@@ -353,7 +353,7 @@ export default {
 
 ## 📚 相关文档
 
-- [RFC 0001: 青鸟通用发布工具设计规范](../rfc/0001-universal-publish-tool.md)
+- [RFC 0001: 青鸟通用发布工具设计规范](../../.spec/rfc/0001-universal-publish-tool.md)
 
 ---
 

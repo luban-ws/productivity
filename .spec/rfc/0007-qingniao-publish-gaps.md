@@ -22,23 +22,23 @@
 
 ## Children
 
-| RFC | Concern |
-|-----|---------|
-| [0022](completed/0022-run-registry-login.md) | Run registry login when publish is unauthenticated |
-| [0021](0021-qingniao-config-web-ui.md) | Web UI for qingniao publish config |
-| [0020](0020-qingniao-ci-templates.md) | Ship CI templates that run qingniao |
-| [0019](0019-package-manager-path-fallback.md) | Detect the package manager from PATH |
-| [0018](0018-turbo-json-tasks.md) | Run Turbo using tasks declared in turbo.json |
-| [0017](0017-dependency-publish-order.md) | Publish packages in dependency order |
-| [0016](0016-replace-workspace-protocols.md) | Replace workspace protocols before publish |
-| [0015](0015-sync-workspace-dependency-versions.md) | Sync workspace dependency versions on bump |
-| [0014](0014-publish-otp-prompt.md) | Prompt for OTP when otpRequired is set |
-| [0013](0013-publish-access-flag.md) | Honor publish.access for scoped packages |
-| [0012](0012-publish-registry-flag.md) | Pass publish.registry to the publish command |
-| [0011](0011-yarn-npm-package-discovery.md) | Discover yarn and npm workspace packages |
-| [0010](0010-qingniao-config-validation.md) | Validate qingniao config against a schema |
-| [0009](0009-qingniao-plugin-loader.md) | Load third-party qingniao plugins |
-| [0008](0008-wire-publish-hooks.md) | Wire publish hooks into the executor |
+| RFC                                                | Concern                                            |
+| -------------------------------------------------- | -------------------------------------------------- |
+| [0022](completed/0022-run-registry-login.md)       | Run registry login when publish is unauthenticated |
+| [0021](0021-qingniao-config-web-ui.md)             | Web UI for qingniao publish config                 |
+| [0020](0020-qingniao-ci-templates.md)              | Ship CI templates that run qingniao                |
+| [0019](0019-package-manager-path-fallback.md)      | Detect the package manager from PATH               |
+| [0018](0018-turbo-json-tasks.md)                   | Run Turbo using tasks declared in turbo.json       |
+| [0017](0017-dependency-publish-order.md)           | Publish packages in dependency order               |
+| [0016](0016-replace-workspace-protocols.md)        | Replace workspace protocols before publish         |
+| [0015](0015-sync-workspace-dependency-versions.md) | Sync workspace dependency versions on bump         |
+| [0014](0014-publish-otp-prompt.md)                 | Prompt for OTP when otpRequired is set             |
+| [0013](0013-publish-access-flag.md)                | Honor publish.access for scoped packages           |
+| [0012](0012-publish-registry-flag.md)              | Pass publish.registry to the publish command       |
+| [0011](0011-yarn-npm-package-discovery.md)         | Discover yarn and npm workspace packages           |
+| [0010](0010-qingniao-config-validation.md)         | Validate qingniao config against a schema          |
+| [0009](0009-qingniao-plugin-loader.md)             | Load third-party qingniao plugins                  |
+| [0008](0008-wire-publish-hooks.md)                 | Wire publish hooks into the executor               |
 
 ## Acceptance
 

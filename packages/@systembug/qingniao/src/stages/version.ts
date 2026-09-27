@@ -4,7 +4,8 @@
 
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { join } from "path";
-import { exec, execSilent } from "../utils/exec";
+import { execSilent } from "../utils/exec";
+import { runChangesetVersion } from "./changeset-version";
 import type { Context, PublishConfig } from "../types";
 import {
     discoverAllPackagesWithPnpm,
@@ -180,12 +181,10 @@ export async function bumpVersionWithChangeset(
               : "npx";
 
     const command = config.changeset?.versionCommand || `${pmCommand} changeset version`;
-
-    exec(command, {
-        cwd: rootDir,
-        timeout: 5 * 60 * 1000, // 5 分钟
-        description: "更新版本号 (changeset version)",
-    });
+    const versionRun = runChangesetVersion(command, rootDir);
+    if (versionRun.kind === "empty") {
+        return getCurrentVersion(rootDir);
+    }
 
     // changeset 更新后，获取所有已更新包的版本号
     // 通常所有包应该使用相同的版本号，我们取第一个已更新包的版本

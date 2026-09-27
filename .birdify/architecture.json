@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 1,
+  "language": "zh",
+  "mapId": "productivity-tools",
+  "revision": 1,
+  "project": {
+    "id": "luban-productivity",
+    "name": "鲁班工坊生产力工具集",
+    "revision": "7ce390cc3318d2db98f6b822192d68edf47a5433"
+  },
+  "constraintDiscovery": {
+    "checkedAt": "2026-09-27T18:22:05.356Z",
+    "checkedPaths": [
+      "AGENTS.md",
+      "CLAUDE.md",
+      "README.md",
+      "package.json",
+      "pnpm-workspace.yaml",
+      "turbo.json",
+      "apps/site/package.json",
+      "apps/site/src/main.ts",
+      "apps/site/src/data/tools.ts",
+      "packages/@systembug/pangu/package.json",
+      "packages/@systembug/pangu/src/cli.ts",
+      "packages/@systembug/pangu/src/process-utils.ts",
+      "packages/@systembug/qingniao/package.json",
+      "packages/@systembug/qingniao/src/stages/publish.ts",
+      "packages/@systembug/qingniao/src/i18n/translator.ts",
+      "packages/@systembug/wenxin/package.json",
+      "packages/@systembug/wenxin/src/index.ts",
+      "packages/@systembug/diting/package.json",
+      "packages/@systembug/diting/src/index.ts",
+      "packages/@systembug/tongyu/package.json",
+      "packages/@systembug/tongyu/src/resolve-locale.ts"
+    ],
+    "uninspectedPaths": [
+      ".claude/skills/ui-ux-pro-max/design-system",
+      ".cursor/skills/ui-ux-pro-max/design-system"
+    ]
+  },
+  "modules": [
+    {
+      "id": "workspace",
+      "name": "工作区与任务编排",
+      "kind": "local",
+      "role": "generic",
+      "roleAssessment": {
+        "basis": "out-of-taxonomy",
+        "note": "负责 monorepo 包发现、Turbo 任务和根级 CLI 入口，不属于单一应用端或服务端职责。"
+      },
+      "responsibility": "通过 pnpm workspace 与 Turborepo 管理应用和工具包；根脚本把开发入口交给盘古、发布入口交给青鸟。",
+      "ownership": [
+        { "kind": "file", "path": "package.json" },
+        { "kind": "file", "path": "pnpm-workspace.yaml" },
+        { "kind": "file", "path": "turbo.json" }
+      ],
+      "evidence": [
+        { "path": "package.json", "line": 5, "endLine": 17, "note": "根级 build、test、lint、typecheck、dev、release 命令。" },
+        { "path": "pnpm-workspace.yaml", "line": 1, "endLine": 4, "note": "声明 apps 与 packages 工作区。" },
+        { "path": "turbo.json", "line": 3, "endLine": 20, "note": "定义跨包构建、测试、检查和开发任务。" }
+      ],
+      "status": "supported",
+      "openQuestions": [],
+      "layout": { "row": 0, "column": 2 }
+    },
+    {
+      "id": "site",
+      "name": "工具目录与文档站",
+      "kind": "local",
+      "role": "frontend",
+      "responsibility": "提供鲁班工坊工具目录、多语言介绍和在线快速入门文档。",
+      "ownership": [{ "kind": "directory", "path": "apps/site" }],
+      "evidence": [
+        { "path": "apps/site/src/main.ts", "line": 1, "endLine": 18, "note": "WSX 网站入口，初始化路由、国际化和应用组件。" },
+        { "path": "apps/site/src/data/tools.ts", "line": 23, "endLine": 28, "note": "生成站内工具快速入门路径并定义工具目录数据。" },
+        { "path": "apps/site/src/data/tools.ts", "line": 107, "endLine": 150, "note": "目录提供盘古、谛听等工具说明和仓库链接。" }
+      ],
+      "status": "supported",
+      "openQuestions": [],
+      "layout": { "row": 0, "column": 0 }
+    },
+    {
+      "id": "pangu",
+      "name": "盘古开发启动 CLI",
+      "kind": "local",
+      "role": "backend",
+      "responsibility": "读取 demo 配置，展示交互菜单，并在目标 workspace 包中启动 dev 脚本。",
+      "ownership": [{ "kind": "directory", "path": "packages/@systembug/pangu" }],
+      "evidence": [
+        { "path": "packages/@systembug/pangu/src/cli.ts", "line": 34, "endLine": 74, "note": "选择 demo 后解析包目录、读取启动命令并生成子进程。" },
+        { "path": "packages/@systembug/pangu/src/process-utils.ts", "line": 21, "endLine": 45, "note": "通过包管理器解析目标 workspace 包目录。" },
+        { "path": "packages/@systembug/pangu/package.json", "line": 22, "endLine": 31, "note": "发布 CLI bin，并依赖通语。" }
+      ],
+      "status": "supported",
+      "openQuestions": [],
+      "layout": { "row": 0, "column": 1 }
+    },
+    {
+      "id": "qingniao",
+      "name": "青鸟发布 CLI",
+      "kind": "local",
+      "role": "backend",
+      "responsibility": "检测并执行 monorepo 版本、构建、认证和包发布流程，支持 CLI 与 Agent JSONL 协议。",
+      "ownership": [{ "kind": "directory", "path": "packages/@systembug/qingniao" }],
+      "evidence": [
+        { "path": "packages/@systembug/qingniao/src/cli.ts", "line": 1, "endLine": 21, "note": "注册青鸟 CLI 命令与 JSON 报告器。" },
+        { "path": "packages/@systembug/qingniao/src/stages/publish.ts", "line": 76, "endLine": 94, "note": "按包管理器选择 publish 命令并发布包。" },
+        { "path": "packages/@systembug/qingniao/package.json", "line": 50, "endLine": 59, "note": "依赖谛听与通语。" }
+      ],
+      "status": "supported",
+      "openQuestions": [],
+      "layout": { "row": 1, "column": 1 }
+    },
+    {
+      "id": "wenxin",
+      "name": "文心 API 文档生成器",
+      "kind": "local",
+      "role": "backend",
+      "responsibility": "加载并验证配置，按 JSDoc、TypeScript 或混合模式生成 API 文档。",
+      "ownership": [{ "kind": "directory", "path": "packages/@systembug/wenxin" }],
+      "evidence": [
+        { "path": "packages/@systembug/wenxin/src/index.ts", "line": 17, "endLine": 82, "note": "公开 generateDocs，调度 JSDoc 与 TypeScript 文档处理器。" },
+        { "path": "packages/@systembug/wenxin/package.json", "line": 2, "endLine": 12, "note": "定义 API 文档生成器包及 CLI 产物。" }
+      ],
+      "status": "supported",
+      "openQuestions": [],
+      "layout": { "row": 0, "column": 3 }
+    },
+    {
+      "id": "diting",
+      "name": "谛听日志库",
+      "kind": "local",
+      "role": "generic",
+      "roleAssessment": {
+        "basis": "out-of-taxonomy",
+        "note": "是跨应用共享日志库；角色分类没有共享库类别，不能仅因运行在 Node.js 就标成后端服务。"
+      },
+      "responsibility": "提供可配置日志级别、结构化输出和可插拔传输器，供工具包记录日志。",
+      "ownership": [{ "kind": "directory", "path": "packages/@systembug/diting" }],
+      "evidence": [
+        { "path": "packages/@systembug/diting/src/index.ts", "line": 1, "endLine": 58, "note": "定义日志级别、日志条目、传输器和 Logger 配置。" },
+        { "path": "packages/@systembug/diting/package.json", "line": 50, "endLine": 55, "note": "以 chalk 与 pino 为运行依赖。" }
+      ],
+      "status": "supported",
+      "openQuestions": [],
+      "layout": { "row": 1, "column": 2 }
+    },
+    {
+      "id": "tongyu",
+      "name": "通语 locale 解析库",
+      "kind": "local",
+      "role": "generic",
+      "roleAssessment": {
+        "basis": "out-of-taxonomy",
+        "note": "是共享 locale 解析能力库；角色分类没有基础库类别。"
+      },
+      "responsibility": "读取环境变量或操作系统 locale，并规范化为 CLI 支持语言；不拥有各工具的文案目录。",
+      "ownership": [{ "kind": "directory", "path": "packages/@systembug/tongyu" }],
+      "evidence": [
+        { "path": "packages/@systembug/tongyu/src/resolve-locale.ts", "line": 21, "endLine": 54, "note": "按覆盖变量优先级读取 locale，再回退到 os-locale。" },
+        { "path": "packages/@systembug/tongyu/package.json", "line": 1, "endLine": 22, "note": "定义通语包和 ESM/CJS 导出。" }
+      ],
+      "status": "supported",
+      "openQuestions": [],
+      "layout": { "row": 0, "column": 4 }
+    },
+    {
+      "id": "npm-registry",
+      "name": "NPM Registry",
+      "kind": "external",
+      "role": "generic",
+      "roleAssessment": {
+        "basis": "out-of-taxonomy",
+        "note": "这是包发布目标；模块角色分类没有外部服务类别。"
+      },
+      "responsibility": "接收青鸟通过对应包管理器提交的包发布请求。",
+      "ownership": [],
+      "evidence": [],
+      "status": "supported",
+      "openQuestions": [],
+      "layout": { "row": 1, "column": 4 }
+    }
+  ],
+  "relationships": [
+    {
+      "id": "workspace-site",
+      "from": "workspace",
+      "to": "site",
+      "label": "Turbo 调度站点任务",
+      "evidence": [
+        { "path": "package.json", "line": 5, "endLine": 11, "note": "根脚本把构建、测试、lint 和类型检查交给 Turbo。" },
+        { "path": "turbo.json", "line": 3, "endLine": 18, "note": "声明跨 workspace 的任务及依赖顺序。" }
+      ],
+      "kind": "control",
+      "visibility": "overview",
+      "status": "supported",
+      "openQuestions": []
+    },
+    {
+      "id": "workspace-pangu",
+      "from": "workspace",
+      "to": "pangu",
+      "label": "根 dev 命令调用盘古",
+      "evidence": [
+        { "path": "package.json", "line": 15, "endLine": 16, "note": "根 dev 脚本运行 pangu，release 脚本运行 qingniao。" },
+        { "path": "package.json", "line": 24, "endLine": 27, "note": "根开发依赖声明本地盘古和青鸟包。" }
+      ],
+      "kind": "request",
+      "visibility": "overview",
+      "status": "supported",
+      "openQuestions": []
+    },
+    {
+      "id": "workspace-qingniao",
+      "from": "workspace",
+      "to": "qingniao",
+      "label": "根 release 命令调用青鸟",
+      "evidence": [
+        { "path": "package.json", "line": 15, "endLine": 16, "note": "根 dev 脚本运行 pangu，release 脚本运行 qingniao。" },
+        { "path": "package.json", "line": 24, "endLine": 27, "note": "根开发依赖声明本地盘古和青鸟包。" }
+      ],
+      "kind": "request",
+      "visibility": "overview",
+      "status": "supported",
+      "openQuestions": []
+    },
+    {
+      "id": "workspace-wenxin",
+      "from": "workspace",
+      "to": "wenxin",
+      "label": "pnpm workspace 包成员",
+      "evidence": [
+        { "path": "pnpm-workspace.yaml", "line": 1, "endLine": 4, "note": "工作区 glob 纳入 packages/* 与 packages/@systembug/*。" }
+      ],
+      "kind": "dependency",
+      "visibility": "detail",
+      "status": "supported",
+      "openQuestions": []
+    },
+    {
+      "id": "workspace-diting",
+      "from": "workspace",
+      "to": "diting",
+      "label": "pnpm workspace 包成员",
+      "evidence": [
+        { "path": "pnpm-workspace.yaml", "line": 1, "endLine": 4, "note": "工作区 glob 纳入 packages/* 与 packages/@systembug/*。" }
+      ],
+      "kind": "dependency",
+      "visibility": "detail",
+      "status": "supported",
+      "openQuestions": []
+    },
+    {
+      "id": "workspace-tongyu",
+      "from": "workspace",
+      "to": "tongyu",
+      "label": "pnpm workspace 包成员",
+      "evidence": [
+        { "path": "pnpm-workspace.yaml", "line": 1, "endLine": 4, "note": "工作区 glob 纳入 packages/* 与 packages/@systembug/*。" }
+      ],
+      "kind": "dependency",
+      "visibility": "detail",
+      "status": "supported",
+      "openQuestions": []
+    },
+    {
+      "id": "pangu-tongyu",
+      "from": "pangu",
+      "to": "tongyu",
+      "label": "读取共享系统语言偏好",
+      "evidence": [
+        { "path": "packages/@systembug/pangu/package.json", "line": 24, "endLine": 29, "note": "盘古声明对通语的 workspace 依赖。" },
+        { "path": "packages/@systembug/pangu/src/i18n/translator.ts", "line": 1, "endLine": 8, "note": "盘古 translator 调用通语解析 locale。" }
+      ],
+      "kind": "dependency",
+      "visibility": "overview",
+      "status": "supported",
+      "openQuestions": []
+    },
+    {
+      "id": "qingniao-tongyu",
+      "from": "qingniao",
+      "to": "tongyu",
+      "label": "读取共享系统语言偏好",
+      "evidence": [
+        { "path": "packages/@systembug/qingniao/package.json", "line": 50, "endLine": 54, "note": "青鸟声明对通语的 workspace 依赖。" },
+        { "path": "packages/@systembug/qingniao/src/i18n/translator.ts", "line": 1, "endLine": 6, "note": "青鸟 translator 调用通语解析 locale。" }
+      ],
+      "kind": "dependency",
+      "visibility": "overview",
+      "status": "supported",
+      "openQuestions": []
+    },
+    {
+      "id": "qingniao-diting",
+      "from": "qingniao",
+      "to": "diting",
+      "label": "使用共享日志能力",
+      "evidence": [
+        { "path": "packages/@systembug/qingniao/package.json", "line": 50, "endLine": 54, "note": "青鸟声明对谛听的 workspace 依赖。" }
+      ],
+      "kind": "dependency",
+      "visibility": "overview",
+      "status": "supported",
+      "openQuestions": []
+    },
+    {
+      "id": "qingniao-npm",
+      "from": "qingniao",
+      "to": "npm-registry",
+      "label": "发布包到 NPM Registry",
+      "evidence": [
+        { "path": "packages/@systembug/qingniao/src/stages/publish.ts", "line": 76, "endLine": 94, "note": "按 pnpm、yarn 或 npm 构建发布命令。" }
+      ],
+      "kind": "request",
+      "visibility": "overview",
+      "status": "supported",
+      "openQuestions": []
+    }
+  ]
+}
