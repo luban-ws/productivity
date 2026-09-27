@@ -111,6 +111,23 @@ qn
 - 从 package.json 推断构建步骤
 - 自动处理版本管理和发布
 
+### Agent / CI 使用
+
+`--json` 输出 JSON Lines：stdout 只包含机器事件；原始命令诊断写入 stderr。Agent 不应解析人类文本。
+
+```bash
+# 无副作用：发现包和将执行的步骤
+qingniao plan --json
+
+# 无副作用：检查认证、Git、scripts 和 changeset
+qingniao doctor --json
+
+# 需要明确授权；没有 --yes 会以退出码 3 停止
+qingniao --json --yes --dry-run
+```
+
+每次 JSON 命令以单个 `result` 事件结束。检查 `exitCode` 与 `status`；错误事件提供稳定 `code` 和可读 `message`。
+
 ### 最小配置示例
 
 ```json

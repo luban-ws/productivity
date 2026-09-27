@@ -4,25 +4,34 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { EventEmitter } from "events";
+import { mkdtempSync, rmSync, writeFileSync } from "fs";
+import { tmpdir } from "os";
+import { delimiter, join } from "path";
 import type { ChildProcess, SpawnSyncReturns } from "child_process";
 
 const spawnSyncMock = vi.hoisted(() => vi.fn());
+const spawnMock = vi.hoisted(() => vi.fn());
 
 vi.mock("child_process", async (importOriginal) => {
     const actual = await importOriginal<typeof import("child_process")>();
     return {
         ...actual,
+        spawn: spawnMock,
         spawnSync: spawnSyncMock,
     };
 });
 
 import {
+    appendDevArgs,
     attachGracefulShutdown,
+    buildDevEnv,
     buildPackageDevArgs,
     EXIT_CODE_SIGINT,
     EXIT_CODE_SIGTERM,
     isGracefulExitCode,
+    readDevScript,
     resolvePackageDirectory,
+    spawnDevScript,
 } from "../src/process-utils.js";
 import { getShutdownMessage } from "../src/messages.js";
 
@@ -47,6 +56,7 @@ function createSpawnSyncResult(
 describe("process-utils", () => {
     beforeEach(() => {
         spawnSyncMock.mockReset();
+        spawnMock.mockReset();
     });
 
     describe("isGracefulExitCode", () => {
@@ -76,6 +86,92 @@ describe("process-utils", () => {
                 "--port",
                 "3000",
             ]);
+        });
+    });
+
+    describe("dev script", () => {
+        let root: string;
+
+        beforeEach(() => {
+            root = mkdtempSync(join(tmpdir(), "pangu-dev-script-"));
+        });
+
+        afterEach(() => {
+            rmSync(root, { recursive: true, force: true });
+        });
+
+        it("应读取 dev 脚本", () => {
+            writeFileSync(join(root, "package.json"), JSON.stringify({ scripts: { dev: "vite" } }));
+            expect(readDevScript(root)).toBe("vite");
+        });
+
+        it("缺少 package.json 时应报没有 dev 脚本", () => {
+            expect(() => readDevScript(root)).toThrow(/dev/);
+        });
+
+        it("非法 JSON 时应报无法读取", () => {
+            writeFileSync(join(root, "package.json"), "{");
+            expect(() => readDevScript(root)).toThrow(/dev/);
+        });
+
+        it("dev 不是字符串或空白时应报没有脚本", () => {
+            writeFileSync(join(root, "package.json"), JSON.stringify({ scripts: { dev: 1 } }));
+            expect(() => readDevScript(root)).toThrow(/dev/);
+
+            writeFileSync(join(root, "package.json"), JSON.stringify({ scripts: { dev: "  " } }));
+            expect(() => readDevScript(root)).toThrow(/dev/);
+
+            writeFileSync(join(root, "package.json"), JSON.stringify({}));
+            expect(() => readDevScript(root)).toThrow(/dev/);
+        });
+
+        it("无额外参数时保持原脚本，有参数时接到后面", () => {
+            expect(appendDevArgs("vite", [])).toBe("vite");
+            expect(appendDevArgs("vite", ["--port", "3000"])).toBe("vite --port 3000");
+        });
+
+        it("应把包和仓库的 .bin 放到 PATH 前面", () => {
+            const env = buildDevEnv(join(root, "pkg"), root, { PATH: "/usr/bin" });
+            expect(env.PATH).toBe(
+                [
+                    join(root, "pkg", "node_modules", ".bin"),
+                    join(root, "node_modules", ".bin"),
+                    "/usr/bin",
+                ].join(delimiter),
+            );
+        });
+
+        it("原 PATH 为空时只保留 .bin", () => {
+            const env = buildDevEnv(root, root, {});
+            expect(env.PATH).toBe(
+                [join(root, "node_modules", ".bin"), join(root, "node_modules", ".bin")].join(
+                    delimiter,
+                ),
+            );
+        });
+
+        it("应通过 shell 直接启动脚本", () => {
+            const child = new EventEmitter();
+            spawnMock.mockReturnValue(child);
+            const env = { PATH: "/bin" };
+
+            expect(spawnDevScript("vite", root, env)).toBe(child);
+            expect(spawnMock).toHaveBeenCalledWith("vite", {
+                cwd: root,
+                env,
+                shell: true,
+                stdio: "inherit",
+                detached: true,
+            });
+        });
+
+        it("Windows 上不脱离进程组", () => {
+            spawnMock.mockReturnValue(new EventEmitter());
+            spawnDevScript("vite", root, { PATH: "/bin" }, "win32");
+            expect(spawnMock).toHaveBeenCalledWith(
+                "vite",
+                expect.objectContaining({ detached: false }),
+            );
         });
     });
 
@@ -138,6 +234,41 @@ describe("process-utils", () => {
             process.removeAllListeners("SIGINT");
             process.removeAllListeners("SIGTERM");
             vi.restoreAllMocks();
+        });
+
+        it("Ctrl+C 应把 SIGINT 发给子进程组，而不是让终端直接打到脚本", () => {
+            childProcess.pid = 4242;
+            const killSpy = vi.spyOn(process, "kill").mockImplementation(() => true);
+
+            attachGracefulShutdown(childProcess, { message: EN_SHUTDOWN, platform: "darwin" });
+            process.emit("SIGINT");
+
+            expect(killSpy).toHaveBeenCalledWith(-4242, "SIGINT");
+            expect(childProcess.kill).not.toHaveBeenCalled();
+            expect(logSpy).toHaveBeenCalledWith(EN_SHUTDOWN);
+        });
+
+        it("进程组已经结束时应退回 kill 单个子进程", () => {
+            childProcess.pid = 4242;
+            vi.spyOn(process, "kill").mockImplementation(() => {
+                throw new Error("ESRCH");
+            });
+
+            attachGracefulShutdown(childProcess, { platform: "linux" });
+            process.emit("SIGTERM");
+
+            expect(childProcess.kill).toHaveBeenCalledWith("SIGTERM");
+        });
+
+        it("Windows 上 Ctrl+C 只 kill 子进程", () => {
+            childProcess.pid = 4242;
+            const killSpy = vi.spyOn(process, "kill").mockImplementation(() => true);
+
+            attachGracefulShutdown(childProcess, { platform: "win32" });
+            process.emit("SIGINT");
+
+            expect(killSpy).not.toHaveBeenCalled();
+            expect(childProcess.kill).toHaveBeenCalledWith("SIGINT");
         });
 
         it("SIGINT 后子进程退出 130 时应以 0 结束", () => {

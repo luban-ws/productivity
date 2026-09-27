@@ -4,6 +4,7 @@
 
 import { describe, test, expect, vi, beforeEach, afterEach } from "vitest";
 import { exec, execSilent } from "../exec";
+import { QINGNIAO_LOCALE_ENV } from "../../messages.js";
 import { execSync } from "child_process";
 
 // Mock child_process
@@ -16,12 +17,21 @@ vi.mock("child_process", () => {
 });
 
 describe("exec", () => {
+    let previousLocale: string | undefined;
+
     beforeEach(() => {
         vi.clearAllMocks();
+        previousLocale = process.env[QINGNIAO_LOCALE_ENV];
+        process.env[QINGNIAO_LOCALE_ENV] = "en";
     });
 
     afterEach(() => {
         vi.restoreAllMocks();
+        if (previousLocale === undefined) {
+            delete process.env[QINGNIAO_LOCALE_ENV];
+        } else {
+            process.env[QINGNIAO_LOCALE_ENV] = previousLocale;
+        }
     });
 
     test("应该成功执行命令", () => {
@@ -85,7 +95,33 @@ describe("exec", () => {
 
         expect(() => {
             exec("failing-command", { description: "失败的命令" });
-        }).toThrow("命令执行失败");
+        }).toThrow("Command failed");
+    });
+
+    test("命令失败时应使用可搜索的英文诊断", () => {
+        (execSync as vi.Mock).mockImplementation(() => {
+            throw new Error("Command failed");
+        });
+
+        withEnv(QINGNIAO_LOCALE_ENV, "en", () => {
+            expect(() => {
+                exec("failing-command", { cwd: "/test/dir", timeout: 1000 });
+            }).toThrow(
+                "Command failed\nCommand: failing-command\nWorking directory: /test/dir\nTimeout: 1 seconds",
+            );
+        });
+    });
+
+    test("QINGNIAO_LANG=zh 时应使用中文诊断", () => {
+        (execSync as vi.Mock).mockImplementation(() => {
+            throw new Error("Command failed");
+        });
+
+        withEnv(QINGNIAO_LOCALE_ENV, "zh-CN", () => {
+            expect(() => {
+                exec("failing-command", { cwd: "/test/dir", timeout: 1000 });
+            }).toThrow("命令执行失败\n命令: failing-command\n工作目录: /test/dir\n超时: 1秒");
+        });
     });
 
     test("应该在超时时提供详细的错误信息", () => {
@@ -96,7 +132,7 @@ describe("exec", () => {
 
         expect(() => {
             exec("slow-command", { timeout: 1000, description: "慢命令" });
-        }).toThrow("命令执行超时");
+        }).toThrow("Command timed out after 1 seconds");
     });
 
     test("应该在命令未找到时提供帮助信息", () => {
@@ -107,7 +143,7 @@ describe("exec", () => {
 
         expect(() => {
             exec("nonexistent-command");
-        }).toThrow("命令未找到");
+        }).toThrow("Command not found");
     });
 
     test("应该使用默认超时（30分钟）", () => {
@@ -135,16 +171,13 @@ describe("exec", () => {
         });
 
         try {
-            exec("test-command", {
-                cwd: "/test/dir",
-                description: "测试描述",
-            });
+            exec("test-command", { cwd: "/test/dir" });
             expect.fail("应该抛出错误");
         } catch (err) {
             const errorMessage = err instanceof Error ? err.message : String(err);
             expect(errorMessage).toContain("test-command");
             expect(errorMessage).toContain("/test/dir");
-            expect(errorMessage).toContain("测试描述");
+            expect(errorMessage).toContain("Timeout: 1800 seconds");
         }
     });
 
@@ -160,8 +193,8 @@ describe("exec", () => {
             expect.fail("应该抛出错误");
         } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
-            expect(msg).toContain("命令执行失败");
-            expect(msg).toContain("命令输出:");
+            expect(msg).toContain("Command failed");
+            expect(msg).toContain("Command output:");
             expect(msg).toContain("tsc error: type mismatch");
         }
     });
@@ -178,7 +211,7 @@ describe("exec", () => {
             expect.fail("应该抛出错误");
         } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
-            expect(msg).toContain("命令输出:");
+            expect(msg).toContain("Command output:");
             expect(msg).toContain("eslint error: unused variable");
         }
     });
@@ -195,7 +228,7 @@ describe("exec", () => {
             expect.fail("应该抛出错误");
         } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
-            expect(msg).toContain("命令输出:");
+            expect(msg).toContain("Command output:");
             expect(msg).toContain("stdout message");
         }
     });
@@ -212,7 +245,7 @@ describe("exec", () => {
             expect.fail("应该抛出错误");
         } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
-            expect(msg).toContain("命令输出:");
+            expect(msg).toContain("Command output:");
             expect(msg).toContain("stdout buffer message");
         }
     });
@@ -227,11 +260,25 @@ describe("exec", () => {
             expect.fail("应该抛出错误");
         } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
-            expect(msg).toContain("命令执行失败");
-            expect(msg).not.toContain("命令输出:");
+            expect(msg).toContain("Command failed");
+            expect(msg).not.toContain("Command output:");
         }
     });
 });
+
+function withEnv(key: string, value: string, run: () => void): void {
+    const previous = process.env[key];
+    process.env[key] = value;
+    try {
+        run();
+    } finally {
+        if (previous === undefined) {
+            delete process.env[key];
+        } else {
+            process.env[key] = previous;
+        }
+    }
+}
 
 describe("execSilent", () => {
     beforeEach(() => {

@@ -20,6 +20,7 @@ export interface Context {
     packages: PackageInfo[];
     config: PublishConfig;
     rootDir: string;
+    outputMode?: "human" | "json";
     [key: string]: unknown;
 }
 

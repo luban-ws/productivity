@@ -247,6 +247,23 @@ qingniao --yes
 qingniao --dry-run
 ```
 
+### Agent / CI 模式
+
+Agent 应使用 JSON Lines，不解析 spinner 或自然语言。stdout 只包含 JSON 事件，原始命令诊断写入 stderr。
+
+```bash
+# 只读发布计划
+qingniao plan --json
+
+# 只读发布前诊断
+qingniao doctor --json
+
+# 显式授权的非交互 dry-run
+qingniao --json --yes --dry-run
+```
+
+`--json` 不等于授权。少于 `--yes` 时根发布命令返回 exit code `3`，不会修改版本、Git 或 NPM。每个 JSONL 调用的最后一行是 `result`，Agent 应读取其 `status` 和 `exitCode`。
+
 ## 🔧 自定义配置（可选）
 
 **默认情况下，完全不需要配置文件！** 所有配置都自动检测。

@@ -39,7 +39,12 @@
                     "enum": ["changeset", "manual", "semver", "custom"]
                 },
                 "syncAll": { "type": "boolean" },
-                "syncWorkspaceDeps": { "type": "boolean" }
+                "syncWorkspaceDeps": { "type": "boolean" },
+                "files": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "除 package.json 与自动发现的 skill-release.json、plugin.json 外，还要写入 version 的 JSON 文件（相对项目根目录）"
+                }
             }
         },
         "changeset": {

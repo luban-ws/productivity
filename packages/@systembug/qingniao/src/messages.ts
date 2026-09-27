@@ -65,7 +65,12 @@ export type MessageKey =
     | "depChangesetsHint"
     | "depChangesetsOk"
     | "configMissing"
-    | "configOk";
+    | "configOk"
+    | "commandFailed"
+    | "commandTimedOut"
+    | "commandNotFound"
+    | "commandDetails"
+    | "commandOutput";
 
 const QINGNIAO_CATALOG: MessageCatalog<MessageKey> = {
     en: {
@@ -129,6 +134,11 @@ const QINGNIAO_CATALOG: MessageCatalog<MessageKey> = {
         depChangesetsOk: "@changesets/cli installed",
         configMissing: "Missing qingniao.config.json (optional)",
         configOk: "qingniao.config.json exists",
+        commandFailed: "Command failed",
+        commandTimedOut: "Command timed out after {seconds} seconds",
+        commandNotFound: "Command not found",
+        commandDetails: "Command: {command}\nWorking directory: {cwd}\nTimeout: {seconds} seconds",
+        commandOutput: "Command output:",
     },
     zh: {
         missingScript:
@@ -190,6 +200,11 @@ const QINGNIAO_CATALOG: MessageCatalog<MessageKey> = {
         depChangesetsOk: "@changesets/cli 已安装",
         configMissing: "缺少 qingniao.config.json（可选）",
         configOk: "qingniao.config.json 已存在",
+        commandFailed: "命令执行失败",
+        commandTimedOut: "命令执行超时（{seconds}秒）",
+        commandNotFound: "命令未找到",
+        commandDetails: "命令: {command}\n工作目录: {cwd}\n超时: {seconds}秒",
+        commandOutput: "命令输出:",
     },
 };
 

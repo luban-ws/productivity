@@ -11,20 +11,18 @@ export default defineConfig({
     },
     test: {
         environment: "node",
-        include: ["tests/**/*.test.ts"],
+        include: ["tests/**/*.test.ts", "tests/**/*.test.tsx"],
         globals: true,
         coverage: {
             provider: "v8",
             reportsDirectory: "./coverage",
             include: ["src/**/*.ts", "src/**/*.tsx"],
             exclude: [
-                "src/cli.ts",
+                "src/index.ts",
+                "src/types.ts",
+                "src/ui/alert-text.ts",
                 "src/ui/DemoSelectApp.tsx",
-                "src/ui/HelpApp.tsx",
-                "src/ui/AlertApp.tsx",
                 "src/ui/StartupApp.tsx",
-                "src/ui/run-invalid-demo.tsx",
-                "src/ui/console-demo-select.ts",
                 "tests/**/*",
             ],
             thresholds: {

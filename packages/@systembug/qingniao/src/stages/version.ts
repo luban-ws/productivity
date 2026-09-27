@@ -11,6 +11,7 @@ import {
     discoverAllPackagesWithPattern,
     readPackageJson,
 } from "../utils/package";
+import { syncVersionFiles } from "./version-files";
 
 /**
  * 检测是否使用 changeset
@@ -39,6 +40,7 @@ export function bumpVersion(
     rootDir: string,
     versionType: "major" | "minor" | "patch",
     packages: Array<{ path: string }>,
+    extraFiles: readonly string[] = [],
 ): string {
     const semver = /^(\d+)\.(\d+)\.(\d+)$/;
 
@@ -97,6 +99,7 @@ export function bumpVersion(
         }
     }
 
+    syncVersionFiles(rootDir, newVersion, extraFiles);
     return newVersion;
 }
 
@@ -230,6 +233,8 @@ export async function bumpVersionWithChangeset(
                 }
             }
         }
+
+        syncVersionFiles(rootDir, newVersion, config.version?.files);
     }
 
     // 获取更新后的版本
@@ -250,7 +255,7 @@ export async function bumpVersionWithSemver(
     const allPackages = await discoverAllWorkspacePackages(rootDir, config);
 
     // 执行版本更新
-    return bumpVersion(rootDir, versionType, allPackages);
+    return bumpVersion(rootDir, versionType, allPackages, config.version?.files);
 }
 
 /**
@@ -308,7 +313,7 @@ export async function applyVersionUpdate(
     if (versionType) {
         // 发现所有 workspace 包（包括私有包）用于版本更新
         const allPackages = await discoverAllWorkspacePackages(rootDir, config);
-        const newVersion = bumpVersion(rootDir, versionType, allPackages);
+        const newVersion = bumpVersion(rootDir, versionType, allPackages, config.version?.files);
         return newVersion;
     }
 

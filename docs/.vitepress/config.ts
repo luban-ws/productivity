@@ -49,6 +49,10 @@ export default withMermaid(
                             text: "RFC 0001 - 通用发布工具",
                             link: "/rfc/0001-universal-publish-tool",
                         },
+                        {
+                            text: "RFC 0006 - 青鸟 Agent CLI 协议",
+                            link: "/rfc/0006-qingniao-agent-cli-protocol",
+                        },
                     ],
                 },
             ],

@@ -2,7 +2,6 @@
  * 盘古 CLI - 交互式开发服务器启动工具
  */
 
-import { spawn } from "child_process";
 import { loadConfig, getDemoOptions } from "./config.js";
 import { DEFAULT_SUPPORTED_BY } from "./constants.js";
 import { t } from "./messages.js";
@@ -14,9 +13,12 @@ import { runInvalidDemoScreen } from "./ui/run-invalid-demo.js";
 import { runStartup } from "./ui/run-startup.js";
 import { isStartupFailedError } from "./ui/startup-types.js";
 import {
+    appendDevArgs,
     attachGracefulShutdown,
-    buildPackageDevArgs,
+    buildDevEnv,
+    readDevScript,
     resolvePackageDirectory,
+    spawnDevScript,
 } from "./process-utils.js";
 import { exitAfterUserMessage } from "./exit-utils.js";
 import type { DemoOption } from "./types.js";
@@ -47,8 +49,8 @@ async function startDevServer(
 
     const packageManager = option.packageManager || defaultPackageManager;
     const allArgs = [...(option.args || []), ...extraArgs];
-    const commandArgs = buildPackageDevArgs(allArgs);
-    const command = `${packageManager} ${commandArgs.join(" ")}`;
+    const packageDirectory = resolvePackageDirectory(option.package, packageManager, process.cwd());
+    const command = appendDevArgs(readDevScript(packageDirectory), allArgs);
 
     let payload;
     try {
@@ -57,8 +59,7 @@ async function startDevServer(
             packageName: option.package,
             packageManager,
             command,
-            resolveDirectory: () =>
-                resolvePackageDirectory(option.package, packageManager, process.cwd()),
+            resolveDirectory: () => packageDirectory,
         });
     } catch (error) {
         if (isStartupFailedError(error)) {
@@ -67,11 +68,11 @@ async function startDevServer(
         throw error;
     }
 
-    const childProcess = spawn(packageManager, commandArgs, {
-        stdio: "inherit",
-        cwd: payload.packageDirectory,
-        shell: process.platform === "win32",
-    });
+    const childProcess = spawnDevScript(
+        command,
+        payload.packageDirectory,
+        buildDevEnv(payload.packageDirectory, process.cwd()),
+    );
 
     childProcess.on("error", (error) => {
         void runAlert({

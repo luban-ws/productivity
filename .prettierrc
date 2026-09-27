@@ -4,7 +4,5 @@
     "printWidth": 100,
     "trailingComma": "all",
     "tabWidth": 4,
-    "editorconfig": true,
-    "endOfLine": "lf",
-    "insertFinalNewline": true
+    "endOfLine": "lf"
 }

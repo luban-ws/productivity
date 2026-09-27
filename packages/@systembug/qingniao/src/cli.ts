@@ -18,6 +18,9 @@ import { initChangeset } from "./commands/changeset-init";
 import { runDoctor } from "./commands/doctor";
 import { t } from "./messages.js";
 import ora from "ora";
+import { reportReleaseFailure } from "./core/release-error";
+import { JsonReporter } from "./reporters/json-reporter";
+import { reportPlanJson, runPlan } from "./commands/plan";
 
 const program = new Command();
 
@@ -94,17 +97,57 @@ program
     .option("-c, --config <path>", "指定配置文件路径")
     .option("--fix", "自动修复可修复项（根 package.json scripts 等）")
     .option("--strict", "将 warning 视为失败")
-    .action(async (options: { config?: string; fix?: boolean; strict?: boolean }) => {
+    .option("--json", "输出 JSON Lines，供 Agent 解析")
+    .action(
+        async (options: { config?: string; fix?: boolean; strict?: boolean; json?: boolean }) => {
+            const json = options.json === true || process.argv.includes("--json");
+            try {
+                const exitCode = await runDoctor(process.cwd(), {
+                    configPath: options.config,
+                    fix: options.fix,
+                    strict: options.strict,
+                    json,
+                });
+                process.exit(exitCode);
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                if (json) {
+                    const reporter = new JsonReporter();
+                    reporter.error("doctor_failed", errorMessage);
+                    reporter.result("failed", 1, "Doctor failed");
+                } else {
+                    console.error(`\n${t("doctorFailed", { message: errorMessage })}`);
+                }
+                process.exit(1);
+            }
+        },
+    );
+
+program
+    .command("plan")
+    .description("生成只读发布计划；Agent 请使用 --json")
+    .option("-c, --config <path>", "指定配置文件路径")
+    .option("--json", "输出 JSON Lines，供 Agent 解析")
+    .action(async (options: { config?: string; json?: boolean }) => {
+        const json = options.json === true || process.argv.includes("--json");
         try {
-            const exitCode = await runDoctor(process.cwd(), {
-                configPath: options.config,
-                fix: options.fix,
-                strict: options.strict,
-            });
-            process.exit(exitCode);
+            const plan = await runPlan(process.cwd(), options.config);
+            if (json) {
+                reportPlanJson(plan);
+            } else {
+                ora().info(
+                    `发布计划: ${plan.packages.length} 个包；步骤: ${plan.actions.join(", ")}`,
+                );
+            }
         } catch (error: unknown) {
             const errorMessage = error instanceof Error ? error.message : String(error);
-            console.error(`\n${t("doctorFailed", { message: errorMessage })}`);
+            if (json) {
+                const reporter = new JsonReporter();
+                reporter.error("plan_failed", errorMessage);
+                reporter.result("failed", 1, "Release plan failed");
+            } else {
+                console.error(`\n${errorMessage}`);
+            }
             process.exit(1);
         }
     });
@@ -119,6 +162,7 @@ program
     .option("-y, --yes", "跳过所有确认提示")
     .option("-v, --verbose", "详细输出")
     .option("-s, --silent", "静默模式")
+    .option("--json", "输出 JSON Lines，供 Agent 解析")
     .action(
         async (options: {
             config?: string;
@@ -129,19 +173,33 @@ program
             yes?: boolean;
             verbose?: boolean;
             silent?: boolean;
+            json?: boolean;
         }) => {
-            // 加载配置（零配置自动检测）
-            const { loadConfig } = await import("./config/loader");
-            const config = await loadConfig(options.config);
+            const json = options.json === true;
+            const reporter = json ? new JsonReporter() : undefined;
 
-            // 创建上下文
-            const { createContext } = await import("./core/context");
-            const context = createContext(config, [], process.cwd());
+            if (json && options.silent) {
+                reporter?.error("invalid_options", "--json cannot be combined with --silent");
+                reporter?.result("failed", 2, "Invalid command options");
+                process.exit(2);
+            }
 
-            // 执行发布流程
-            const { executePublish } = await import("./core/executor.js");
+            if (json && !options.yes) {
+                reporter?.error("confirmation_required", "Pass --yes to authorize release changes");
+                reporter?.result("failed", 3, "Release requires explicit confirmation");
+                process.exit(3);
+            }
 
             try {
+                const { loadConfig } = await import("./config/loader");
+                const config = await loadConfig(options.config);
+                const { createContext } = await import("./core/context");
+                const context = createContext(config, [], process.cwd());
+                if (json) {
+                    context.outputMode = "json";
+                    reporter?.stage("release", "started");
+                }
+                const { executePublish } = await import("./core/executor.js");
                 await executePublish(config, context, {
                     dryRun: options.dryRun,
                     skipVersion: options.skipVersion,
@@ -150,11 +208,21 @@ program
                     yes: options.yes,
                 });
 
+                if (json) {
+                    reporter?.stage("release", "succeeded");
+                    reporter?.result("succeeded", 0, "Release completed");
+                }
+
                 // 成功消息已在 executor 中显示，这里不需要重复
             } catch (error: unknown) {
                 const errorMessage = error instanceof Error ? error.message : String(error);
-                ora().fail(errorMessage);
-                console.error(`\n${t("releaseFailed", { message: errorMessage })}`);
+                if (json) {
+                    reporter?.stage("release", "failed");
+                    reporter?.error("release_failed", errorMessage);
+                    reporter?.result("failed", 1, "Release failed");
+                } else {
+                    reportReleaseFailure(error);
+                }
                 process.exit(1);
             }
         },

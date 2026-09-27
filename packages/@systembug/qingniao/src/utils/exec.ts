@@ -3,6 +3,7 @@
  */
 
 import { execSync } from "child_process";
+import { t } from "../messages.js";
 
 export interface ExecOptions {
     silent?: boolean;
@@ -31,7 +32,6 @@ export function exec(command: string, options: ExecOptions = {}): string {
         cwd = process.cwd(),
         encoding = "utf-8",
         timeout = DEFAULT_TIMEOUT,
-        description,
     } = options;
 
     try {
@@ -49,7 +49,7 @@ export function exec(command: string, options: ExecOptions = {}): string {
         return execSync(command, execOptions) as string;
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : String(error);
-        const context = buildErrorContext(command, cwd, description, timeout);
+        const context = buildErrorContext(command, cwd, timeout);
         // 保留子进程 stderr/stdout（如 tsc、lint 等），便于诊断
         const execErr = error as { stderr?: Buffer | string; stdout?: Buffer | string };
         const stderrStr =
@@ -68,15 +68,7 @@ export function exec(command: string, options: ExecOptions = {}): string {
 
         // 检查是否是超时错误
         if (errorMessage.includes("ETIMEDOUT") || errorMessage.includes("timeout")) {
-            throw new Error(
-                `命令执行超时（${timeout / 1000}秒）: ${context}\n` +
-                    `命令可能已挂起，请检查：\n` +
-                    `  1. 命令是否正确\n` +
-                    `  2. 网络连接是否正常\n` +
-                    `  3. 依赖服务是否可用\n` +
-                    `  4. 是否需要交互式输入\n` +
-                    `  5. 命令是否在等待用户输入`,
-            );
+            throw new Error(`${t("commandTimedOut", { seconds: timeout / 1000 })}\n${context}`);
         }
 
         // 检查是否是命令未找到错误
@@ -85,40 +77,24 @@ export function exec(command: string, options: ExecOptions = {}): string {
             errorMessage.includes("command not found") ||
             errorMessage.includes("不是内部或外部命令")
         ) {
-            throw new Error(
-                `命令未找到: ${context}\n` +
-                    `请检查：\n` +
-                    `  1. 命令是否正确安装\n` +
-                    `  2. 命令是否在 PATH 中\n` +
-                    `  3. 是否需要安装依赖`,
-            );
+            throw new Error(`${t("commandNotFound")}\n${context}`);
         }
 
         // 其他错误：附上子进程输出以便诊断（如 tsc 类型错误）
-        const withOutput = childOutput ? `\n\n命令输出:\n${childOutput}` : "";
-        throw new Error(`命令执行失败: ${context}\n错误: ${errorMessage}${withOutput}`);
+        const withOutput = childOutput ? `\n\n${t("commandOutput")}\n${childOutput}` : "";
+        throw new Error(`${t("commandFailed")}\n${context}\nError: ${errorMessage}${withOutput}`);
     }
 }
 
 /**
  * 构建错误上下文信息
  */
-function buildErrorContext(
-    command: string,
-    cwd: string,
-    description?: string,
-    timeout?: number,
-): string {
-    const parts: string[] = [];
-    if (description) {
-        parts.push(`[${description}]`);
-    }
-    parts.push(`命令: ${command}`);
-    parts.push(`工作目录: ${cwd}`);
-    if (timeout && timeout > 0) {
-        parts.push(`超时: ${timeout / 1000}秒`);
-    }
-    return parts.join(" ");
+function buildErrorContext(command: string, cwd: string, timeout?: number): string {
+    return t("commandDetails", {
+        command,
+        cwd,
+        seconds: timeout && timeout > 0 ? timeout / 1000 : 0,
+    });
 }
 
 /**

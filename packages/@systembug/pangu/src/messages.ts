@@ -15,6 +15,8 @@ export type MessageKey =
     | "resolvePackageDirFailed"
     | "resolvePackageDirError"
     | "resolvePackageDirErrorWithStderr"
+    | "devScriptMissing"
+    | "devScriptInvalid"
     | "locatePackageFailed"
     | "startingServer"
     | "startingServerSuccess"
@@ -47,6 +49,8 @@ const PANGU_CATALOG: MessageCatalog<MessageKey> = {
         resolvePackageDirFailed: "❌ Unable to locate package directory for {name}",
         resolvePackageDirError: "Unable to resolve package directory: {package}",
         resolvePackageDirErrorWithStderr: "Unable to resolve package directory {package}: {stderr}",
+        devScriptMissing: "Package {package} has no dev script",
+        devScriptInvalid: "Cannot read dev script for {package}",
         locatePackageFailed: "❌ Unable to locate {name} package directory",
         startingServer: "Starting {name} dev server...",
         startingServerSuccess: "✅ Starting {name} dev server",
@@ -79,6 +83,8 @@ const PANGU_CATALOG: MessageCatalog<MessageKey> = {
         resolvePackageDirFailed: "❌ 无法定位 {name} 包目录",
         resolvePackageDirError: "无法解析包目录: {package}",
         resolvePackageDirErrorWithStderr: "无法解析包目录 {package}: {stderr}",
+        devScriptMissing: "包 {package} 没有 dev 脚本",
+        devScriptInvalid: "无法读取 {package} 的 dev 脚本",
         locatePackageFailed: "❌ 无法定位 {name} 包目录",
         startingServer: "正在启动 {name} 开发服务器...",
         startingServerSuccess: "✅ 正在启动 {name} 开发服务器",

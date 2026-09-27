@@ -5,11 +5,7 @@
 import type { Context, PublishConfig } from "../types";
 import { checkNpmAuth } from "../stages/auth";
 import { getCurrentBranch, hasUncommittedChanges, hasUnpushedCommits } from "../stages/git";
-import {
-    discoverPackagesWithPnpm,
-    discoverPackagesWithPattern,
-    discoverAllPackagesWithPnpm,
-} from "../utils/package";
+import { discoverPackagesWithPnpm, discoverPackagesWithPattern } from "../utils/package";
 import { exec } from "../utils/exec";
 import { applyVersionUpdate } from "../stages/version";
 import { verifyArtifacts } from "../stages/build";
@@ -27,9 +23,9 @@ import { hasChangesetFiles as checkHasChangesetFiles, detectChangeset } from "..
 import { discoverAllWorkspacePackages } from "../stages/version";
 import { confirm, select } from "../utils/prompts";
 import { readPackageJson, validatePackageForPublish } from "../utils/package";
-import { isMissingScriptError, toPublishErrorMessage } from "../utils/script-errors";
 import { resolveNonInteractiveVersionMethod, type VersionUpdateMethod } from "./version-strategy";
 import { t } from "../messages.js";
+import { createPublishStepError } from "./publish-error";
 
 /** 中止发布步骤并抛出可读错误（避免 pnpm ELIFECYCLE 噪音） */
 function abortPublishStep(
@@ -38,12 +34,8 @@ function abortPublishStep(
     scriptFallback: string,
     genericMessage: string,
 ): never {
-    const raw = error instanceof Error ? error.message : String(error);
-    const message = isMissingScriptError(raw)
-        ? toPublishErrorMessage(error, scriptFallback)
-        : genericMessage;
-    spinner.fail(message);
-    throw new Error(message);
+    spinner.stop();
+    throw createPublishStepError(error, scriptFallback, genericMessage);
 }
 
 /**

@@ -37,5 +37,7 @@ describe("runInvalidDemoScreen", () => {
         await runInvalidDemoScreen("invalid demo", [DEMO], "pnpm");
 
         expect(runInkTimedScreenMock).toHaveBeenCalledOnce();
+        const renderScreen = runInkTimedScreenMock.mock.calls[0][0] as () => React.ReactElement;
+        renderScreen();
     });
 });

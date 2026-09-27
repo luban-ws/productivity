@@ -24,6 +24,7 @@ export async function publishPackagesDryRun(
     config: PublishConfig,
     context: Context,
 ): Promise<void> {
+    const silent = context.outputMode === "json";
     const pmCommand =
         config.project?.packageManager === "pnpm"
             ? "pnpm exec"
@@ -46,6 +47,7 @@ export async function publishPackagesDryRun(
             `${pmCommand} changeset publish --dry-run`;
         exec(command, {
             cwd: context.rootDir,
+            silent,
             timeout: 5 * 60 * 1000, // 5 分钟
             description: "发布预览 (changeset dry-run)",
         });
@@ -58,6 +60,7 @@ export async function publishPackagesDryRun(
                 const accessFlag = isScoped ? " --access public" : "";
                 exec(`${publishCommand} --dry-run${accessFlag}`, {
                     cwd: pkg.path,
+                    silent,
                     timeout: 5 * 60 * 1000, // 5 分钟
                     description: `发布预览 ${pkg.name}@${pkg.version} (dry-run)`,
                 });
@@ -73,6 +76,7 @@ export async function publishPackagesDryRun(
  * 发布包到 NPM
  */
 export async function publishPackages(config: PublishConfig, context: Context): Promise<void> {
+    const silent = context.outputMode === "json";
     const pmCommand =
         config.project?.packageManager === "pnpm"
             ? "pnpm exec"
@@ -112,7 +116,7 @@ export async function publishPackages(config: PublishConfig, context: Context): 
         // 发布可能需要较长时间（网络上传），设置 10 分钟超时
         exec(command, {
             cwd: context.rootDir,
-            silent: false, // 显示输出，允许交互式输入
+            silent,
             timeout: 10 * 60 * 1000, // 10 分钟
             description: "发布包到 NPM (changeset)",
         });
@@ -136,7 +140,7 @@ export async function publishPackages(config: PublishConfig, context: Context): 
                 const accessFlag = isScoped ? " --access public" : "";
                 exec(`${publishCommand}${accessFlag}`, {
                     cwd: pkg.path,
-                    silent: false, // 允许交互式输入 OTP
+                    silent,
                     timeout: 10 * 60 * 1000, // 10 分钟
                     description: `发布包 ${pkg.name}@${pkg.version}`,
                 });
