@@ -4,9 +4,13 @@
 
 ## Active RFCs
 
-| RFC                                           | Title                       | Status   |
-| --------------------------------------------- | --------------------------- | -------- |
-| [0006](./0006-qingniao-agent-cli-protocol.md) | Qingniao Agent CLI Protocol | Accepted |
+无。
+
+## Implemented RFCs
+
+| RFC                                           | Title                       | Status      |
+| --------------------------------------------- | --------------------------- | ----------- |
+| [0006](./0006-qingniao-agent-cli-protocol.md) | Qingniao Agent CLI Protocol | Implemented |
 
 ## Lifecycle
 
