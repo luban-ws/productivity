@@ -3,7 +3,8 @@
  */
 
 import type { Context, PublishConfig } from "../types";
-import { checkNpmAuth } from "../stages/auth";
+import { ensureNpmAuth } from "../stages/auth";
+import { isInteractiveTerminal } from "../ui/tty";
 import { getCurrentBranch, hasUncommittedChanges, hasUnpushedCommits } from "../stages/git";
 import { discoverPackagesWithPnpm, discoverPackagesWithPattern } from "../utils/package";
 import { exec } from "../utils/exec";
@@ -92,13 +93,17 @@ export async function executePublish(
     if (config.checks?.auth !== false) {
         const spinner = ora("检查 NPM 认证").start();
         const packageManager = config.project?.packageManager;
-        const npmAuth = await checkNpmAuth(packageManager);
-        if (!npmAuth) {
+        const npmAuth = await ensureNpmAuth({
+            packageManager,
+            interactive: context.outputMode !== "json" && isInteractiveTerminal(),
+            runLogin: (command) => {
+                spinner.stop();
+                exec(command, { timeout: 0, description: command });
+            },
+        }).catch((error: unknown) => {
             spinner.fail();
-            const pmCommand =
-                packageManager === "pnpm" ? "pnpm" : packageManager === "yarn" ? "yarn" : "npm";
-            throw new Error(`未登录 NPM，请先运行: ${pmCommand} login`);
-        }
+            throw error;
+        });
         spinner.succeed(`已登录 NPM: ${npmAuth.username}`);
 
         // 检查 registry 警告

@@ -1462,136 +1462,7 @@ hooks: {
 
 ### 未接线
 
-这些字段或文件在类型、加载器或空函数里，发布流程没有调用它们。
-
-| 缺口                                                                 | 代码位置                                  | 现状                                                                              |
-| -------------------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------- |
-| 钩子                                                                 | `core/hooks.ts` 的 `executeHook`          | 没有任何调用方。`PublishConfig.hooks` 不生效                                      |
-| 插件系统                                                             | 无对应模块                                | 没有插件加载                                                                      |
-| 配置校验                                                             | `config/schema.ts`、`config/validator.ts` | schema 是空对象。`validateConfig` 固定返回 valid，注释写着 TODO                   |
-| yarn/npm 包发现                                                      | `utils/auto-detect.ts` 能认出 workspace   | 发现包的实现只有 `pnpm list` 和目录扫描，没有 `yarn workspaces list` / `npm ls`   |
-| `publish.registry`                                                   | `types.ts`                                | 发布命令不带 `--registry`                                                         |
-| `publish.access`                                                     | `types.ts`                                | scoped 包写死 `--access public`，不读配置                                         |
-| `publish.otpRequired`                                                | `types.ts`                                | 没有 OTP 提示。子进程输出里出现 OTP 字样时原样抛出                                |
-| `version.syncWorkspaceDeps`                                          | `config/loader.ts` 默认 true              | 版本阶段不读这个字段                                                              |
-| `publish.replaceWorkspaceProtocols`                                  | `stages/publish.ts`                       | 分支是空的，注释写着 TODO                                                         |
-| `dependencies.respectDependencyOrder` / `buildOrder` / `customOrder` | `types.ts`                                | 发布顺序不使用                                                                    |
-| Turbo 任务图                                                         | `stages/build.ts`                         | 不读 `turbo.json`。默认命令是 `turbo build` 再拼 `turboTasks`（默认又是 `build`） |
-| `which` 探测包管理器                                                 | `utils/auto-detect.ts`                    | 没有 lockfile 且没有 `packageManager` 字段时返回 null                             |
-| CI 模板                                                              | 仓库内无                                  | 没有 GitHub Actions / GitLab CI 模板                                              |
-| Web UI                                                               | 仓库内无                                  | 没有配置管理界面                                                                  |
-
-## 实现状态-旧稿起点
-
-所有 `publish.mjs` 中的功能已完整实现，使用 **ora** 和 **inquirer** 作为交互框架：
-
-#### Phase 1: 核心框架 ✅
-
-1. **零配置系统** ✅
-    - ✅ 包管理器自动检测（packageManager 字段、lockfile）
-    - ✅ Workspace 类型自动检测（pnpm/yarn/npm）
-    - ✅ 包发现自动推断（workspace 命令）
-    - ✅ 构建命令自动推断（package.json scripts）
-    - ✅ 构建产物路径自动推断（package.json 字段、目录检测）
-
-2. **配置系统** ✅
-    - ✅ 配置文件加载器（支持多种格式）
-    - ✅ 配置验证器
-    - ✅ 默认配置合并
-    - ✅ 零配置与配置文件合并逻辑
-
-3. **基础执行引擎** ✅
-    - ✅ 命令执行工具
-    - ✅ 上下文管理
-    - ✅ 错误处理
-
-4. **基础阶段实现** ✅
-    - ✅ NPM 认证检查
-    - ✅ Git 状态检查（包括分支验证、未提交更改检查、未推送提交检查）
-    - ✅ 远程分支检查与拉取
-    - ✅ 版本管理（manual 和 changeset 模式）
-    - ✅ 包发现（零配置优先）
-    - ✅ pnpm workspace 完整支持
-    - ✅ 所有 workspace 包版本更新（排除根包）
-
-#### Phase 2: 完整功能 ✅
-
-1. **版本管理增强** ✅
-    - ✅ **Changeset 深度集成**
-        - ✅ 自动检测 .changeset 目录
-        - ✅ 读取 .changeset/config.json 配置
-        - ✅ 自动生成 changeset 命令（使用 `pnpm exec` 或 `npx`）
-        - ✅ Changeset 文件检查和创建流程（交互式）
-        - ✅ Changeset 版本更新集成
-        - ✅ Changeset 发布集成
-    - ✅ Semver 自动升级（major/minor/patch）
-    - ✅ 版本更新后的 Git 操作（提交、标签、推送）
-    - ✅ 显示所有将被更新版本的包列表
-
-2. **构建系统** ✅
-    - ✅ 构建步骤执行（clean, install, preLintBuild, lint, format, typecheck, test, build）
-    - ✅ 清理步骤在构建之前执行（如果 build.steps 中包含 clean，先执行；否则执行默认清理）
-    - ✅ 在 lint 之前构建特定包（preLintBuild 配置）
-    - ✅ 代码格式检查（优先使用 format:check 或 prettier --check，避免修改文件）
-    - ✅ 产物验证
-    - ✅ 测试集成
-
-3. **发布流程** ✅
-    - ✅ NPM 发布
-    - ✅ Dry-run 支持
-    - ✅ 版本检查（检查已存在的包）
-    - ✅ 发布确认流程（交互式）
-    - ✅ OTP 提示支持（2FA）
-    - ✅ **发布阶段不执行构建，只验证构建产物存在**
-
-#### Phase 3: 高级特性 ✅
-
-1. **交互式 UI（基于 Inquirer）** ✅
-    - ✅ 确认对话框（使用 `inquirer.prompt` 的 `confirm` 类型）
-    - ✅ 选择列表（使用 `inquirer.prompt` 的 `rawlist` 类型）
-    - ✅ 版本类型选择（使用 `rawlist`）
-    - ✅ 所有交互式提示使用 inquirer 实现
-
-2. **CLI 增强** ✅
-    - ✅ 交互式提示（使用 inquirer）
-    - ✅ 进度显示（使用 ora spinner）
-    - ✅ 详细日志（使用 @systembug/diting）
-
-3. **文档和示例** ✅
-    - ✅ README 文档
-    - ✅ 使用指南
-    - ✅ 配置示例
-
-### 功能对照表（publish.mjs → qingniao）
-
-| publish.mjs 功能                                                                 | qingniao 实现             | 状态 |
-| -------------------------------------------------------------------------------- | ------------------------- | ---- |
-| NPM 认证检查                                                                     | `stages/auth.ts`          | ✅   |
-| Git 状态检查                                                                     | `stages/git.ts`           | ✅   |
-| 远程分支检查与拉取                                                               | `stages/git.ts`           | ✅   |
-| 询问是否更新版本                                                                 | `core/executor.tsx` (ink) | ✅   |
-| 选择版本更新方式                                                                 | `core/executor.tsx` (ink) | ✅   |
-| Manual 版本更新                                                                  | `stages/version.ts`       | ✅   |
-| Changeset 版本更新                                                               | `stages/version.ts`       | ✅   |
-| 创建 changeset                                                                   | `core/executor.tsx` (ink) | ✅   |
-| 版本更新后 Git 操作                                                              | `stages/git.ts`           | ✅   |
-| 构建前检查（clean, install, preLintBuild, lint, format, typecheck, test, build） | `core/executor.ts`        | ✅   |
-| 验证构建产物                                                                     | `stages/build.ts`         | ✅   |
-| 发布阶段验证构建产物（不执行构建）                                               | `core/executor.ts`        | ✅   |
-| 显示要发布的包列表                                                               | `core/executor.tsx`       | ✅   |
-| 检查已存在的包                                                                   | `stages/publish.ts`       | ✅   |
-| 确认发布                                                                         | `core/executor.tsx` (ink) | ✅   |
-| Dry-run 测试                                                                     | `stages/publish.ts`       | ✅   |
-| 发布前 OTP 提示                                                                  | `core/executor.tsx` (ink) | ✅   |
-| 发布到 NPM                                                                       | `stages/publish.ts`       | ✅   |
-
-### 技术栈
-
-- **交互框架**：inquirer（交互式提示）+ ora（进度显示）
-- **日志系统**：@systembug/diting（统一日志系统，基于 chalk 和 pino）
-- **构建工具**：Vite
-- **类型系统**：TypeScript
-- **包管理**：pnpm workspace
+尚未接线的事项不写在本 RFC。每件一事，见伞 RFC [0007](0007-qingniao-publish-gaps.md) 的子 RFC。
 
 ## 迁移路径
 
@@ -1659,10 +1530,7 @@ const builds = [
 
 ## 后续工作
 
-1. **插件系统**：支持第三方插件扩展功能
-2. **多 registry 支持**：支持发布到多个 NPM registry
-3. **CI/CD 集成**：提供 GitHub Actions、GitLab CI 等集成
-4. **可视化界面**：提供 Web UI 进行配置管理
+剩余事项在伞 RFC [0007](0007-qingniao-publish-gaps.md)。本 RFC 不再追加第二件工作。
 
 ## 参考文献
 
@@ -1674,3 +1542,4 @@ const builds = [
 ## 变更日志
 
 - **2025-01-XX**: 初始版本，定义通用发布工具设计规范
+- **2026-09-27**: 标题改为 RFC 0001。实现状态按当前源码重写。未接线事项拆到伞 RFC 0007，每件一事。

@@ -31,6 +31,7 @@ export type MessageKey =
     | "npmRegistryHint"
     | "npmNotLoggedIn"
     | "npmLoginHint"
+    | "npmLoginFailed"
     | "gitNotRepo"
     | "gitBranch"
     | "gitDirty"
@@ -99,6 +100,7 @@ const QINGNIAO_CATALOG: MessageCatalog<MessageKey> = {
         npmRegistryHint: "Confirm this is the intended registry",
         npmNotLoggedIn: "Not logged in to NPM",
         npmLoginHint: "Run: {pm} login",
+        npmLoginFailed: "{pm} login finished, but the registry still has no user",
         gitNotRepo: "Not inside a git repository",
         gitBranch: "Current branch: {branch}",
         gitDirty: "Uncommitted changes detected",
@@ -165,6 +167,7 @@ const QINGNIAO_CATALOG: MessageCatalog<MessageKey> = {
         npmRegistryHint: "确认是否为预期源",
         npmNotLoggedIn: "未登录 NPM",
         npmLoginHint: "运行: {pm} login",
+        npmLoginFailed: "{pm} login 已结束，registry 仍没有登录用户",
         gitNotRepo: "不在 git 仓库中",
         gitBranch: "当前分支: {branch}",
         gitDirty: "存在未提交更改",
