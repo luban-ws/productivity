@@ -1,14 +1,16 @@
-# RFC 0005: 青鸟(Qing Niao)通用发布工具设计规范
+# RFC 0001: 青鸟(Qing Niao)通用发布工具设计规范
+
+**Status:** Draft
 
 - **开始日期**: 2025-01-XX
-- **更新日期**: 2025-01-XX
+- **更新日期**: 2026-09-27
 - **RFC PR**:
 - **实现议题**:
 - **作者**: AI Assistant
 - **状态**: Draft
 - **命名空间**: `@systembug/qingniao`
 
-## 摘要
+## Summary
 
 本 RFC 设计一个通用的、可配置的发布工具——**青鸟(Qing Niao)**，用于自动化 monorepo 项目的版本管理、构建验证和 NPM 发布流程。该工具**完全零配置优先**，自动从 `package.json` 和 workspace 配置推断所有必要信息。**配置文件完全可选**，仅用于覆盖自动检测的结果，支持部分覆盖和深度定制。
 
@@ -79,6 +81,8 @@
 │   └── config.schema.json           # JSON Schema 配置定义
 └── README.md
 ```
+
+上面是设计树。代码里没有 `utils/logger.ts`，日志走 `ora` 和 `@systembug/diting`。执行器是 `core/executor.ts`，不是 `executor.tsx`。交互确认在 `utils/prompts.ts`（inquirer）。Ink 只用于 `doctor` 界面。
 
 ### 2. 配置系统
 
@@ -1444,7 +1448,40 @@ hooks: {
 
 ## 实现状态
 
-### ✅ 已完成功能（2025-01-XX）
+2026-09-27 对照 `packages/@systembug/qingniao/src` 改写。发布主路径已经能跑。下面「未接线」才是相对本 RFC 还没落地的部分。Agent 的 `plan --json` / `doctor --json` 属于 RFC 0006，不记在这里。
+
+### 已落地
+
+- 包管理器：读 `packageManager` 字段和 lockfile（`utils/auto-detect.ts`）。没有 `which pnpm/yarn/npm` 回退。
+- 包发现：`pnpm list -r`，或 `packages/` 目录模式（`utils/package.ts`）。`executor.ts` 在 workspace 开启时也只调 pnpm。
+- 版本：manual、changeset、semver（`stages/version.ts`）。`version.files` 以及自动发现的 `skill-release.json`、`plugin.json` 会一起改版本（`stages/version-files.ts`）。
+- Git：分支、干净工作区、未推送、远程拉取、提交、标签、推送（`stages/git.ts`）。
+- 构建：配置的 steps、否则 Nx `run-many`、否则 turbo、否则 `run build`（`stages/build.ts`）。`preLintBuild` 在 `stages/verify.ts`。
+- 发布：`npm`/`pnpm`/`yarn` publish、dry-run、`skipExisting`（`stages/publish.ts`）。认证读 whoami 和当前 registry，非 npmjs.org 只警告（`stages/auth.ts`、`core/executor.ts`）。
+- 人机界面：inquirer + ora。Doctor 另有 Ink。
+
+### 未接线
+
+这些字段或文件在类型、加载器或空函数里，发布流程没有调用它们。
+
+| 缺口                                                                 | 代码位置                                  | 现状                                                                              |
+| -------------------------------------------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------- |
+| 钩子                                                                 | `core/hooks.ts` 的 `executeHook`          | 没有任何调用方。`PublishConfig.hooks` 不生效                                      |
+| 插件系统                                                             | 无对应模块                                | 没有插件加载                                                                      |
+| 配置校验                                                             | `config/schema.ts`、`config/validator.ts` | schema 是空对象。`validateConfig` 固定返回 valid，注释写着 TODO                   |
+| yarn/npm 包发现                                                      | `utils/auto-detect.ts` 能认出 workspace   | 发现包的实现只有 `pnpm list` 和目录扫描，没有 `yarn workspaces list` / `npm ls`   |
+| `publish.registry`                                                   | `types.ts`                                | 发布命令不带 `--registry`                                                         |
+| `publish.access`                                                     | `types.ts`                                | scoped 包写死 `--access public`，不读配置                                         |
+| `publish.otpRequired`                                                | `types.ts`                                | 没有 OTP 提示。子进程输出里出现 OTP 字样时原样抛出                                |
+| `version.syncWorkspaceDeps`                                          | `config/loader.ts` 默认 true              | 版本阶段不读这个字段                                                              |
+| `publish.replaceWorkspaceProtocols`                                  | `stages/publish.ts`                       | 分支是空的，注释写着 TODO                                                         |
+| `dependencies.respectDependencyOrder` / `buildOrder` / `customOrder` | `types.ts`                                | 发布顺序不使用                                                                    |
+| Turbo 任务图                                                         | `stages/build.ts`                         | 不读 `turbo.json`。默认命令是 `turbo build` 再拼 `turboTasks`（默认又是 `build`） |
+| `which` 探测包管理器                                                 | `utils/auto-detect.ts`                    | 没有 lockfile 且没有 `packageManager` 字段时返回 null                             |
+| CI 模板                                                              | 仓库内无                                  | 没有 GitHub Actions / GitLab CI 模板                                              |
+| Web UI                                                               | 仓库内无                                  | 没有配置管理界面                                                                  |
+
+## 实现状态-旧稿起点
 
 所有 `publish.mjs` 中的功能已完整实现，使用 **ora** 和 **inquirer** 作为交互框架：
 
