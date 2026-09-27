@@ -100,7 +100,7 @@
 
 ## RFC 工作跟踪
 
-我使用 RFC 来跟踪工作和进度。阅读 `docs/rfc/README.md` 了解如何管理 RFC。
+我使用 RFC 来跟踪工作和进度。阅读 `.spec/ROADMAP.md` 了解如何管理 RFC。
 
 # 三、编程规范
 

@@ -1,5 +1,7 @@
 # RFC 0002: 文心(Wen Xin)通用 API 文档生成工具设计规范
 
+**Status:** Implemented
+
 - **开始日期**: 2025-01-XX
 - **更新日期**: 2025-01-XX
 - **RFC PR**:
@@ -680,7 +682,7 @@ template:
 - [JSDoc 官方文档](https://jsdoc.app/)
 - [TypeDoc 官方文档](https://typedoc.org/)
 - [JSON Schema 规范](https://json-schema.org/)
-- [RFC 0001: 青鸟通用发布工具](./0001-universal-publish-tool.md)
+- [RFC 0001: 青鸟通用发布工具](../0001-universal-publish-tool.md)
 
 ## 变更日志
 

@@ -7,13 +7,14 @@ This monorepo contains various productivity tools and utilities that streamline 
 ## Packages
 
 - **[@systembug/qingniao](./packages/@systembug/qingniao/)**: Universal publish tool for managing releases and versioning.
+- **[@systembug/pangu](./packages/@systembug/pangu/)**: Interactive development server launcher.
 - **[@systembug/diting](./packages/@systembug/diting/)**: Documentation and tooling utilities.
 - **[@systembug/wenxin](./packages/@systembug/wenxin/)**: Universal API documentation generator supporting JSDoc and TypeScript.
 
 ## Documentation
 
 - 📖 **[在线文档](https://conouch.io/productivity/)** - 完整的工具使用指南
-- 📖 **[RFCs](docs/rfc/)** - Design documents and standards
+- 📖 **[RFCs](.spec/ROADMAP.md)** - Design documents and standards
 
 ### 本地查看文档
 

@@ -1,5 +1,7 @@
 # RFC 0003: 通语(Tong Yu) CLI Locale 包设计规范
 
+**Status:** Implemented
+
 - **开始日期**: 2026-07-11
 - **更新日期**: 2026-07-11
 - **RFC PR**:
