@@ -9,7 +9,7 @@
     "revision": "7ce390cc3318d2db98f6b822192d68edf47a5433"
   },
   "constraintDiscovery": {
-    "checkedAt": "2026-09-27T18:22:05.356Z",
+    "checkedAt": "2026-09-27T18:32:34.101Z",
     "checkedPaths": [
       "AGENTS.md",
       "CLAUDE.md",
@@ -34,8 +34,16 @@
       "packages/@systembug/tongyu/src/resolve-locale.ts"
     ],
     "uninspectedPaths": [
-      ".claude/skills/ui-ux-pro-max/design-system",
-      ".cursor/skills/ui-ux-pro-max/design-system"
+      ".claude/skills/ui-ux-pro-max/design-system/MASTER.md",
+      ".claude/skills/ui-ux-pro-max/design-system/pages/dashboard.md",
+      ".claude/skills/ui-ux-pro-max/design-system/pages/checkout.md",
+      ".cursor/skills/ui-ux-pro-max/design-system/MASTER.md",
+      ".cursor/skills/ui-ux-pro-max/design-system/pages/dashboard.md",
+      ".cursor/skills/ui-ux-pro-max/design-system/pages/checkout.md",
+      "packages/@systembug/qingniao/docs/zero-config.md",
+      "packages/@systembug/qingniao/docs/configuration.md",
+      "packages/@systembug/qingniao/docs/api.md",
+      ".spec/rfc/index.md"
     ]
   },
   "modules": [
