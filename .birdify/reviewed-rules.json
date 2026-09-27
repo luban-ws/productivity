@@ -1,9 +1,9 @@
 {
-  "revision": "7ce390cc3318d2db98f6b822192d68edf47a5433",
+  "revision": "2b3bcfc7d1eac54f423bd9c7755c85467428dfc9",
   "architectureBinding": {
     "mapId": "productivity-tools",
     "mapRevision": 1,
-    "sourceRevision": "7ce390cc3318d2db98f6b822192d68edf47a5433"
+    "sourceRevision": "2b3bcfc7d1eac54f423bd9c7755c85467428dfc9"
   },
   "scope": "部分审阅：根目录通用协作、测试声明、RFC 状态规则，以及 UI 技能的适用条件。RFC 正文作为参考资料，不纳入约束图；其余目录级规则与引用缺口未完成语义审阅。",
   "groups": [

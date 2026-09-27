@@ -6,10 +6,10 @@
   "project": {
     "id": "luban-productivity",
     "name": "鲁班工坊生产力工具集",
-    "revision": "7ce390cc3318d2db98f6b822192d68edf47a5433"
+    "revision": "2b3bcfc7d1eac54f423bd9c7755c85467428dfc9"
   },
   "constraintDiscovery": {
-    "checkedAt": "2026-09-27T18:32:34.101Z",
+    "checkedAt": "2026-09-27T18:40:04.534Z",
     "checkedPaths": [
       "AGENTS.md",
       "CLAUDE.md",
