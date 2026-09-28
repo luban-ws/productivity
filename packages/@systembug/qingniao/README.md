@@ -130,6 +130,39 @@ qingniao --json --yes --dry-run
 
 每次 JSON 命令以单个 `result` 事件结束。检查 `exitCode` 与 `status`；错误事件提供稳定 `code` 和可读 `message`。
 
+给其他仓库的 Agent 升版本时，把下面整段交给代理。这段只升版本，不发布。
+
+```text
+Use @systembug/qingniao in this repository to bump versions. Do not npm publish. Do not edit the version field by hand.
+
+Setup, only if the CLI is missing:
+- pnpm add -D @systembug/qingniao @changesets/cli
+- Root package.json scripts: "release": "qingniao"
+- First time only: npx qingniao changeset-init
+
+Protocol:
+- stdout is JSON Lines. Parse only JSON. Diagnostics go to stderr.
+- The last line of each command is a result event. Read status and exitCode. If exitCode is not 0, stop and report code and message.
+- --json is not authorization. Any command that writes versions must also pass --yes. Without --yes the exit code is 3. Do not retry and do not edit files.
+
+Order:
+1. qingniao doctor --json
+2. qingniao plan --json
+3. Bump only when the user explicitly asks to bump the version.
+
+Bump without publishing:
+qingniao --json --yes --skip-publish --skip-build
+
+How the version is chosen:
+- If .changeset/*.md files exist (other than README.md), qingniao bumps with changesets.
+- If the .changeset directory exists but there are no changeset files, --yes skips the bump. Write a changeset markdown file first, then run the bump command. Do not run interactive pnpm changeset.
+- If there is no .changeset directory, qingniao uses semver from Conventional Commits (feat = minor, fix = patch, BREAKING = major).
+
+The bump updates each package.json version and the top-level version in skill-release.json and plugin.json. Do not edit those files yourself.
+
+Do not run qingniao without --skip-publish. Do not use --dry-run as a bump; dry-run does not write versions. On a non-TTY or with --json, if the registry is not logged in, stop and report the doctor auth error. Do not type passwords.
+```
+
 ### 最小配置示例
 
 ```json
