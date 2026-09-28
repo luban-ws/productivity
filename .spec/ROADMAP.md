@@ -35,3 +35,6 @@
 | 0020 | [Ship CI templates that run qingniao (child of 0007)](rfc/0020-qingniao-ci-templates.md) | Draft |
 | 0021 | [Web UI for qingniao publish config (child of 0007)](rfc/0021-qingniao-config-web-ui.md) | Draft |
 | 0022 | [Run registry login when publish is unauthenticated (child of 0007)](rfc/completed/0022-run-registry-login.md) | Implemented |
+| 0023 | [Qingniao and Pangu agent skills (Umbrella)](rfc/0023-qingniao-pangu-agent-skills.md) | Implemented |
+| 0024 | [Skill that drives qingniao releases safely (child of 0023)](rfc/0024-qingniao-release-skill.md) | Implemented |
+| 0025 | [Skill that drives pangu dev servers without blocking (child of 0023)](rfc/0025-pangu-dev-server-skill.md) | Implemented |

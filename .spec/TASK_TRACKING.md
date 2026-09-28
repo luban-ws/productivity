@@ -19,6 +19,9 @@
     - [ ] Implement RFC 0020: Ship CI templates that run qingniao (child of 0007) (RFC 0020)
     - [ ] Implement RFC 0021: Web UI for qingniao publish config (child of 0007) (RFC 0021)
     - [x] Implement RFC 0022: Run registry login when publish is unauthenticated (child of 0007) (RFC 0022)
+- [x] Implement RFC 0023: Qingniao and Pangu agent skills (Umbrella) (RFC 0023)
+    - [x] Implement RFC 0024: Skill that drives qingniao releases safely (child of 0023) (RFC 0024)
+    - [x] Implement RFC 0025: Skill that drives pangu dev servers without blocking (child of 0023) (RFC 0025)
 
 ## Done
 

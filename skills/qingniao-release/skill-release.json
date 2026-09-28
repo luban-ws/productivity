@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "skillId": "qingniao-release",
+  "channel": "development",
+  "version": "0.1.0-dev.0",
+  "source": {
+    "repository": "https://github.com/luban-ws/productivity"
+  },
+  "updateManifestUrl": "https://raw.githubusercontent.com/luban-ws/productivity/main/skills/qingniao-release/skill-release.json"
+}
